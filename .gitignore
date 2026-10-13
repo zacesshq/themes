@@ -1,0 +1,14 @@
+# node
+node_modules/
+# release and package outputs
+dist/
+*.vsix
+notes.md
+# gradle and the IntelliJ Platform Gradle Plugin
+.gradle/
+.kotlin/
+.intellijPlatform/
+editors/jetbrains/build/
+# os and editors
+.DS_Store
+.idea/

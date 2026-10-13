@@ -1,0 +1,601 @@
+{
+  "$schema": "./schema.json",
+  "name": "Zacess",
+  "version": "0.1.0",
+  "rules": {
+    "textContrast": 7,
+    "findMatchContrast": 4.5,
+    "nonTextContrast": 3,
+    "ansiFloor": 4.5,
+    "toneStep": 0.05,
+    "deficiencyDistance": 0.04
+  },
+  "tokens": {
+    "keyword": {
+      "style": [
+        "bold"
+      ],
+      "description": "Declarations and other keywords such as const, class and fn"
+    },
+    "control": {
+      "style": [
+        "bold"
+      ],
+      "description": "Control flow such as if, return, for and import"
+    },
+    "function": {
+      "style": [],
+      "description": "Function and method names"
+    },
+    "type": {
+      "style": [],
+      "description": "Types, classes, interfaces and enums"
+    },
+    "variable": {
+      "style": [],
+      "description": "Variables and identifiers"
+    },
+    "parameter": {
+      "style": [
+        "italic"
+      ],
+      "description": "Function parameters"
+    },
+    "property": {
+      "style": [],
+      "description": "Object properties, fields and keys"
+    },
+    "string": {
+      "style": [],
+      "description": "Strings and characters"
+    },
+    "number": {
+      "style": [],
+      "description": "Numbers, booleans and other constants"
+    },
+    "comment": {
+      "style": [
+        "italic"
+      ],
+      "description": "Comments, never dimmed below the contrast floor"
+    },
+    "operator": {
+      "style": [],
+      "description": "Operators and punctuation"
+    },
+    "tag": {
+      "style": [
+        "bold"
+      ],
+      "description": "Markup tags"
+    },
+    "attribute": {
+      "style": [],
+      "description": "Markup attributes"
+    },
+    "regex": {
+      "style": [],
+      "description": "Regular expressions"
+    },
+    "invalid": {
+      "style": [
+        "underline"
+      ],
+      "description": "Invalid code and illegal characters"
+    },
+    "added": {
+      "style": [],
+      "description": "Added lines in a diff"
+    },
+    "removed": {
+      "style": [],
+      "description": "Removed lines in a diff"
+    },
+    "changed": {
+      "style": [],
+      "description": "Changed lines in a diff"
+    }
+  },
+  "pairs": [
+    {
+      "pair": [
+        "keyword",
+        "function"
+      ]
+    },
+    {
+      "pair": [
+        "keyword",
+        "type"
+      ]
+    },
+    {
+      "pair": [
+        "keyword",
+        "variable"
+      ]
+    },
+    {
+      "pair": [
+        "control",
+        "keyword"
+      ]
+    },
+    {
+      "pair": [
+        "control",
+        "variable"
+      ]
+    },
+    {
+      "pair": [
+        "control",
+        "function"
+      ]
+    },
+    {
+      "pair": [
+        "function",
+        "variable"
+      ]
+    },
+    {
+      "pair": [
+        "function",
+        "type"
+      ]
+    },
+    {
+      "pair": [
+        "function",
+        "property"
+      ]
+    },
+    {
+      "pair": [
+        "function",
+        "string"
+      ]
+    },
+    {
+      "pair": [
+        "type",
+        "variable"
+      ]
+    },
+    {
+      "pair": [
+        "type",
+        "property"
+      ]
+    },
+    {
+      "pair": [
+        "variable",
+        "property"
+      ]
+    },
+    {
+      "pair": [
+        "variable",
+        "parameter"
+      ]
+    },
+    {
+      "pair": [
+        "parameter",
+        "type"
+      ]
+    },
+    {
+      "pair": [
+        "parameter",
+        "property"
+      ]
+    },
+    {
+      "pair": [
+        "property",
+        "string"
+      ]
+    },
+    {
+      "pair": [
+        "string",
+        "comment"
+      ]
+    },
+    {
+      "pair": [
+        "number",
+        "variable"
+      ]
+    },
+    {
+      "pair": [
+        "number",
+        "operator"
+      ]
+    },
+    {
+      "pair": [
+        "comment",
+        "variable"
+      ]
+    },
+    {
+      "pair": [
+        "tag",
+        "attribute"
+      ]
+    },
+    {
+      "pair": [
+        "attribute",
+        "string"
+      ]
+    },
+    {
+      "pair": [
+        "invalid",
+        "variable"
+      ]
+    },
+    {
+      "pair": [
+        "string",
+        "number"
+      ],
+      "lightness": true
+    },
+    {
+      "pair": [
+        "string",
+        "regex"
+      ],
+      "lightness": true
+    },
+    {
+      "pair": [
+        "string",
+        "invalid"
+      ],
+      "lightness": true
+    },
+    {
+      "pair": [
+        "added",
+        "removed"
+      ],
+      "lightness": true
+    },
+    {
+      "pair": [
+        "added",
+        "changed"
+      ],
+      "lightness": true
+    },
+    {
+      "pair": [
+        "removed",
+        "changed"
+      ],
+      "lightness": true
+    }
+  ],
+  "themes": [
+    {
+      "id": "light",
+      "name": "Zacess Light",
+      "appearance": "light",
+      "vscodeUiTheme": "vs",
+      "readerProfile": "dark_on_light",
+      "description": "Ink on white, the reader's Dark on light theme.",
+      "ui": {
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "surface": "#f4f4f4",
+        "surfaceAlt": "#ededed",
+        "muted": "#424242",
+        "border": "#707070",
+        "accent": "#0049a3",
+        "accentForeground": "#ffffff",
+        "link": "#0049a3",
+        "selection": "#fff1a8",
+        "lineHighlight": "#f0f0f0",
+        "cursor": "#111111",
+        "gutter": "#ffffff",
+        "lineNumber": "#4d4d4d",
+        "lineNumberActive": "#111111",
+        "findMatch": "#ffd400",
+        "findMatchBorder": "#111111",
+        "error": "#810005",
+        "warning": "#583600",
+        "info": "#003a84",
+        "diffAddedBackground": "#e3f5e6",
+        "diffRemovedBackground": "#fdeaea",
+        "indentGuide": "#8a8a8a",
+        "whitespace": "#767676"
+      },
+      "syntax": {
+        "foreground": "#111111",
+        "keyword": "#58099c",
+        "control": "#5e003c",
+        "function": "#0049a3",
+        "type": "#003737",
+        "variable": "#111111",
+        "parameter": "#4c2300",
+        "property": "#030075",
+        "string": "#004a0e",
+        "number": "#4c1b00",
+        "comment": "#434f5b",
+        "operator": "#111111",
+        "tag": "#58099c",
+        "attribute": "#412300",
+        "regex": "#5b0020",
+        "invalid": "#5d0002",
+        "added": "#005b14",
+        "removed": "#5d0002",
+        "changed": "#001940"
+      },
+      "terminal": {
+        "ansi": [
+          "#111111",
+          "#640003",
+          "#003708",
+          "#412900",
+          "#002c66",
+          "#580055",
+          "#003434",
+          "#484848",
+          "#4d4d4d",
+          "#950007",
+          "#005512",
+          "#634100",
+          "#004498",
+          "#84007f",
+          "#005151",
+          "#111111"
+        ],
+        "dim": [],
+        "backgroundRole": []
+      }
+    },
+    {
+      "id": "dark",
+      "name": "Zacess Dark",
+      "appearance": "dark",
+      "vscodeUiTheme": "vs-dark",
+      "readerProfile": "light_on_dark",
+      "description": "Near white on near black, the reader's Light on dark theme.",
+      "ui": {
+        "background": "#121212",
+        "foreground": "#f5f5f5",
+        "surface": "#1a1a1a",
+        "surfaceAlt": "#232323",
+        "muted": "#c8c8c8",
+        "border": "#7a7a7a",
+        "accent": "#8cbcff",
+        "accentForeground": "#121212",
+        "link": "#8cbcff",
+        "selection": "#1a2436",
+        "lineHighlight": "#1f1f1f",
+        "cursor": "#ffd400",
+        "gutter": "#121212",
+        "lineNumber": "#b8b8b8",
+        "lineNumberActive": "#f5f5f5",
+        "findMatch": "#332a00",
+        "findMatchBorder": "#ffd400",
+        "error": "#ffccc4",
+        "warning": "#ffd182",
+        "info": "#bddaff",
+        "diffAddedBackground": "#0f2a17",
+        "diffRemovedBackground": "#331414",
+        "indentGuide": "#6b6b6b",
+        "whitespace": "#7a7a7a"
+      },
+      "syntax": {
+        "foreground": "#f5f5f5",
+        "keyword": "#d3bdff",
+        "control": "#ffd2e6",
+        "function": "#84b7fa",
+        "type": "#5ddad9",
+        "variable": "#f5f5f5",
+        "parameter": "#ffb97f",
+        "property": "#c5e1ff",
+        "string": "#96d797",
+        "number": "#ffd9ba",
+        "comment": "#abb6c1",
+        "operator": "#f5f5f5",
+        "tag": "#d3bdff",
+        "attribute": "#ffdb9e",
+        "regex": "#f3989e",
+        "invalid": "#ffd7d2",
+        "added": "#99da9b",
+        "removed": "#f39992",
+        "changed": "#c9e0ff"
+      },
+      "terminal": {
+        "ansi": [
+          "#2b2b2b",
+          "#ffa79b",
+          "#8dcd8e",
+          "#deb967",
+          "#90c1ff",
+          "#eba8e4",
+          "#52d0cf",
+          "#e6e6e6",
+          "#aeaeae",
+          "#ffd5ce",
+          "#aceead",
+          "#ffda8a",
+          "#c9e0ff",
+          "#ffd0fa",
+          "#76f1f0",
+          "#ffffff"
+        ],
+        "dim": [],
+        "backgroundRole": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "yellow-on-black",
+      "name": "Zacess Yellow on Black",
+      "appearance": "dark",
+      "vscodeUiTheme": "hc-black",
+      "readerProfile": "yellow_on_black",
+      "description": "Yellow on black for low vision, the reader's Yellow on black theme.",
+      "ui": {
+        "background": "#000000",
+        "foreground": "#ffeb3b",
+        "surface": "#000000",
+        "surfaceAlt": "#0d0d0d",
+        "muted": "#e6e6e6",
+        "border": "#ffeb3b",
+        "accent": "#5ce1e6",
+        "accentForeground": "#000000",
+        "link": "#5ce1e6",
+        "selection": "#0a2257",
+        "lineHighlight": "#141414",
+        "cursor": "#ffffff",
+        "gutter": "#000000",
+        "lineNumber": "#d9d9d9",
+        "lineNumberActive": "#ffeb3b",
+        "findMatch": "#3d3000",
+        "findMatchBorder": "#ffffff",
+        "error": "#ffbeb5",
+        "warning": "#ffd8ab",
+        "info": "#a6d2ff",
+        "diffAddedBackground": "#0d2a12",
+        "diffRemovedBackground": "#3a0e0e",
+        "indentGuide": "#8c8c8c",
+        "whitespace": "#9a9a9a"
+      },
+      "syntax": {
+        "foreground": "#ffeb3b",
+        "keyword": "#ffffff",
+        "control": "#49ebf3",
+        "function": "#88c3ff",
+        "type": "#9ae99c",
+        "variable": "#ffeb3b",
+        "parameter": "#ffcca3",
+        "property": "#ffffff",
+        "string": "#90eaa4",
+        "number": "#ffa77e",
+        "comment": "#b4bfca",
+        "operator": "#ffeb3b",
+        "tag": "#ffffff",
+        "attribute": "#ffffff",
+        "regex": "#ffa1ce",
+        "invalid": "#ffa59d",
+        "added": "#9ae99c",
+        "removed": "#ffa59d",
+        "changed": "#ddedff"
+      },
+      "terminal": {
+        "ansi": [
+          "#262626",
+          "#ffa79b",
+          "#82d085",
+          "#e5b851",
+          "#90c1ff",
+          "#f2a4eb",
+          "#1fd3d3",
+          "#ffffff",
+          "#aeaeae",
+          "#ffd5ce",
+          "#a2f1a4",
+          "#ffda8a",
+          "#c9e0ff",
+          "#ffd0fa",
+          "#55f4f3",
+          "#ffffff"
+        ],
+        "dim": [],
+        "backgroundRole": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "cream",
+      "name": "Zacess Cream",
+      "appearance": "light",
+      "vscodeUiTheme": "hc-light",
+      "readerProfile": "black_on_cream",
+      "description": "Black on cream for dyslexia, the reader's Black on cream theme.",
+      "ui": {
+        "background": "#fdf6e3",
+        "foreground": "#000000",
+        "surface": "#f5edd6",
+        "surfaceAlt": "#ebe2c8",
+        "muted": "#3f382c",
+        "border": "#6e6555",
+        "accent": "#004498",
+        "accentForeground": "#ffffff",
+        "link": "#004498",
+        "selection": "#f9e79a",
+        "lineHighlight": "#f3ead2",
+        "cursor": "#000000",
+        "gutter": "#fdf6e3",
+        "lineNumber": "#4a4337",
+        "lineNumberActive": "#000000",
+        "findMatch": "#ffd400",
+        "findMatchBorder": "#000000",
+        "error": "#770004",
+        "warning": "#513100",
+        "info": "#00357a",
+        "diffAddedBackground": "#e4f1d8",
+        "diffRemovedBackground": "#f9e3d8",
+        "indentGuide": "#857b69",
+        "whitespace": "#766c5b"
+      },
+      "syntax": {
+        "foreground": "#000000",
+        "keyword": "#530093",
+        "control": "#550036",
+        "function": "#004498",
+        "type": "#003232",
+        "variable": "#000000",
+        "parameter": "#441f00",
+        "property": "#020068",
+        "string": "#00440c",
+        "number": "#451700",
+        "comment": "#534637",
+        "operator": "#000000",
+        "tag": "#530093",
+        "attribute": "#3a1f00",
+        "regex": "#52001c",
+        "invalid": "#540002",
+        "added": "#005512",
+        "removed": "#540002",
+        "changed": "#001538"
+      },
+      "terminal": {
+        "ansi": [
+          "#000000",
+          "#5b0002",
+          "#003107",
+          "#3b2500",
+          "#00275c",
+          "#4f004d",
+          "#002f2f",
+          "#434343",
+          "#484848",
+          "#8b0006",
+          "#004f10",
+          "#5c3c00",
+          "#003f8e",
+          "#7b0077",
+          "#004b4b",
+          "#000000"
+        ],
+        "dim": [],
+        "backgroundRole": []
+      }
+    }
+  ]
+}

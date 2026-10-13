@@ -1,0 +1,1433 @@
+#!/usr/bin/env node
+// writes every editor's theme files from palette/zacess.json; the outputs are committed so each
+// editor folder stands alone, with `npm run verify` proving they match the palette
+import { mkdirSync, readFileSync, writeFileSync, copyFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { ROOT, HEADER, REPO, ANSI_NAMES, loadPalette, loadSchema, styleOf } from "./lib/palette.mjs";
+import { parseHex } from "./lib/colour.mjs";
+import { validate } from "./lib/schema.mjs";
+import { contrastTables } from "./lib/tables.mjs";
+
+const palette = loadPalette();
+const schemaErrors = validate(loadSchema(), palette);
+if (schemaErrors.length) {
+  console.error(`palette/zacess.json does not match palette/schema.json:\n${schemaErrors.join("\n")}`);
+  process.exit(1);
+}
+
+const written = [];
+function write(path, content) {
+  const full = join(ROOT, path);
+  mkdirSync(dirname(full), { recursive: true });
+  writeFileSync(full, content);
+  written.push(path);
+}
+const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
+const fontStyle = (token) => styleOf(palette, token).join(" ");
+const has = (token, style) => styleOf(palette, token).includes(style);
+const slug = (theme) => `zacess-${theme.id}`;
+
+// ---------------------------------------------------------------- VS Code
+
+function vscodeTokenColors(s) {
+  const rule = (name, scope, token, colour = s[token], style = fontStyle(token)) => ({
+    name,
+    scope,
+    settings: { foreground: colour, fontStyle: style },
+  });
+  return [
+    rule("Comments", ["comment", "punctuation.definition.comment", "string.quoted.docstring.multi.python"], "comment"),
+    rule("Strings", ["string", "punctuation.definition.string", "constant.character", "markup.inline.raw"], "string"),
+    rule("Regular expressions", ["string.regexp", "constant.character.escape", "constant.other.character-class.regexp"], "regex"),
+    rule("Numbers and constants", ["constant.numeric", "constant.language", "constant.other", "support.constant", "variable.other.constant", "variable.other.enummember", "entity.name.constant"], "number"),
+    rule("Keywords", ["keyword", "storage", "storage.type", "storage.modifier", "keyword.operator.new", "keyword.operator.expression", "keyword.operator.logical.python", "variable.language", "support.type.primitive.ts", "keyword.other"], "keyword"),
+    rule("Control flow", ["keyword.control", "keyword.control.flow", "keyword.control.import", "keyword.control.conditional", "keyword.control.loop", "keyword.control.trycatch"], "control"),
+    rule("Operators and punctuation", ["keyword.operator", "punctuation", "meta.brace", "punctuation.separator", "punctuation.terminator", "punctuation.accessor"], "operator"),
+    rule("Functions", ["entity.name.function", "support.function", "meta.function-call entity.name.function", "variable.function", "entity.name.function.macro", "meta.decorator", "entity.name.function.decorator"], "function"),
+    rule("Types", ["entity.name.type", "entity.name.class", "entity.name.namespace", "entity.other.inherited-class", "support.type", "support.class", "storage.type.primitive", "entity.name.type.primitive", "entity.name.type.parameter"], "type"),
+    rule("Variables", ["variable", "variable.other.readwrite", "meta.definition.variable", "support.variable"], "variable"),
+    rule("Parameters", ["variable.parameter", "meta.parameters variable", "entity.name.variable.parameter"], "parameter"),
+    rule("Properties", ["variable.other.property", "variable.other.object.property", "variable.other.member", "support.type.property-name", "meta.object-literal.key", "entity.name.tag.yaml", "support.variable.property", "entity.name.field"], "property"),
+    rule("Tags", ["entity.name.tag", "punctuation.definition.tag"], "tag"),
+    rule("Attributes", ["entity.other.attribute-name", "meta.attribute", "entity.other.attribute-name.id", "entity.other.attribute-name.class"], "attribute"),
+    rule("Invalid", ["invalid", "invalid.illegal", "invalid.deprecated"], "invalid"),
+    rule("Added", ["markup.inserted", "meta.diff.header.to-file", "punctuation.definition.inserted"], "added"),
+    rule("Removed", ["markup.deleted", "meta.diff.header.from-file", "punctuation.definition.deleted"], "removed"),
+    rule("Changed", ["markup.changed", "punctuation.definition.changed"], "changed"),
+    rule("Headings", ["markup.heading", "entity.name.section"], "keyword", s.keyword, "bold"),
+    rule("Bold", ["markup.bold"], "variable", s.foreground, "bold"),
+    rule("Italic", ["markup.italic"], "variable", s.foreground, "italic"),
+    rule("Links", ["markup.underline.link", "string.other.link"], "function", s.function, "underline"),
+    rule("Quotes", ["markup.quote"], "comment"),
+  ];
+}
+
+function vscodeSemantic(s) {
+  const style = (token, colour = s[token]) => {
+    const out = { foreground: colour };
+    if (has(token, "bold")) out.bold = true;
+    if (has(token, "italic")) out.italic = true;
+    if (has(token, "underline")) out.underline = true;
+    return out;
+  };
+  return {
+    namespace: style("type"),
+    class: style("type"),
+    interface: style("type"),
+    enum: style("type"),
+    struct: style("type"),
+    type: style("type"),
+    typeParameter: style("type"),
+    function: style("function"),
+    method: style("function"),
+    macro: style("function"),
+    decorator: style("function"),
+    parameter: style("parameter"),
+    variable: style("variable"),
+    property: style("property"),
+    enumMember: style("number"),
+    keyword: style("keyword"),
+    selfKeyword: style("keyword"),
+    comment: style("comment"),
+    string: style("string"),
+    number: style("number"),
+    regexp: style("regex"),
+    operator: style("operator"),
+    label: style("control"),
+  };
+}
+
+function vscodeColors(theme) {
+  const u = theme.ui;
+  const s = theme.syntax;
+  const a = theme.terminal.ansi;
+  const highContrast = theme.vscodeUiTheme.startsWith("hc");
+  const colours = {
+    foreground: u.foreground,
+    descriptionForeground: u.muted,
+    disabledForeground: u.muted,
+    errorForeground: u.error,
+    focusBorder: u.accent,
+    "widget.border": u.border,
+    "selection.background": u.selection,
+    "icon.foreground": u.foreground,
+    "textLink.foreground": u.link,
+    "textLink.activeForeground": u.link,
+    "textPreformat.foreground": s.string,
+    "textBlockQuote.border": u.border,
+    "textCodeBlock.background": u.surface,
+    "editor.background": u.background,
+    "editor.foreground": u.foreground,
+    "editorLineNumber.foreground": u.lineNumber,
+    "editorLineNumber.activeForeground": u.lineNumberActive,
+    "editorCursor.foreground": u.cursor,
+    "editorCursor.background": u.background,
+    "editor.selectionBackground": u.selection,
+    "editor.inactiveSelectionBackground": u.selection,
+    // these are drawn over the selection and the text, so they stay transparent and rely on a
+    // border; an opaque colour would hide the selection and change the measured contrast
+    "editor.selectionHighlightBackground": `${u.background}00`,
+    "editor.selectionHighlightBorder": u.border,
+    "editor.lineHighlightBackground": u.lineHighlight,
+    "editor.lineHighlightBorder": u.lineHighlight,
+    "editor.findMatchBackground": u.findMatch,
+    "editor.findMatchBorder": u.findMatchBorder,
+    "editor.findMatchHighlightBackground": `${u.background}00`,
+    "editor.findMatchHighlightBorder": u.findMatchBorder,
+    "editor.wordHighlightBackground": `${u.background}00`,
+    "editor.wordHighlightBorder": u.border,
+    "editor.wordHighlightStrongBackground": `${u.background}00`,
+    "editor.wordHighlightStrongBorder": u.accent,
+    "editorBracketMatch.background": `${u.background}00`,
+    "editorBracketMatch.border": u.accent,
+    "editorGutter.background": u.gutter,
+    "editorGutter.addedBackground": s.added,
+    "editorGutter.modifiedBackground": s.changed,
+    "editorGutter.deletedBackground": s.removed,
+    "editorError.foreground": u.error,
+    "editorWarning.foreground": u.warning,
+    "editorInfo.foreground": u.info,
+    "editorLink.activeForeground": u.link,
+    "editorIndentGuide.background1": u.indentGuide,
+    "editorIndentGuide.activeBackground1": u.foreground,
+    "editorWhitespace.foreground": u.whitespace,
+    "editorRuler.foreground": u.indentGuide,
+    "editorCodeLens.foreground": u.muted,
+    "editorInlayHint.foreground": u.muted,
+    "editorInlayHint.background": u.surface,
+    "editorWidget.background": u.surface,
+    "editorWidget.foreground": u.foreground,
+    "editorWidget.border": u.border,
+    "editorHoverWidget.background": u.surface,
+    "editorHoverWidget.foreground": u.foreground,
+    "editorHoverWidget.border": u.border,
+    "editorSuggestWidget.background": u.surface,
+    "editorSuggestWidget.foreground": u.foreground,
+    "editorSuggestWidget.border": u.border,
+    "editorSuggestWidget.selectedBackground": u.selection,
+    "editorSuggestWidget.selectedForeground": u.foreground,
+    "editorSuggestWidget.highlightForeground": u.accent,
+    "editorOverviewRuler.errorForeground": u.error,
+    "editorOverviewRuler.warningForeground": u.warning,
+    "editorOverviewRuler.infoForeground": u.info,
+    "editorOverviewRuler.findMatchForeground": u.findMatchBorder,
+    "diffEditor.insertedTextBackground": u.diffAddedBackground,
+    "diffEditor.removedTextBackground": u.diffRemovedBackground,
+    "diffEditor.insertedLineBackground": u.diffAddedBackground,
+    "diffEditor.removedLineBackground": u.diffRemovedBackground,
+    "editorGroup.border": u.border,
+    "editorGroupHeader.tabsBackground": u.surface,
+    "editorGroupHeader.tabsBorder": u.border,
+    "tab.activeBackground": u.background,
+    "tab.activeForeground": u.foreground,
+    "tab.activeBorderTop": u.accent,
+    "tab.inactiveBackground": u.surface,
+    "tab.inactiveForeground": u.muted,
+    "tab.border": u.border,
+    "tab.hoverBackground": u.lineHighlight,
+    "sideBar.background": u.surface,
+    "sideBar.foreground": u.foreground,
+    "sideBar.border": u.border,
+    "sideBarTitle.foreground": u.foreground,
+    "sideBarSectionHeader.background": u.surfaceAlt,
+    "sideBarSectionHeader.foreground": u.foreground,
+    "sideBarSectionHeader.border": u.border,
+    "activityBar.background": u.surfaceAlt,
+    "activityBar.foreground": u.foreground,
+    "activityBar.inactiveForeground": u.muted,
+    "activityBar.border": u.border,
+    "activityBar.activeBorder": u.accent,
+    "activityBarBadge.background": u.accent,
+    "activityBarBadge.foreground": u.accentForeground,
+    "statusBar.background": u.surfaceAlt,
+    "statusBar.foreground": u.foreground,
+    "statusBar.border": u.border,
+    "statusBar.noFolderBackground": u.surfaceAlt,
+    "statusBar.noFolderForeground": u.foreground,
+    "statusBar.debuggingBackground": u.accent,
+    "statusBar.debuggingForeground": u.accentForeground,
+    "statusBarItem.hoverBackground": u.surface,
+    "statusBarItem.remoteBackground": u.accent,
+    "statusBarItem.remoteForeground": u.accentForeground,
+    "titleBar.activeBackground": u.surfaceAlt,
+    "titleBar.activeForeground": u.foreground,
+    "titleBar.inactiveBackground": u.surface,
+    "titleBar.inactiveForeground": u.muted,
+    "titleBar.border": u.border,
+    "panel.background": u.surface,
+    "panel.border": u.border,
+    "panelTitle.activeForeground": u.foreground,
+    "panelTitle.inactiveForeground": u.muted,
+    "panelTitle.activeBorder": u.accent,
+    "breadcrumb.foreground": u.muted,
+    "breadcrumb.focusForeground": u.foreground,
+    "breadcrumb.activeSelectionForeground": u.foreground,
+    "input.background": u.background,
+    "input.foreground": u.foreground,
+    "input.border": u.border,
+    "input.placeholderForeground": u.muted,
+    "inputOption.activeBorder": u.accent,
+    "inputValidation.errorBorder": u.error,
+    "inputValidation.warningBorder": u.warning,
+    "inputValidation.infoBorder": u.info,
+    "dropdown.background": u.background,
+    "dropdown.foreground": u.foreground,
+    "dropdown.border": u.border,
+    "button.background": u.accent,
+    "button.foreground": u.accentForeground,
+    "button.hoverBackground": u.accent,
+    "button.secondaryBackground": u.surfaceAlt,
+    "button.secondaryForeground": u.foreground,
+    "button.border": u.border,
+    "badge.background": u.accent,
+    "badge.foreground": u.accentForeground,
+    "checkbox.background": u.background,
+    "checkbox.border": u.border,
+    "checkbox.foreground": u.foreground,
+    "list.activeSelectionBackground": u.selection,
+    "list.activeSelectionForeground": u.foreground,
+    "list.inactiveSelectionBackground": u.lineHighlight,
+    "list.inactiveSelectionForeground": u.foreground,
+    "list.hoverBackground": u.lineHighlight,
+    "list.hoverForeground": u.foreground,
+    "list.focusOutline": u.accent,
+    "list.highlightForeground": u.accent,
+    "list.errorForeground": u.error,
+    "list.warningForeground": u.warning,
+    "menu.background": u.surface,
+    "menu.foreground": u.foreground,
+    "menu.selectionBackground": u.selection,
+    "menu.selectionForeground": u.foreground,
+    "menu.border": u.border,
+    "notifications.background": u.surface,
+    "notifications.foreground": u.foreground,
+    "notifications.border": u.border,
+    "notificationLink.foreground": u.link,
+    "quickInput.background": u.surface,
+    "quickInput.foreground": u.foreground,
+    "pickerGroup.foreground": u.accent,
+    "pickerGroup.border": u.border,
+    "peekView.border": u.accent,
+    "peekViewEditor.background": u.surface,
+    "peekViewResult.background": u.surface,
+    "peekViewTitle.background": u.surfaceAlt,
+    "peekViewEditor.matchHighlightBackground": `${u.background}00`,
+    "peekViewEditor.matchHighlightBorder": u.findMatchBorder,
+    "peekViewResult.matchHighlightBackground": u.selection,
+    "gitDecoration.addedResourceForeground": s.added,
+    "gitDecoration.untrackedResourceForeground": s.added,
+    "gitDecoration.modifiedResourceForeground": s.changed,
+    "gitDecoration.deletedResourceForeground": s.removed,
+    "gitDecoration.ignoredResourceForeground": u.muted,
+    "gitDecoration.conflictingResourceForeground": u.error,
+    "scrollbarSlider.background": `${u.indentGuide}80`,
+    "scrollbarSlider.hoverBackground": `${u.indentGuide}b3`,
+    "scrollbarSlider.activeBackground": u.indentGuide,
+    "terminal.background": u.background,
+    "terminal.foreground": u.foreground,
+    "terminalCursor.foreground": u.cursor,
+    "terminal.selectionBackground": u.selection,
+  };
+  ANSI_NAMES.forEach((name, i) => {
+    colours[`terminal.ansi${name[0].toUpperCase()}${name.slice(1)}`] = a[i];
+  });
+  if (highContrast) {
+    // high contrast themes draw borders everywhere from these two keys
+    colours.contrastBorder = u.border;
+    colours.contrastActiveBorder = u.accent;
+    colours["editor.selectionForeground"] = u.foreground;
+  }
+  return colours;
+}
+
+function buildVscode() {
+  const contributes = [];
+  for (const theme of palette.themes) {
+    const file = `themes/${slug(theme)}-color-theme.json`;
+    write(`editors/vscode/${file}`, json({
+      $schema: "vscode://schemas/color-theme",
+      name: theme.name,
+      type: theme.vscodeUiTheme === "vs" ? "light" : theme.vscodeUiTheme === "vs-dark" ? "dark" : theme.vscodeUiTheme === "hc-black" ? "hcDark" : "hcLight",
+      semanticHighlighting: true,
+      colors: vscodeColors(theme),
+      tokenColors: vscodeTokenColors(theme.syntax),
+      semanticTokenColors: vscodeSemantic(theme.syntax),
+    }));
+    contributes.push({ label: theme.name, uiTheme: theme.vscodeUiTheme, path: `./${file}` });
+  }
+  write("editors/vscode/package.json", json({
+    name: "zacess-themes",
+    displayName: "Zacess Themes",
+    description: "Four high contrast code themes matching the Zacess reader: Light, Dark, Yellow on Black for low vision and Cream for dyslexia. Every text and syntax colour keeps 7:1 contrast.",
+    version: palette.version,
+    publisher: "zacess",
+    license: "MIT",
+    icon: "icon.png",
+    galleryBanner: { color: "#111111", theme: "dark" },
+    homepage: REPO,
+    repository: { type: "git", url: `${REPO}.git`, directory: "editors/vscode" },
+    bugs: { url: `${REPO}/issues` },
+    engines: { vscode: "^1.85.0" },
+    categories: ["Themes"],
+    keywords: ["theme", "high contrast", "accessibility", "low vision", "dyslexia", "WCAG", "AAA", "colour blind", "yellow on black", "cream"],
+    contributes: { themes: contributes },
+  }));
+  copyFileSync(join(ROOT, "LICENSE"), join(ROOT, "editors/vscode/LICENSE"));
+  written.push("editors/vscode/LICENSE");
+}
+
+// ---------------------------------------------------------------- JetBrains
+
+const xmlEscape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const bare = (hex) => hex.slice(1);
+
+function iclsAttribute(name, { fg, bg, token, effect, effectColour, fontType }) {
+  const lines = [`    <option name="${name}">`, "      <value>"];
+  if (fg) lines.push(`        <option name="FOREGROUND" value="${bare(fg)}" />`);
+  if (bg) lines.push(`        <option name="BACKGROUND" value="${bare(bg)}" />`);
+  // FONT_TYPE is a bit set: 1 bold, 2 italic
+  const type = fontType ?? (token ? (has(token, "bold") ? 1 : 0) + (has(token, "italic") ? 2 : 0) : 0);
+  if (type) lines.push(`        <option name="FONT_TYPE" value="${type}" />`);
+  const underline = token && has(token, "underline");
+  if (effect !== undefined || underline) {
+    lines.push(`        <option name="EFFECT_COLOR" value="${bare(effectColour ?? fg)}" />`);
+    // EFFECT_TYPE 0 boxed, 1 underline, 2 wavy underline
+    lines.push(`        <option name="EFFECT_TYPE" value="${effect ?? 1}" />`);
+  }
+  lines.push("      </value>", "    </option>");
+  return lines.join("\n");
+}
+
+function icls(theme) {
+  const u = theme.ui;
+  const s = theme.syntax;
+  const a = theme.terminal.ansi;
+  const colours = {
+    CARET_COLOR: u.cursor,
+    CARET_ROW_COLOR: u.lineHighlight,
+    SELECTION_BACKGROUND: u.selection,
+    SELECTION_FOREGROUND: u.foreground,
+    GUTTER_BACKGROUND: u.gutter,
+    LINE_NUMBERS_COLOR: u.lineNumber,
+    LINE_NUMBER_ON_CARET_ROW_COLOR: u.lineNumberActive,
+    INDENT_GUIDE: u.indentGuide,
+    SELECTED_INDENT_GUIDE: u.foreground,
+    RIGHT_MARGIN_COLOR: u.indentGuide,
+    WHITESPACES: u.whitespace,
+    METHOD_SEPARATORS_COLOR: u.border,
+    TEARLINE_COLOR: u.border,
+    ADDED_LINES_COLOR: s.added,
+    MODIFIED_LINES_COLOR: s.changed,
+    DELETED_LINES_COLOR: s.removed,
+    WHITESPACES_MODIFIED_LINES_COLOR: s.changed,
+    DOCUMENTATION_COLOR: u.surface,
+    ERROR_HINT: u.surface,
+    INFORMATION_HINT: u.surface,
+    QUESTION_HINT: u.surface,
+    LOOKUP_COLOR: u.surface,
+    CONSOLE_BACKGROUND_KEY: u.background,
+    FILESTATUS_ADDED: s.added,
+    FILESTATUS_MODIFIED: s.changed,
+    FILESTATUS_DELETED: s.removed,
+    FILESTATUS_UNKNOWN: s.added,
+    FILESTATUS_IDEA_FILESTATUS_IGNORED: u.muted,
+  };
+  const t = (token) => ({ fg: s[token], token });
+  const attributes = {
+    TEXT: { fg: u.foreground, bg: u.background },
+    DEFAULT_KEYWORD: t("keyword"),
+    DEFAULT_IDENTIFIER: t("variable"),
+    DEFAULT_LOCAL_VARIABLE: t("variable"),
+    DEFAULT_GLOBAL_VARIABLE: t("variable"),
+    DEFAULT_REASSIGNED_LOCAL_VARIABLE: t("variable"),
+    DEFAULT_PARAMETER: t("parameter"),
+    DEFAULT_REASSIGNED_PARAMETER: t("parameter"),
+    DEFAULT_INSTANCE_FIELD: t("property"),
+    DEFAULT_STATIC_FIELD: t("property"),
+    DEFAULT_FUNCTION_DECLARATION: t("function"),
+    DEFAULT_FUNCTION_CALL: t("function"),
+    DEFAULT_INSTANCE_METHOD: t("function"),
+    DEFAULT_STATIC_METHOD: t("function"),
+    DEFAULT_CLASS_NAME: t("type"),
+    DEFAULT_CLASS_REFERENCE: t("type"),
+    DEFAULT_INTERFACE_NAME: t("type"),
+    DEFAULT_STRING: t("string"),
+    DEFAULT_VALID_STRING_ESCAPE: t("regex"),
+    DEFAULT_INVALID_STRING_ESCAPE: { fg: s.invalid, token: "invalid" },
+    DEFAULT_NUMBER: t("number"),
+    DEFAULT_CONSTANT: t("number"),
+    DEFAULT_PREDEFINED_SYMBOL: t("number"),
+    DEFAULT_LINE_COMMENT: t("comment"),
+    DEFAULT_BLOCK_COMMENT: t("comment"),
+    DEFAULT_DOC_COMMENT: t("comment"),
+    DEFAULT_DOC_COMMENT_TAG: { fg: s.comment, fontType: 3 },
+    DEFAULT_DOC_MARKUP: t("comment"),
+    DEFAULT_OPERATION_SIGN: t("operator"),
+    DEFAULT_BRACES: t("operator"),
+    DEFAULT_BRACKETS: t("operator"),
+    DEFAULT_PARENTHS: t("operator"),
+    DEFAULT_COMMA: t("operator"),
+    DEFAULT_SEMICOLON: t("operator"),
+    DEFAULT_DOT: t("operator"),
+    DEFAULT_METADATA: t("function"),
+    DEFAULT_LABEL: t("control"),
+    DEFAULT_TAG: t("tag"),
+    DEFAULT_ATTRIBUTE: t("attribute"),
+    DEFAULT_ENTITY: t("number"),
+    DEFAULT_TEMPLATE_LANGUAGE_COLOR: t("variable"),
+    "REGEXP.CHAR_CLASS": t("regex"),
+    "REGEXP.BRACKETS": t("regex"),
+    "REGEXP.META": t("regex"),
+    "JS.REGEXP": t("regex"),
+    "TS.TYPE_PARAMETER": t("type"),
+    "PY.KEYWORD": t("keyword"),
+    "PY.DOC_COMMENT": t("string"),
+    "PY.DECORATOR": t("function"),
+    "PY.BUILTIN_NAME": t("function"),
+    "PY.SELF_PARAMETER": t("keyword"),
+    BAD_CHARACTER: { fg: s.invalid, token: "invalid" },
+    WRONG_REFERENCES_ATTRIBUTES: { fg: s.invalid, token: "invalid" },
+    ERRORS_ATTRIBUTES: { effect: 2, effectColour: u.error },
+    WARNING_ATTRIBUTES: { effect: 2, effectColour: u.warning },
+    INFO_ATTRIBUTES: { effect: 2, effectColour: u.info },
+    TYPO: { effect: 2, effectColour: u.info },
+    HYPERLINK_ATTRIBUTES: { fg: u.link, effect: 1, effectColour: u.link },
+    FOLLOWED_HYPERLINK_ATTRIBUTES: { fg: u.link, effect: 1, effectColour: u.link },
+    SEARCH_RESULT_ATTRIBUTES: { bg: u.findMatch, effect: 0, effectColour: u.findMatchBorder },
+    TEXT_SEARCH_RESULT_ATTRIBUTES: { bg: u.findMatch, effect: 0, effectColour: u.findMatchBorder },
+    WRITE_SEARCH_RESULT_ATTRIBUTES: { bg: u.findMatch, effect: 0, effectColour: u.findMatchBorder },
+    IDENTIFIER_UNDER_CARET_ATTRIBUTES: { bg: u.lineHighlight, effect: 0, effectColour: u.border },
+    WRITE_IDENTIFIER_UNDER_CARET_ATTRIBUTES: { bg: u.lineHighlight, effect: 0, effectColour: u.accent },
+    MATCHED_BRACE_ATTRIBUTES: { bg: u.lineHighlight, effect: 0, effectColour: u.accent, fontType: 1 },
+    UNMATCHED_BRACE_ATTRIBUTES: { fg: s.invalid, token: "invalid" },
+    TODO_DEFAULT_ATTRIBUTES: { fg: s.control, fontType: 3 },
+    DIFF_INSERTED: { bg: u.diffAddedBackground },
+    DIFF_DELETED: { bg: u.diffRemovedBackground },
+    DIFF_MODIFIED: { bg: u.lineHighlight },
+    DELETED_TEXT_ATTRIBUTES: { fg: s.removed, effect: 3, effectColour: s.removed },
+    INJECTED_LANGUAGE_FRAGMENT: {},
+    CONSOLE_NORMAL_OUTPUT: { fg: u.foreground },
+    CONSOLE_ERROR_OUTPUT: { fg: u.error },
+    CONSOLE_SYSTEM_OUTPUT: { fg: u.muted },
+    CONSOLE_USER_INPUT: { fg: s.function, fontType: 2 },
+    LOG_ERROR_OUTPUT: { fg: u.error },
+    LOG_WARNING_OUTPUT: { fg: u.warning },
+    LOG_INFO_OUTPUT: { fg: u.info },
+  };
+  const consoleNames = ["BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN", "GRAY"];
+  const brightNames = ["DARKGRAY", "RED_BRIGHT", "GREEN_BRIGHT", "YELLOW_BRIGHT", "BLUE_BRIGHT", "MAGENTA_BRIGHT", "CYAN_BRIGHT", "WHITE"];
+  consoleNames.forEach((n, i) => { attributes[`CONSOLE_${n}_OUTPUT`] = { fg: a[i] }; });
+  brightNames.forEach((n, i) => { attributes[`CONSOLE_${n}_OUTPUT`] = { fg: a[i + 8] }; });
+
+  const parent = theme.appearance === "dark" ? "Darcula" : "Default";
+  return [
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+    `<!-- ${HEADER} -->`,
+    `<scheme name="${xmlEscape(theme.name)}" version="142" parent_scheme="${parent}">`,
+    "  <metaInfo>",
+    `    <property name="ide">idea</property>`,
+    `    <property name="originalScheme">${xmlEscape(theme.name)}</property>`,
+    "  </metaInfo>",
+    "  <colors>",
+    ...Object.entries(colours).map(([k, v]) => `    <option name="${k}" value="${bare(v)}" />`),
+    "  </colors>",
+    "  <attributes>",
+    ...Object.entries(attributes).map(([k, v]) => iclsAttribute(k, v)),
+    "  </attributes>",
+    "</scheme>",
+    "",
+  ].join("\n");
+}
+
+function jetbrainsTheme(theme) {
+  const u = theme.ui;
+  return {
+    name: theme.name,
+    dark: theme.appearance === "dark",
+    author: "Zacess",
+    editorScheme: `/themes/${slug(theme)}.icls`,
+    ui: {
+      "*": {
+        background: u.surface,
+        foreground: u.foreground,
+        infoForeground: u.muted,
+        disabledForeground: u.muted,
+        inactiveForeground: u.muted,
+        selectionBackground: u.selection,
+        selectionForeground: u.foreground,
+        selectionInactiveBackground: u.lineHighlight,
+        selectionBackgroundInactive: u.lineHighlight,
+        selectionInactiveForeground: u.foreground,
+        hoverBackground: u.lineHighlight,
+        borderColor: u.border,
+        separatorColor: u.border,
+        focusColor: u.accent,
+        focusedBorderColor: u.accent,
+        errorForeground: u.error,
+        acceleratorForeground: u.muted,
+      },
+      Component: {
+        focusWidth: 2,
+        focusColor: u.accent,
+        focusedBorderColor: u.accent,
+        borderColor: u.border,
+        errorFocusColor: u.error,
+        inactiveErrorFocusColor: u.error,
+        warningFocusColor: u.warning,
+        inactiveWarningFocusColor: u.warning,
+      },
+      Link: {
+        activeForeground: u.link,
+        hoverForeground: u.link,
+        pressedForeground: u.link,
+        visitedForeground: u.link,
+      },
+      Button: {
+        startBackground: u.surfaceAlt,
+        endBackground: u.surfaceAlt,
+        foreground: u.foreground,
+        startBorderColor: u.border,
+        endBorderColor: u.border,
+        focusedBorderColor: u.accent,
+        "default.startBackground": u.accent,
+        "default.endBackground": u.accent,
+        "default.foreground": u.accentForeground,
+        "default.startBorderColor": u.accent,
+        "default.endBorderColor": u.accent,
+        "default.focusColor": u.foreground,
+        "default.focusedBorderColor": u.foreground,
+      },
+      TextField: { background: u.background, foreground: u.foreground },
+      TextArea: { background: u.background, foreground: u.foreground },
+      ComboBox: { background: u.background, foreground: u.foreground, nonEditableBackground: u.background },
+      EditorPane: { background: u.background },
+      EditorTabs: {
+        background: u.surface,
+        underlinedTabBackground: u.background,
+        underlinedTabForeground: u.foreground,
+        underlineColor: u.accent,
+        underlineHeight: 3,
+        inactiveUnderlineColor: u.border,
+      },
+      ToolWindow: {
+        "Header.background": u.surfaceAlt,
+        "Header.inactiveBackground": u.surface,
+        "HeaderTab.selectedInactiveBackground": u.lineHighlight,
+        "Button.selectedBackground": u.selection,
+        "Button.selectedForeground": u.foreground,
+      },
+      MainToolbar: { background: u.surfaceAlt, inactiveBackground: u.surface },
+      StatusBar: { background: u.surfaceAlt, borderColor: u.border },
+      Tree: { background: u.surface, foreground: u.foreground, selectionBackground: u.selection, selectionForeground: u.foreground, selectionInactiveBackground: u.lineHighlight },
+      List: { background: u.surface, foreground: u.foreground, selectionBackground: u.selection, selectionForeground: u.foreground, selectionInactiveBackground: u.lineHighlight },
+      Table: { background: u.surface, foreground: u.foreground, selectionBackground: u.selection, selectionForeground: u.foreground },
+      Popup: { background: u.surface, borderColor: u.border },
+      ToolTip: { background: u.surface, foreground: u.foreground, borderColor: u.border },
+      Notification: { background: u.surface, foreground: u.foreground, borderColor: u.border },
+      SearchMatch: { startBackground: u.findMatch, endBackground: u.findMatch },
+      Counter: { background: u.accent, foreground: u.accentForeground },
+      ScrollBar: { "Mac.thumbColor": u.indentGuide, "Mac.hoverThumbColor": u.border, thumbColor: u.indentGuide, hoverThumbColor: u.border },
+    },
+  };
+}
+
+function buildJetbrains() {
+  const base = "editors/jetbrains/src/main/resources";
+  const providers = [];
+  for (const theme of palette.themes) {
+    write(`${base}/themes/${slug(theme)}.theme.json`, json(jetbrainsTheme(theme)));
+    write(`${base}/themes/${slug(theme)}.icls`, icls(theme));
+    providers.push(`    <themeProvider id="${slug(theme)}" path="/themes/${slug(theme)}.theme.json" />`);
+  }
+  const names = palette.themes.map((t) => t.name);
+  write(`${base}/META-INF/plugin.xml`, [
+    `<!-- ${HEADER} -->`,
+    "<idea-plugin>",
+    "  <id>com.zacess.themes</id>",
+    "  <name>Zacess Themes</name>",
+    "  <vendor url=\"https://zacess.com\" email=\"contact@zacess.com\">Zacess</vendor>",
+    "  <description><![CDATA[",
+    "<p>Four high contrast themes that match the Zacess reader, so a page looks the same in the reader and in the IDE.</p>",
+    "<ul>",
+    ...palette.themes.map((t) => `<li><b>${t.name}</b>: ${t.description}</li>`),
+    "</ul>",
+    "<p>Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background, the selection and the current line. Comments are never dimmed below it. Keywords are bold, comments italic and invalid code underlined, so colour is never the only signal.</p>",
+    `<p>Source, contrast tables and issues: <a href="${REPO}">${REPO}</a></p>`,
+    "]]></description>",
+    "  <depends>com.intellij.modules.platform</depends>",
+    "  <extensions defaultExtensionNs=\"com.intellij\">",
+    ...providers,
+    "  </extensions>",
+    "</idea-plugin>",
+    "",
+  ].join("\n"));
+  return names;
+}
+
+// ---------------------------------------------------------------- Obsidian
+
+function obsidianVars(theme) {
+  const u = theme.ui;
+  const s = theme.syntax;
+  return [
+    `color-scheme: ${theme.appearance};`,
+    // Obsidian derives form fields and many panels from the base scale, so it is set too; without
+    // it a theme chosen in the other mode keeps the wrong mode's field colours
+    `--color-base-00: ${u.background};`,
+    `--color-base-05: ${u.surface};`,
+    `--color-base-10: ${u.surface};`,
+    `--color-base-20: ${u.surfaceAlt};`,
+    `--color-base-25: ${u.surfaceAlt};`,
+    `--color-base-30: ${u.border};`,
+    `--color-base-35: ${u.border};`,
+    `--color-base-40: ${u.border};`,
+    `--color-base-50: ${u.muted};`,
+    `--color-base-60: ${u.muted};`,
+    `--color-base-70: ${u.muted};`,
+    `--color-base-100: ${u.foreground};`,
+    `--background-modifier-form-field: ${u.background};`,
+    `--background-primary: ${u.background};`,
+    `--background-primary-alt: ${u.surface};`,
+    `--background-secondary: ${u.surface};`,
+    `--background-secondary-alt: ${u.surfaceAlt};`,
+    `--background-modifier-border: ${u.border};`,
+    `--background-modifier-border-hover: ${u.foreground};`,
+    `--background-modifier-border-focus: ${u.accent};`,
+    `--background-modifier-hover: ${u.lineHighlight};`,
+    `--background-modifier-active-hover: ${u.lineHighlight};`,
+    `--background-modifier-error: ${u.error};`,
+    `--background-modifier-success: ${s.added};`,
+    `--text-normal: ${u.foreground};`,
+    `--text-muted: ${u.muted};`,
+    `--text-faint: ${u.muted};`,
+    `--text-error: ${u.error};`,
+    `--text-warning: ${u.warning};`,
+    `--text-success: ${s.added};`,
+    `--text-accent: ${u.accent};`,
+    `--text-accent-hover: ${u.accent};`,
+    `--text-on-accent: ${u.accentForeground};`,
+    `--text-on-accent-inverted: ${u.accentForeground};`,
+    `--text-selection: ${u.selection};`,
+    `--text-highlight-bg: ${u.findMatch};`,
+    `--interactive-normal: ${u.surfaceAlt};`,
+    `--interactive-hover: ${u.lineHighlight};`,
+    `--interactive-accent: ${u.accent};`,
+    `--interactive-accent-hover: ${u.accent};`,
+    `--link-color: ${u.link};`,
+    `--link-color-hover: ${u.link};`,
+    `--link-external-color: ${u.link};`,
+    `--link-external-color-hover: ${u.link};`,
+    `--link-unresolved-color: ${u.link};`,
+    `--link-unresolved-opacity: 1;`,
+    `--link-decoration: underline;`,
+    `--link-decoration-hover: underline;`,
+    `--link-external-decoration: underline;`,
+    `--link-unresolved-decoration-style: dashed;`,
+    `--code-background: ${u.surface};`,
+    `--code-normal: ${s.foreground};`,
+    `--code-comment: ${s.comment};`,
+    `--code-function: ${s.function};`,
+    `--code-important: ${s.control};`,
+    `--code-keyword: ${s.keyword};`,
+    `--code-operator: ${s.operator};`,
+    `--code-property: ${s.property};`,
+    `--code-punctuation: ${s.operator};`,
+    `--code-string: ${s.string};`,
+    `--code-tag: ${s.tag};`,
+    `--code-value: ${s.number};`,
+    `--caret-color: ${u.cursor};`,
+    `--checkbox-color: ${u.accent};`,
+    `--checkbox-border-color: ${u.border};`,
+    `--blockquote-border-color: ${u.border};`,
+    `--hr-color: ${u.border};`,
+    `--tag-color: ${u.accent};`,
+    `--tag-background: ${u.surface};`,
+    `--tag-border-color: ${u.border};`,
+    `--tag-border-width: 1px;`,
+    `--zacess-focus: ${u.accent};`,
+    `--zacess-added: ${s.added};`,
+    `--zacess-removed: ${s.removed};`,
+  ];
+}
+
+function buildObsidian() {
+  const byId = Object.fromEntries(palette.themes.map((t) => [t.id, t]));
+  const block = (selector, theme) => `${selector} {\n${obsidianVars(theme).map((v) => `  ${v}`).join("\n")}\n}\n`;
+  const css = [
+    `/* ${HEADER} */`,
+    "",
+    "/* @settings",
+    "name: Zacess",
+    "id: zacess-theme",
+    "settings:",
+    "  - id: zacess-contrast",
+    "    title: Contrast theme",
+    "    description: Light and Dark follow Obsidian's own appearance setting. Yellow on Black and Cream replace both.",
+    "    type: class-select",
+    "    allowEmpty: false",
+    "    default: zacess-follow",
+    "    options:",
+    "      - label: Light or Dark, following Obsidian",
+    "        value: zacess-follow",
+    "      - label: Yellow on Black (low vision)",
+    "        value: zacess-yellow-on-black",
+    "      - label: Cream (dyslexia friendly)",
+    "        value: zacess-cream",
+    "*/",
+    "",
+    block(".theme-light", byId.light),
+    block(".theme-dark", byId.dark),
+    "/* the class-select option sits on body, so it outranks the light and dark blocks above */",
+    block("body.zacess-yellow-on-black.theme-light,\nbody.zacess-yellow-on-black.theme-dark", byId["yellow-on-black"]),
+    block("body.zacess-cream.theme-light,\nbody.zacess-cream.theme-dark", byId.cream),
+    "/* links are underlined so colour is never the only signal */",
+    ".markdown-rendered a,",
+    ".cm-s-obsidian span.cm-hmd-internal-link,",
+    ".cm-s-obsidian span.cm-url,",
+    ".cm-s-obsidian span.cm-link {",
+    "  text-decoration: underline;",
+    "  text-decoration-thickness: 1px;",
+    "  text-underline-offset: 2px;",
+    "}",
+    "",
+    "/* a visible focus ring on every control, never removed */",
+    ":focus-visible {",
+    "  outline: 3px solid var(--zacess-focus);",
+    "  outline-offset: 2px;",
+    "}",
+    "",
+    "/* font styles in code match every other editor, so styles carry meaning without colour */",
+    ".cm-s-obsidian .cm-keyword,",
+    ".markdown-rendered .token.keyword {",
+    "  font-weight: 700;",
+    "}",
+    "",
+    ".cm-s-obsidian .cm-comment,",
+    ".markdown-rendered .token.comment {",
+    "  font-style: italic;",
+    "}",
+    "",
+    ".markdown-rendered .token.tag {",
+    "  font-weight: 700;",
+    "}",
+    "",
+    ".markdown-rendered .token.parameter {",
+    "  font-style: italic;",
+    "}",
+    "",
+    ".markdown-rendered .token.inserted {",
+    "  color: var(--zacess-added);",
+    "}",
+    "",
+    ".markdown-rendered .token.deleted {",
+    "  color: var(--zacess-removed);",
+    "}",
+    "",
+    "@media (prefers-reduced-motion: reduce) {",
+    "  * {",
+    "    animation-duration: 0.01ms !important;",
+    "    transition-duration: 0.01ms !important;",
+    "  }",
+    "}",
+    "",
+  ].join("\n");
+  write("editors/obsidian/theme.css", css);
+  write("editors/obsidian/manifest.json", json({
+    name: "Zacess",
+    version: palette.version,
+    minAppVersion: "1.0.0",
+    author: "Zacess",
+    authorUrl: "https://zacess.com",
+  }));
+}
+
+// ---------------------------------------------------------------- Neovim
+
+function neovim(theme) {
+  const u = theme.ui;
+  const s = theme.syntax;
+  const spec = (token, extra = {}) => {
+    const out = { fg: s[token], ...extra };
+    if (has(token, "bold")) out.bold = true;
+    if (has(token, "italic")) out.italic = true;
+    if (has(token, "underline")) { out.underline = true; out.sp = s[token]; }
+    return out;
+  };
+  const groups = {
+    Normal: { fg: u.foreground, bg: u.background },
+    NormalNC: { fg: u.foreground, bg: u.background },
+    NormalFloat: { fg: u.foreground, bg: u.surface },
+    FloatBorder: { fg: u.border, bg: u.surface },
+    FloatTitle: { fg: u.foreground, bg: u.surface, bold: true },
+    Cursor: { fg: u.background, bg: u.cursor },
+    lCursor: { fg: u.background, bg: u.cursor },
+    CursorIM: { fg: u.background, bg: u.cursor },
+    TermCursor: { fg: u.background, bg: u.cursor },
+    CursorLine: { bg: u.lineHighlight },
+    CursorColumn: { bg: u.lineHighlight },
+    ColorColumn: { bg: u.lineHighlight },
+    CursorLineNr: { fg: u.lineNumberActive, bg: u.lineHighlight, bold: true },
+    LineNr: { fg: u.lineNumber, bg: u.gutter },
+    SignColumn: { fg: u.lineNumber, bg: u.gutter },
+    FoldColumn: { fg: u.lineNumber, bg: u.gutter },
+    Folded: { fg: u.muted, bg: u.surface, italic: true },
+    Visual: { bg: u.selection },
+    VisualNOS: { bg: u.selection },
+    Search: { fg: u.foreground, bg: u.lineHighlight, underline: true, sp: u.findMatchBorder },
+    CurSearch: { fg: u.foreground, bg: u.findMatch, bold: true },
+    IncSearch: { fg: u.foreground, bg: u.findMatch, bold: true },
+    Substitute: { fg: u.foreground, bg: u.findMatch },
+    MatchParen: { bg: u.lineHighlight, bold: true, underline: true, sp: u.accent },
+    NonText: { fg: u.whitespace },
+    Whitespace: { fg: u.whitespace },
+    SpecialKey: { fg: u.whitespace },
+    EndOfBuffer: { fg: u.whitespace },
+    Conceal: { fg: u.muted },
+    Directory: { fg: s.function, bold: true },
+    Title: { fg: s.keyword, bold: true },
+    ErrorMsg: { fg: u.error, bold: true },
+    WarningMsg: { fg: u.warning, bold: true },
+    ModeMsg: { fg: u.foreground, bold: true },
+    MoreMsg: { fg: u.accent, bold: true },
+    Question: { fg: u.accent, bold: true },
+    StatusLine: { fg: u.foreground, bg: u.surfaceAlt },
+    StatusLineNC: { fg: u.muted, bg: u.surface },
+    TabLine: { fg: u.muted, bg: u.surface },
+    TabLineFill: { bg: u.surface },
+    TabLineSel: { fg: u.foreground, bg: u.background, bold: true, underline: true, sp: u.accent },
+    WinSeparator: { fg: u.border },
+    VertSplit: { fg: u.border },
+    WinBar: { fg: u.foreground, bg: u.background, bold: true },
+    WinBarNC: { fg: u.muted, bg: u.background },
+    Pmenu: { fg: u.foreground, bg: u.surface },
+    PmenuSel: { fg: u.foreground, bg: u.selection, bold: true },
+    PmenuSbar: { bg: u.surfaceAlt },
+    PmenuThumb: { bg: u.indentGuide },
+    PmenuMatch: { fg: u.accent, bold: true },
+    WildMenu: { fg: u.foreground, bg: u.selection },
+    QuickFixLine: { bg: u.selection },
+    SpellBad: { undercurl: true, sp: u.error },
+    SpellCap: { undercurl: true, sp: u.warning },
+    SpellLocal: { undercurl: true, sp: u.info },
+    SpellRare: { undercurl: true, sp: u.info },
+    DiffAdd: { bg: u.diffAddedBackground },
+    DiffDelete: { fg: s.removed, bg: u.diffRemovedBackground },
+    DiffChange: { bg: u.lineHighlight },
+    DiffText: { bg: u.selection, bold: true },
+    Added: spec("added"),
+    Removed: spec("removed"),
+    Changed: spec("changed"),
+    diffAdded: spec("added"),
+    diffRemoved: spec("removed"),
+    diffChanged: spec("changed"),
+    Comment: spec("comment"),
+    Constant: spec("number"),
+    String: spec("string"),
+    Character: spec("string"),
+    Number: spec("number"),
+    Boolean: spec("number"),
+    Float: spec("number"),
+    Identifier: spec("variable"),
+    Function: spec("function"),
+    Statement: spec("keyword"),
+    Conditional: spec("control"),
+    Repeat: spec("control"),
+    Label: spec("control"),
+    Operator: spec("operator"),
+    Keyword: spec("keyword"),
+    Exception: spec("control"),
+    PreProc: spec("keyword"),
+    Include: spec("control"),
+    Define: spec("keyword"),
+    Macro: spec("function"),
+    PreCondit: spec("keyword"),
+    Type: spec("type"),
+    StorageClass: spec("keyword"),
+    Structure: spec("keyword"),
+    Typedef: spec("keyword"),
+    Special: spec("regex"),
+    SpecialChar: spec("regex"),
+    Tag: spec("tag"),
+    Delimiter: spec("operator"),
+    SpecialComment: spec("comment"),
+    Debug: spec("control"),
+    Underlined: { fg: u.link, underline: true },
+    Error: spec("invalid"),
+    Todo: { fg: s.control, bold: true, italic: true },
+    DiagnosticError: { fg: u.error },
+    DiagnosticWarn: { fg: u.warning },
+    DiagnosticInfo: { fg: u.info },
+    DiagnosticHint: { fg: u.muted },
+    DiagnosticOk: { fg: s.added },
+    DiagnosticUnderlineError: { undercurl: true, sp: u.error },
+    DiagnosticUnderlineWarn: { undercurl: true, sp: u.warning },
+    DiagnosticUnderlineInfo: { undercurl: true, sp: u.info },
+    DiagnosticUnderlineHint: { undercurl: true, sp: u.muted },
+    DiagnosticUnnecessary: { fg: u.muted, italic: true },
+    DiagnosticDeprecated: { strikethrough: true, sp: u.muted },
+    LspReferenceText: { bg: u.lineHighlight },
+    LspReferenceRead: { bg: u.lineHighlight },
+    LspReferenceWrite: { bg: u.lineHighlight, underline: true, sp: u.accent },
+    LspInlayHint: { fg: u.muted, bg: u.surface },
+    "@variable": spec("variable"),
+    "@variable.builtin": spec("keyword"),
+    "@variable.parameter": spec("parameter"),
+    "@variable.parameter.builtin": spec("parameter"),
+    "@variable.member": spec("property"),
+    "@property": spec("property"),
+    "@constant": spec("number"),
+    "@constant.builtin": spec("number"),
+    "@constant.macro": spec("number"),
+    "@module": spec("type"),
+    "@label": spec("control"),
+    "@string": spec("string"),
+    "@string.documentation": spec("string"),
+    "@string.regexp": spec("regex"),
+    "@string.escape": spec("regex"),
+    "@string.special": spec("regex"),
+    "@string.special.url": { fg: u.link, underline: true },
+    "@character": spec("string"),
+    "@boolean": spec("number"),
+    "@number": spec("number"),
+    "@number.float": spec("number"),
+    "@type": spec("type"),
+    "@type.builtin": spec("type"),
+    "@type.definition": spec("type"),
+    "@attribute": spec("function"),
+    "@function": spec("function"),
+    "@function.builtin": spec("function"),
+    "@function.call": spec("function"),
+    "@function.macro": spec("function"),
+    "@function.method": spec("function"),
+    "@function.method.call": spec("function"),
+    "@constructor": spec("type"),
+    "@operator": spec("operator"),
+    "@keyword": spec("keyword"),
+    "@keyword.function": spec("keyword"),
+    "@keyword.operator": spec("keyword"),
+    "@keyword.import": spec("control"),
+    "@keyword.type": spec("keyword"),
+    "@keyword.modifier": spec("keyword"),
+    "@keyword.repeat": spec("control"),
+    "@keyword.return": spec("control"),
+    "@keyword.exception": spec("control"),
+    "@keyword.conditional": spec("control"),
+    "@keyword.coroutine": spec("control"),
+    "@keyword.directive": spec("keyword"),
+    "@punctuation": spec("operator"),
+    "@punctuation.delimiter": spec("operator"),
+    "@punctuation.bracket": spec("operator"),
+    "@punctuation.special": spec("operator"),
+    "@comment": spec("comment"),
+    "@comment.documentation": spec("comment"),
+    "@comment.error": { fg: u.error, bold: true, italic: true },
+    "@comment.warning": { fg: u.warning, bold: true, italic: true },
+    "@comment.todo": { fg: s.control, bold: true, italic: true },
+    "@comment.note": { fg: u.info, bold: true, italic: true },
+    "@markup.strong": { bold: true },
+    "@markup.italic": { italic: true },
+    "@markup.strikethrough": { strikethrough: true },
+    "@markup.underline": { underline: true },
+    "@markup.heading": { fg: s.keyword, bold: true },
+    "@markup.quote": spec("comment"),
+    "@markup.link": { fg: u.link, underline: true },
+    "@markup.link.url": { fg: u.link, underline: true },
+    "@markup.link.label": { fg: u.link },
+    "@markup.raw": spec("string"),
+    "@markup.list": spec("operator"),
+    "@diff.plus": spec("added"),
+    "@diff.minus": spec("removed"),
+    "@diff.delta": spec("changed"),
+    "@tag": spec("tag"),
+    "@tag.builtin": spec("tag"),
+    "@tag.attribute": spec("attribute"),
+    "@tag.delimiter": spec("operator"),
+    "@lsp.type.parameter": spec("parameter"),
+    "@lsp.type.property": spec("property"),
+    "@lsp.type.function": spec("function"),
+    "@lsp.type.method": spec("function"),
+    "@lsp.type.type": spec("type"),
+    "@lsp.type.class": spec("type"),
+    "@lsp.type.interface": spec("type"),
+    "@lsp.type.enum": spec("type"),
+    "@lsp.type.enumMember": spec("number"),
+    "@lsp.type.namespace": spec("type"),
+    "@lsp.type.keyword": spec("keyword"),
+    "@lsp.type.comment": spec("comment"),
+    "@lsp.type.variable": spec("variable"),
+    "@lsp.type.decorator": spec("function"),
+  };
+  const lua = (v) => (typeof v === "string" ? JSON.stringify(v) : String(v));
+  const tableOf = (obj) => `{ ${Object.entries(obj).map(([k, v]) => `${k} = ${lua(v)}`).join(", ")} }`;
+  return [
+    `-- ${theme.name}`,
+    `-- ${HEADER}`,
+    "-- needs a terminal or GUI with true colour and vim.o.termguicolors = true",
+    "",
+    "vim.cmd(\"highlight clear\")",
+    "if vim.fn.exists(\"syntax_on\") == 1 then",
+    "  vim.cmd(\"syntax reset\")",
+    "end",
+    `vim.o.background = "${theme.appearance}"`,
+    `vim.g.colors_name = "${slug(theme)}"`,
+    "",
+    "local hl = vim.api.nvim_set_hl",
+    "",
+    ...Object.entries(groups).map(([g, v]) => `hl(0, ${JSON.stringify(g)}, ${tableOf(v)})`),
+    "",
+    ...theme.terminal.ansi.map((c, i) => `vim.g.terminal_color_${i} = "${c}"`),
+    "",
+  ].join("\n");
+}
+
+function buildNeovim() {
+  for (const theme of palette.themes) write(`editors/neovim/colors/${slug(theme)}.lua`, neovim(theme));
+}
+
+// ---------------------------------------------------------------- Zed
+
+function zedTheme(theme) {
+  const u = theme.ui;
+  const s = theme.syntax;
+  const a = theme.terminal.ansi;
+  const syn = (token, colour = s[token]) => {
+    const out = { color: colour, font_style: has(token, "italic") ? "italic" : null, font_weight: has(token, "bold") ? 700 : null };
+    return out;
+  };
+  const style = {
+    background: u.surface,
+    border: u.border,
+    "border.variant": u.border,
+    "border.focused": u.accent,
+    "border.selected": u.accent,
+    "border.transparent": `${u.surface}00`,
+    "border.disabled": u.border,
+    "elevated_surface.background": u.surface,
+    "surface.background": u.surface,
+    "element.background": u.surfaceAlt,
+    "element.hover": u.lineHighlight,
+    "element.active": u.selection,
+    "element.selected": u.selection,
+    "element.disabled": u.surface,
+    "drop_target.background": u.selection,
+    "ghost_element.background": `${u.surface}00`,
+    "ghost_element.hover": u.lineHighlight,
+    "ghost_element.active": u.selection,
+    "ghost_element.selected": u.selection,
+    "ghost_element.disabled": `${u.surface}00`,
+    text: u.foreground,
+    "text.muted": u.muted,
+    "text.placeholder": u.muted,
+    "text.disabled": u.muted,
+    "text.accent": u.accent,
+    icon: u.foreground,
+    "icon.muted": u.muted,
+    "icon.disabled": u.muted,
+    "icon.placeholder": u.muted,
+    "icon.accent": u.accent,
+    "status_bar.background": u.surfaceAlt,
+    "title_bar.background": u.surfaceAlt,
+    "title_bar.inactive_background": u.surface,
+    "toolbar.background": u.background,
+    "tab_bar.background": u.surface,
+    "tab.inactive_background": u.surface,
+    "tab.active_background": u.background,
+    "search.match_background": u.findMatch,
+    "panel.background": u.surface,
+    "panel.focused_border": u.accent,
+    "pane.focused_border": u.accent,
+    "scrollbar.thumb.background": `${u.indentGuide}80`,
+    "scrollbar.thumb.hover_background": u.indentGuide,
+    "scrollbar.thumb.border": u.indentGuide,
+    "scrollbar.track.background": `${u.background}00`,
+    "scrollbar.track.border": `${u.background}00`,
+    "editor.foreground": u.foreground,
+    "editor.background": u.background,
+    "editor.gutter.background": u.gutter,
+    "editor.subheader.background": u.surface,
+    "editor.active_line.background": u.lineHighlight,
+    "editor.highlighted_line.background": u.lineHighlight,
+    "editor.line_number": u.lineNumber,
+    "editor.active_line_number": u.lineNumberActive,
+    "editor.invisible": u.whitespace,
+    "editor.wrap_guide": u.indentGuide,
+    "editor.active_wrap_guide": u.border,
+    "editor.indent_guide": u.indentGuide,
+    "editor.indent_guide_active": u.foreground,
+    "editor.document_highlight.read_background": u.lineHighlight,
+    "editor.document_highlight.write_background": u.lineHighlight,
+    "editor.document_highlight.bracket_background": u.lineHighlight,
+    "terminal.background": u.background,
+    "terminal.foreground": u.foreground,
+    "terminal.bright_foreground": u.foreground,
+    "terminal.dim_foreground": u.muted,
+    "link_text.hover": u.link,
+    conflict: u.warning,
+    "conflict.background": u.surface,
+    "conflict.border": u.warning,
+    created: s.added,
+    "created.background": u.diffAddedBackground,
+    "created.border": s.added,
+    deleted: s.removed,
+    "deleted.background": u.diffRemovedBackground,
+    "deleted.border": s.removed,
+    error: u.error,
+    "error.background": u.surface,
+    "error.border": u.error,
+    hidden: u.muted,
+    "hidden.background": u.surface,
+    "hidden.border": u.border,
+    hint: u.muted,
+    "hint.background": u.surface,
+    "hint.border": u.border,
+    ignored: u.muted,
+    "ignored.background": u.surface,
+    "ignored.border": u.border,
+    info: u.info,
+    "info.background": u.surface,
+    "info.border": u.info,
+    modified: s.changed,
+    "modified.background": u.lineHighlight,
+    "modified.border": s.changed,
+    predictive: u.muted,
+    "predictive.background": u.surface,
+    "predictive.border": u.border,
+    renamed: s.changed,
+    "renamed.background": u.surface,
+    "renamed.border": s.changed,
+    success: s.added,
+    "success.background": u.surface,
+    "success.border": s.added,
+    unreachable: u.muted,
+    "unreachable.background": u.surface,
+    "unreachable.border": u.border,
+    warning: u.warning,
+    "warning.background": u.surface,
+    "warning.border": u.warning,
+    players: [{ cursor: u.cursor, background: u.cursor, selection: u.selection }],
+    syntax: {
+      attribute: syn("attribute"),
+      boolean: syn("number"),
+      comment: syn("comment"),
+      "comment.doc": syn("comment"),
+      constant: syn("number"),
+      constructor: syn("type"),
+      embedded: syn("variable"),
+      emphasis: { color: s.foreground, font_style: "italic", font_weight: null },
+      "emphasis.strong": { color: s.foreground, font_style: null, font_weight: 700 },
+      enum: syn("type"),
+      function: syn("function"),
+      hint: { color: u.muted, font_style: "italic", font_weight: null },
+      keyword: syn("keyword"),
+      label: syn("control"),
+      link_text: { color: u.link, font_style: null, font_weight: null },
+      link_uri: { color: u.link, font_style: null, font_weight: null },
+      number: syn("number"),
+      operator: syn("operator"),
+      predictive: { color: u.muted, font_style: "italic", font_weight: null },
+      preproc: syn("keyword"),
+      primary: syn("variable"),
+      property: syn("property"),
+      punctuation: syn("operator"),
+      "punctuation.bracket": syn("operator"),
+      "punctuation.delimiter": syn("operator"),
+      "punctuation.list_marker": syn("operator"),
+      "punctuation.special": syn("operator"),
+      string: syn("string"),
+      "string.escape": syn("regex"),
+      "string.regex": syn("regex"),
+      "string.special": syn("regex"),
+      "string.special.symbol": syn("number"),
+      tag: syn("tag"),
+      "text.literal": syn("string"),
+      title: { color: s.keyword, font_style: null, font_weight: 700 },
+      type: syn("type"),
+      variable: syn("variable"),
+      "variable.special": syn("keyword"),
+      variant: syn("type"),
+    },
+  };
+  ANSI_NAMES.forEach((name, i) => {
+    const key = name.startsWith("bright") ? `bright_${name.slice(6).toLowerCase()}` : name;
+    style[`terminal.ansi.${key}`] = a[i];
+  });
+  return { name: theme.name, appearance: theme.appearance, style };
+}
+
+function buildZed() {
+  write("editors/zed/themes/zacess.json", json({
+    $schema: "https://zed.dev/schema/themes/v0.2.0.json",
+    name: "Zacess",
+    author: "Zacess",
+    themes: palette.themes.map(zedTheme),
+  }));
+  write("editors/zed/extension.toml", [
+    `# ${HEADER}`,
+    "id = \"zacess-themes\"",
+    "name = \"Zacess Themes\"",
+    `version = "${palette.version}"`,
+    "schema_version = 1",
+    "authors = [\"Zacess <contact@zacess.com>\"]",
+    "description = \"High contrast themes matching the Zacess reader: Light, Dark, Yellow on Black and Cream, every text and syntax colour at 7:1 or more.\"",
+    `repository = "${REPO}"`,
+    "",
+  ].join("\n"));
+  copyFileSync(join(ROOT, "LICENSE"), join(ROOT, "editors/zed/LICENSE"));
+  written.push("editors/zed/LICENSE");
+}
+
+// ---------------------------------------------------------------- terminals
+
+function terminalColours(theme) {
+  const u = theme.ui;
+  return {
+    background: u.background,
+    foreground: u.foreground,
+    cursor: u.cursor,
+    cursorText: u.background,
+    selection: u.selection,
+    selectionText: u.foreground,
+    ansi: theme.terminal.ansi,
+  };
+}
+
+function iterm(theme) {
+  const t = terminalColours(theme);
+  const entry = (key, hex) => {
+    const [r, g, b] = parseHex(hex).map((v) => (v / 255).toFixed(6));
+    return [
+      `\t<key>${key}</key>`,
+      "\t<dict>",
+      "\t\t<key>Alpha Component</key>",
+      "\t\t<real>1</real>",
+      "\t\t<key>Blue Component</key>",
+      `\t\t<real>${b}</real>`,
+      "\t\t<key>Color Space</key>",
+      "\t\t<string>sRGB</string>",
+      "\t\t<key>Green Component</key>",
+      `\t\t<real>${g}</real>`,
+      "\t\t<key>Red Component</key>",
+      `\t\t<real>${r}</real>`,
+      "\t</dict>",
+    ].join("\n");
+  };
+  const keys = {};
+  t.ansi.forEach((c, i) => { keys[`Ansi ${i} Color`] = c; });
+  Object.assign(keys, {
+    "Background Color": t.background,
+    "Badge Color": theme.ui.accent,
+    "Bold Color": t.foreground,
+    "Cursor Color": t.cursor,
+    "Cursor Guide Color": theme.ui.lineHighlight,
+    "Cursor Text Color": t.cursorText,
+    "Foreground Color": t.foreground,
+    "Link Color": theme.ui.link,
+    "Selected Text Color": t.selectionText,
+    "Selection Color": t.selection,
+  });
+  const sorted = Object.keys(keys).sort();
+  return [
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+    "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">",
+    `<!-- ${HEADER} -->`,
+    "<plist version=\"1.0\">",
+    "<dict>",
+    ...sorted.map((k) => entry(k, keys[k])),
+    "</dict>",
+    "</plist>",
+    "",
+  ].join("\n");
+}
+
+function alacritty(theme) {
+  const t = terminalColours(theme);
+  const names = ANSI_NAMES.slice(0, 8);
+  return [
+    `# ${theme.name}`,
+    `# ${HEADER}`,
+    "",
+    "[colors.primary]",
+    `background = "${t.background}"`,
+    `foreground = "${t.foreground}"`,
+    "",
+    "[colors.cursor]",
+    `cursor = "${t.cursor}"`,
+    `text = "${t.cursorText}"`,
+    "",
+    "[colors.selection]",
+    `background = "${t.selection}"`,
+    `text = "${t.selectionText}"`,
+    "",
+    "[colors.normal]",
+    ...names.map((n, i) => `${n} = "${t.ansi[i]}"`),
+    "",
+    "[colors.bright]",
+    ...names.map((n, i) => `${n} = "${t.ansi[i + 8]}"`),
+    "",
+  ].join("\n");
+}
+
+function kitty(theme) {
+  const t = terminalColours(theme);
+  return [
+    `# ${theme.name}`,
+    `# ${HEADER}`,
+    "",
+    `background ${t.background}`,
+    `foreground ${t.foreground}`,
+    `cursor ${t.cursor}`,
+    `cursor_text_color ${t.cursorText}`,
+    `selection_background ${t.selection}`,
+    `selection_foreground ${t.selectionText}`,
+    `url_color ${theme.ui.link}`,
+    `active_border_color ${theme.ui.accent}`,
+    `inactive_border_color ${theme.ui.border}`,
+    `active_tab_background ${theme.ui.background}`,
+    `active_tab_foreground ${theme.ui.foreground}`,
+    `inactive_tab_background ${theme.ui.surfaceAlt}`,
+    `inactive_tab_foreground ${theme.ui.muted}`,
+    ...t.ansi.map((c, i) => `color${i} ${c}`),
+    "",
+  ].join("\n");
+}
+
+function ghostty(theme) {
+  const t = terminalColours(theme);
+  return [
+    `# ${theme.name}`,
+    `# ${HEADER}`,
+    "",
+    ...t.ansi.map((c, i) => `palette = ${i}=${c}`),
+    `background = ${t.background}`,
+    `foreground = ${t.foreground}`,
+    `cursor-color = ${t.cursor}`,
+    `cursor-text = ${t.cursorText}`,
+    `selection-background = ${t.selection}`,
+    `selection-foreground = ${t.selectionText}`,
+    "",
+  ].join("\n");
+}
+
+function windowsTerminal() {
+  const names = ["black", "red", "green", "yellow", "blue", "purple", "cyan", "white"];
+  const cap = (n) => n[0].toUpperCase() + n.slice(1);
+  return json({
+    schemes: palette.themes.map((theme) => {
+      const t = terminalColours(theme);
+      const scheme = {
+        name: theme.name,
+        background: t.background,
+        foreground: t.foreground,
+        cursorColor: t.cursor,
+        selectionBackground: t.selection,
+      };
+      names.forEach((n, i) => { scheme[n] = t.ansi[i]; });
+      names.forEach((n, i) => { scheme[`bright${cap(n)}`] = t.ansi[i + 8]; });
+      return scheme;
+    }),
+  });
+}
+
+function buildTerminals() {
+  for (const theme of palette.themes) {
+    const name = slug(theme);
+    write(`editors/terminals/iterm2/${theme.name}.itermcolors`, iterm(theme));
+    write(`editors/terminals/alacritty/${name}.toml`, alacritty(theme));
+    write(`editors/terminals/kitty/${name}.conf`, kitty(theme));
+    write(`editors/terminals/ghostty/${name}`, ghostty(theme));
+  }
+  write("editors/terminals/windows-terminal/zacess.json", windowsTerminal());
+}
+
+// ---------------------------------------------------------------- docs
+
+function replaceBetween(path, marker, body) {
+  const full = join(ROOT, path);
+  const text = readFileSync(full, "utf8");
+  const start = `<!-- ${marker} start: generated by scripts/build.mjs -->`;
+  const end = `<!-- ${marker} end -->`;
+  const i = text.indexOf(start);
+  const j = text.indexOf(end);
+  if (i < 0 || j < 0) throw new Error(`${path} is missing the ${marker} markers`);
+  const next = `${text.slice(0, i + start.length)}\n${body}\n${text.slice(j)}`;
+  if (next !== text) writeFileSync(full, next);
+  written.push(path);
+}
+
+function buildDocs() {
+  const tables = contrastTables(palette);
+  replaceBetween("README.md", "contrast summary", tables.summary);
+  replaceBetween("ACCESSIBILITY.md", "contrast detail", tables.detail);
+  replaceBetween("ACCESSIBILITY.md", "interface detail", tables.ui);
+  replaceBetween("ACCESSIBILITY.md", "terminal detail", tables.terminal);
+  replaceBetween("ACCESSIBILITY.md", "colour vision detail", tables.vision);
+}
+
+buildVscode();
+buildJetbrains();
+buildObsidian();
+buildNeovim();
+buildZed();
+buildTerminals();
+buildDocs();
+console.log(`wrote ${written.length} files from palette/zacess.json`);

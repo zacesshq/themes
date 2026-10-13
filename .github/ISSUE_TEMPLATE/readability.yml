@@ -1,0 +1,52 @@
+name: Contrast or readability problem
+description: Something in a theme is hard to read or hard to tell apart.
+labels: ["accessibility", "palette"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for telling us. We treat a readability problem as a bug. You never need to share a diagnosis or anything personal: describe what was hard to read and we will work from that. If you would rather report privately, email contact@zacess.com.
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      options:
+        - Zacess Light
+        - Zacess Dark
+        - Zacess Yellow on Black
+        - Zacess Cream
+    validations:
+      required: true
+  - type: dropdown
+    id: editor
+    attributes:
+      label: Editor or terminal
+      options:
+        - VS Code
+        - JetBrains IDE
+        - Obsidian
+        - Neovim
+        - Zed
+        - A terminal
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: hard-to-read
+    attributes:
+      label: What was hard to read
+      description: The kind of code or the part of the screen, for example comments, strings next to numbers or the selected line. A screenshot helps if you can share one.
+      placeholder: Strings and numbers look the same to me in Zacess Dark
+    validations:
+      required: true
+  - type: textarea
+    id: would-help
+    attributes:
+      label: What would help (optional)
+      description: If you know what would work better, for example a lighter colour, a different font style or a stronger selection.
+  - type: input
+    id: setup
+    attributes:
+      label: Display and settings (optional)
+      description: Anything that changes how colours look, such as a colour filter, night shift, inverted colours or a zoom level.
+      placeholder: macOS colour filters on, 150% zoom

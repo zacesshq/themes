@@ -1,0 +1,36 @@
+# enforce LF line endings so Windows and Unix contributors never fight over CRLF.
+* text=auto eol=lf
+
+# the Windows wrapper script is run by cmd.exe, which expects CRLF
+*.bat  text eol=crlf
+
+# binary files, never converted
+*.png   binary
+*.jar   binary
+*.zip   binary
+*.vsix  binary
+
+# written by scripts/build.mjs and scripts/preview.mjs from palette/zacess.json, so their diffs
+# are collapsed in reviews; the palette change beside them is what needs reading
+editors/vscode/package.json                              linguist-generated
+editors/vscode/LICENSE                                   linguist-generated
+editors/vscode/themes/**                                 linguist-generated
+editors/jetbrains/src/main/resources/themes/**           linguist-generated
+editors/jetbrains/src/main/resources/META-INF/plugin.xml linguist-generated
+editors/obsidian/manifest.json                           linguist-generated
+editors/obsidian/theme.css                               linguist-generated
+editors/neovim/colors/**                                 linguist-generated
+editors/zed/extension.toml                               linguist-generated
+editors/zed/LICENSE                                      linguist-generated
+editors/zed/themes/**                                    linguist-generated
+editors/terminals/alacritty/**                           linguist-generated
+editors/terminals/ghostty/**                             linguist-generated
+editors/terminals/iterm2/**                              linguist-generated
+editors/terminals/kitty/**                               linguist-generated
+editors/terminals/windows-terminal/**                    linguist-generated
+previews/**                                              linguist-generated
+
+# the Gradle wrapper is written by Gradle itself
+editors/jetbrains/gradlew                                linguist-generated
+editors/jetbrains/gradlew.bat                            linguist-generated
+editors/jetbrains/gradle/wrapper/**                      linguist-generated

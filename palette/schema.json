@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zacesshq/themes/blob/main/palette/schema.json",
+  "title": "Zacess themes palette",
+  "description": "The single source of every colour in the Zacess themes. scripts/build.mjs writes each editor's files from it and scripts/check.mjs measures it.",
+  "type": "object",
+  "required": ["name", "version", "rules", "tokens", "pairs", "themes"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "rules": {
+      "type": "object",
+      "description": "The floors the checks enforce.",
+      "required": ["textContrast", "findMatchContrast", "nonTextContrast", "ansiFloor", "toneStep", "deficiencyDistance"],
+      "additionalProperties": false,
+      "properties": {
+        "textContrast": { "type": "number", "minimum": 7, "description": "WCAG contrast for every text and syntax colour on every surface text sits on." },
+        "findMatchContrast": { "type": "number", "minimum": 4.5, "description": "WCAG contrast for syntax colours over a find match, which also carries a border." },
+        "nonTextContrast": { "type": "number", "minimum": 3, "description": "WCAG contrast for borders, indent guides and whitespace markers." },
+        "ansiFloor": { "type": "number", "minimum": 4.5, "description": "The lowest contrast any terminal colour may have when it is documented as dimmer than the text floor." },
+        "toneStep": { "type": "number", "minimum": 0.05, "description": "The smallest tone difference, the cube root of relative luminance, between two paired tokens that share a style." },
+        "deficiencyDistance": { "type": "number", "minimum": 0.04, "description": "The smallest OKLab distance between two paired tokens under each simulated colour vision deficiency." }
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "description": "Every syntax token with the font style it carries in every theme.",
+      "required": ["keyword", "control", "function", "type", "variable", "parameter", "property", "string", "number", "comment", "operator", "tag", "attribute", "regex", "invalid", "added", "removed", "changed"],
+      "additionalProperties": {
+        "type": "object",
+        "required": ["style", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "style": { "type": "array", "items": { "enum": ["bold", "italic", "underline"] } },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "pairs": {
+      "type": "array",
+      "description": "Tokens that often sit next to each other and must look different without relying on hue.",
+      "items": {
+        "type": "object",
+        "required": ["pair"],
+        "additionalProperties": false,
+        "properties": {
+          "pair": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 },
+          "lightness": { "type": "boolean", "description": "When true the pair must differ in tone even if its styles differ." }
+        }
+      }
+    },
+    "themes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/theme" }
+    }
+  },
+  "$defs": {
+    "colour": { "type": "string", "pattern": "^#[0-9a-f]{6}$" },
+    "theme": {
+      "type": "object",
+      "required": ["id", "name", "appearance", "vscodeUiTheme", "readerProfile", "description", "ui", "syntax", "terminal"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z-]*$" },
+        "name": { "type": "string" },
+        "appearance": { "enum": ["light", "dark"] },
+        "vscodeUiTheme": { "enum": ["vs", "vs-dark", "hc-black", "hc-light"] },
+        "readerProfile": { "enum": ["dark_on_light", "light_on_dark", "yellow_on_black", "black_on_cream"] },
+        "description": { "type": "string" },
+        "ui": {
+          "type": "object",
+          "required": ["background", "foreground", "surface", "surfaceAlt", "muted", "border", "accent", "accentForeground", "link", "selection", "lineHighlight", "cursor", "gutter", "lineNumber", "lineNumberActive", "findMatch", "findMatchBorder", "error", "warning", "info", "diffAddedBackground", "diffRemovedBackground", "indentGuide", "whitespace"],
+          "additionalProperties": { "$ref": "#/$defs/colour" }
+        },
+        "syntax": {
+          "type": "object",
+          "required": ["foreground", "keyword", "control", "function", "type", "variable", "parameter", "property", "string", "number", "comment", "operator", "tag", "attribute", "regex", "invalid", "added", "removed", "changed"],
+          "additionalProperties": { "$ref": "#/$defs/colour" }
+        },
+        "terminal": {
+          "type": "object",
+          "required": ["ansi", "dim", "backgroundRole"],
+          "additionalProperties": false,
+          "properties": {
+            "ansi": { "type": "array", "items": { "$ref": "#/$defs/colour" }, "minItems": 16, "maxItems": 16 },
+            "dim": {
+              "type": "array",
+              "description": "ANSI indexes allowed below the text floor but never below rules.ansiFloor. Each one is listed in ACCESSIBILITY.md.",
+              "items": { "type": "integer", "minimum": 0, "maximum": 15 }
+            },
+            "backgroundRole": {
+              "type": "array",
+              "description": "ANSI indexes that programs use as a background under the text colour, checked the other way round.",
+              "items": { "type": "integer", "minimum": 0, "maximum": 15 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

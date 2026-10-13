@@ -1,0 +1,145 @@
+{
+  "name": "Zacess Dark",
+  "dark": true,
+  "author": "Zacess",
+  "editorScheme": "/themes/zacess-dark.icls",
+  "ui": {
+    "*": {
+      "background": "#1a1a1a",
+      "foreground": "#f5f5f5",
+      "infoForeground": "#c8c8c8",
+      "disabledForeground": "#c8c8c8",
+      "inactiveForeground": "#c8c8c8",
+      "selectionBackground": "#1a2436",
+      "selectionForeground": "#f5f5f5",
+      "selectionInactiveBackground": "#1f1f1f",
+      "selectionBackgroundInactive": "#1f1f1f",
+      "selectionInactiveForeground": "#f5f5f5",
+      "hoverBackground": "#1f1f1f",
+      "borderColor": "#7a7a7a",
+      "separatorColor": "#7a7a7a",
+      "focusColor": "#8cbcff",
+      "focusedBorderColor": "#8cbcff",
+      "errorForeground": "#ffccc4",
+      "acceleratorForeground": "#c8c8c8"
+    },
+    "Component": {
+      "focusWidth": 2,
+      "focusColor": "#8cbcff",
+      "focusedBorderColor": "#8cbcff",
+      "borderColor": "#7a7a7a",
+      "errorFocusColor": "#ffccc4",
+      "inactiveErrorFocusColor": "#ffccc4",
+      "warningFocusColor": "#ffd182",
+      "inactiveWarningFocusColor": "#ffd182"
+    },
+    "Link": {
+      "activeForeground": "#8cbcff",
+      "hoverForeground": "#8cbcff",
+      "pressedForeground": "#8cbcff",
+      "visitedForeground": "#8cbcff"
+    },
+    "Button": {
+      "startBackground": "#232323",
+      "endBackground": "#232323",
+      "foreground": "#f5f5f5",
+      "startBorderColor": "#7a7a7a",
+      "endBorderColor": "#7a7a7a",
+      "focusedBorderColor": "#8cbcff",
+      "default.startBackground": "#8cbcff",
+      "default.endBackground": "#8cbcff",
+      "default.foreground": "#121212",
+      "default.startBorderColor": "#8cbcff",
+      "default.endBorderColor": "#8cbcff",
+      "default.focusColor": "#f5f5f5",
+      "default.focusedBorderColor": "#f5f5f5"
+    },
+    "TextField": {
+      "background": "#121212",
+      "foreground": "#f5f5f5"
+    },
+    "TextArea": {
+      "background": "#121212",
+      "foreground": "#f5f5f5"
+    },
+    "ComboBox": {
+      "background": "#121212",
+      "foreground": "#f5f5f5",
+      "nonEditableBackground": "#121212"
+    },
+    "EditorPane": {
+      "background": "#121212"
+    },
+    "EditorTabs": {
+      "background": "#1a1a1a",
+      "underlinedTabBackground": "#121212",
+      "underlinedTabForeground": "#f5f5f5",
+      "underlineColor": "#8cbcff",
+      "underlineHeight": 3,
+      "inactiveUnderlineColor": "#7a7a7a"
+    },
+    "ToolWindow": {
+      "Header.background": "#232323",
+      "Header.inactiveBackground": "#1a1a1a",
+      "HeaderTab.selectedInactiveBackground": "#1f1f1f",
+      "Button.selectedBackground": "#1a2436",
+      "Button.selectedForeground": "#f5f5f5"
+    },
+    "MainToolbar": {
+      "background": "#232323",
+      "inactiveBackground": "#1a1a1a"
+    },
+    "StatusBar": {
+      "background": "#232323",
+      "borderColor": "#7a7a7a"
+    },
+    "Tree": {
+      "background": "#1a1a1a",
+      "foreground": "#f5f5f5",
+      "selectionBackground": "#1a2436",
+      "selectionForeground": "#f5f5f5",
+      "selectionInactiveBackground": "#1f1f1f"
+    },
+    "List": {
+      "background": "#1a1a1a",
+      "foreground": "#f5f5f5",
+      "selectionBackground": "#1a2436",
+      "selectionForeground": "#f5f5f5",
+      "selectionInactiveBackground": "#1f1f1f"
+    },
+    "Table": {
+      "background": "#1a1a1a",
+      "foreground": "#f5f5f5",
+      "selectionBackground": "#1a2436",
+      "selectionForeground": "#f5f5f5"
+    },
+    "Popup": {
+      "background": "#1a1a1a",
+      "borderColor": "#7a7a7a"
+    },
+    "ToolTip": {
+      "background": "#1a1a1a",
+      "foreground": "#f5f5f5",
+      "borderColor": "#7a7a7a"
+    },
+    "Notification": {
+      "background": "#1a1a1a",
+      "foreground": "#f5f5f5",
+      "borderColor": "#7a7a7a"
+    },
+    "SearchMatch": {
+      "startBackground": "#332a00",
+      "endBackground": "#332a00"
+    },
+    "Counter": {
+      "background": "#8cbcff",
+      "foreground": "#121212"
+    },
+    "ScrollBar": {
+      "Mac.thumbColor": "#6b6b6b",
+      "Mac.hoverThumbColor": "#7a7a7a",
+      "thumbColor": "#6b6b6b",
+      "hoverThumbColor": "#7a7a7a"
+    }
+  }
+}

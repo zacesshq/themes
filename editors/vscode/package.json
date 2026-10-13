@@ -1,0 +1,64 @@
+{
+  "name": "zacess-themes",
+  "displayName": "Zacess Themes",
+  "description": "Four high contrast code themes matching the Zacess reader: Light, Dark, Yellow on Black for low vision and Cream for dyslexia. Every text and syntax colour keeps 7:1 contrast.",
+  "version": "0.1.0",
+  "publisher": "zacess",
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#111111",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/zacesshq/themes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zacesshq/themes.git",
+    "directory": "editors/vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/zacesshq/themes/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "high contrast",
+    "accessibility",
+    "low vision",
+    "dyslexia",
+    "WCAG",
+    "AAA",
+    "colour blind",
+    "yellow on black",
+    "cream"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Zacess Light",
+        "uiTheme": "vs",
+        "path": "./themes/zacess-light-color-theme.json"
+      },
+      {
+        "label": "Zacess Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/zacess-dark-color-theme.json"
+      },
+      {
+        "label": "Zacess Yellow on Black",
+        "uiTheme": "hc-black",
+        "path": "./themes/zacess-yellow-on-black-color-theme.json"
+      },
+      {
+        "label": "Zacess Cream",
+        "uiTheme": "hc-light",
+        "path": "./themes/zacess-cream-color-theme.json"
+      }
+    ]
+  }
+}
