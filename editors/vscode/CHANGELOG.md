@@ -4,6 +4,19 @@ All notable changes to the Zacess Themes extension are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-10-14
+
+### Changed
+
+- Zacess Yellow on Black draws the borders, dividers and outlines that only separate areas in a neutral grey, including `contrastBorder`. Yellow stays for focus (`focusBorder` and `contrastActiveBorder`), the active tab, selected list items, buttons and badges.
+- Zacess Yellow on Black draws the integrated terminal's default text in white with a yellow cursor, so yellow warnings and other light ANSI output stand apart from normal text. ANSI white is a light grey so it stays distinct too.
+- Zacess Cream keeps cream for the editor and the terminal and uses a quieter warm neutral for the side bar, activity bar, title bar, status bar and tabs.
+- Each theme uses one accent for focus and active states.
+
+### Fixed
+
+- Zacess Cream builds on the normal light base instead of the high contrast light one. Every theme now sets the inline code, code block, quote, hover, notification, quick input, menu, list, input, dropdown, badge, button and keybinding colours itself. Inline code in Markdown previews and extension pages is readable in Cream again.
+
 ## [0.1.0] - 2026-10-14
 
 ### Added
@@ -12,4 +25,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Editor, workbench, terminal and semantic token colours, with every text and syntax colour at 7:1 contrast or more.
 - Bold keywords, italic comments and parameters and underlined invalid code, so colour is never the only signal.
 
+[0.1.1]: https://github.com/zacesshq/themes/releases/tag/v0.1.1
 [0.1.0]: https://github.com/zacesshq/themes/releases/tag/v0.1.0

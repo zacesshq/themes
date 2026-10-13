@@ -1,7 +1,7 @@
 // every measurement the checks, the tables and the website data share, so a number in the
 // README is always the number CI enforced
 import { DEFICIENCIES, contrast, distance, luminance, ratio, simulate } from "./colour.mjs";
-import { TEXT_SURFACES, UI_TEXT, UI_NON_TEXT, styleOf } from "./palette.mjs";
+import { TEXT_SURFACES, UI_TEXT, UI_NON_TEXT, styleOf, terminalText } from "./palette.mjs";
 
 // tone is the cube root of relative luminance: the OKLab lightness of the grey with the same
 // luminance, which is all a viewer with no colour vision has to go on
@@ -25,15 +25,36 @@ export function measureTheme(palette, theme) {
     for (const surface of surfaces) contrastRows.push(row(theme, `ui.${item}`, u[item], surface, u[surface], r.textContrast));
   }
   for (const [item, surface] of UI_NON_TEXT) contrastRows.push(row(theme, `ui.${item}`, u[item], surface, u[surface], r.nonTextContrast));
+  const term = terminalText(theme);
+  contrastRows.push(row(theme, "terminal.foreground", term.foreground, "background", u.background, r.textContrast));
+  contrastRows.push(row(theme, "terminal.foreground", term.foreground, "selection", u.selection, r.textContrast));
+  contrastRows.push(row(theme, "terminal.cursor", term.cursor, "background", u.background, r.nonTextContrast));
 
   const terminalRows = theme.terminal.ansi.map((colour, i) => {
     if (theme.terminal.backgroundRole.includes(i)) {
       // a background role colour sits under text, so the text is measured on it instead
-      const measured = row(theme, `ansi.${i}`, u.foreground, `ansi.${i}`, colour, r.textContrast);
-      return { ...measured, role: "background", colour, text: u.foreground };
+      const measured = row(theme, `ansi.${i}`, term.foreground, `ansi.${i}`, colour, r.textContrast);
+      return { ...measured, role: "background", colour, text: term.foreground };
     }
     const measured = row(theme, `ansi.${i}`, colour, "background", u.background, r.textContrast);
     return { ...measured, role: "text" };
+  });
+
+  // coloured program output must never blend into normal terminal text: each ANSI colour differs
+  // from the default foreground in tone or, under every simulation, in OKLab; the slots that stand
+  // for the default text by convention are listed in terminal.textRole and skipped
+  const textRole = theme.terminal.textRole ?? [];
+  const terminalTextRows = theme.terminal.ansi.flatMap((colour, i) => {
+    if (textRole.includes(i) || theme.terminal.backgroundRole.includes(i)) return [];
+    const toneDiff = Math.abs(tone(term.foreground) - tone(colour));
+    const simulated = Object.fromEntries(
+      ["normal", ...DEFICIENCIES.filter((d) => d !== "achromatopsia")].map((d) => [
+        d,
+        d === "normal" ? distance(term.foreground, colour) : distance(simulate(term.foreground, d), simulate(colour, d)),
+      ]),
+    );
+    const pass = toneDiff >= r.toneStep || Object.values(simulated).every((v) => v >= r.deficiencyDistance);
+    return [{ theme: theme.id, index: i, colour, foreground: term.foreground, toneDiff, simulated, pass }];
   });
 
   const pairRows = palette.pairs.map(({ pair: [a, b], lightness = false }) => {
@@ -58,6 +79,7 @@ export function measureTheme(palette, theme) {
   return {
     contrastRows,
     terminalRows,
+    terminalTextRows,
     pairRows,
     lowestOnBackground: lowest(syntaxOnBackground),
     lowestText: lowest(textRows),

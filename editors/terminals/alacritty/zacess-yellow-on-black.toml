@@ -3,10 +3,10 @@
 
 [colors.primary]
 background = "#000000"
-foreground = "#ffeb3b"
+foreground = "#ffffff"
 
 [colors.cursor]
-cursor = "#ffffff"
+cursor = "#ffeb3b"
 text = "#000000"
 
 [colors.selection]
@@ -21,7 +21,7 @@ yellow = "#e5b851"
 blue = "#90c1ff"
 magenta = "#f2a4eb"
 cyan = "#1fd3d3"
-white = "#ffffff"
+white = "#d9d9d9"
 
 [colors.bright]
 black = "#aeaeae"

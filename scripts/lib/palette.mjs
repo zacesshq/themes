@@ -33,10 +33,15 @@ export const UI_TEXT = [
   ["cursor", ["background", "lineHighlight"]],
 ];
 
-// boundaries and markers that are not text, held to the non-text floor
+// boundaries and markers that are not text, held to the non-text floor (WCAG 1.4.11) on every
+// surface they divide; borderActive marks focus and the active tab, so it is measured the same way
 export const UI_NON_TEXT = [
   ["border", "background"],
   ["border", "surface"],
+  ["border", "surfaceAlt"],
+  ["borderActive", "background"],
+  ["borderActive", "surface"],
+  ["borderActive", "surfaceAlt"],
   ["findMatchBorder", "background"],
   ["indentGuide", "background"],
   ["whitespace", "background"],
@@ -48,3 +53,86 @@ export const ANSI_NAMES = [
 ];
 
 export const styleOf = (palette, token) => palette.tokens[token]?.style ?? [];
+
+// a theme may give its terminal a default text colour and cursor of its own, so program output
+// in the ANSI colours stays distinct from normal text; otherwise the interface colours are used
+export const terminalText = (theme) => ({
+  foreground: theme.terminal.foreground ?? theme.ui.foreground,
+  cursor: theme.terminal.cursor ?? theme.ui.cursor,
+});
+
+// colour keys VS Code fills from its own defaults when a theme leaves them out; on a high contrast
+// base those defaults are the built in high contrast colours, which clash with the palette and can
+// put syntax colours on an unreadable background, so every theme sets each one itself
+export const VSCODE_FALLBACK_KEYS = [
+  "textPreformat.foreground", "textPreformat.background", "textCodeBlock.background",
+  "textBlockQuote.background", "textBlockQuote.border", "textLink.foreground", "textLink.activeForeground",
+  "textSeparator.foreground",
+  "editorWidget.background", "editorWidget.foreground", "editorWidget.border",
+  "editorHoverWidget.background", "editorHoverWidget.foreground", "editorHoverWidget.border", "editorHoverWidget.statusBarBackground",
+  "notifications.background", "notifications.foreground", "notifications.border",
+  "notificationCenterHeader.background", "notificationCenterHeader.foreground",
+  "quickInput.background", "quickInput.foreground", "quickInputTitle.background",
+  "quickInputList.focusBackground", "quickInputList.focusForeground",
+  "menu.background", "menu.foreground", "menu.selectionBackground", "menu.selectionForeground", "menu.separatorBackground",
+  "list.hoverBackground", "list.hoverForeground", "list.activeSelectionBackground", "list.activeSelectionForeground",
+  "list.inactiveSelectionBackground", "list.inactiveSelectionForeground", "list.focusBackground", "list.focusForeground",
+  "input.background", "input.foreground", "input.placeholderForeground", "inputOption.activeBackground", "inputOption.activeForeground",
+  "dropdown.background", "dropdown.foreground", "dropdown.listBackground",
+  "badge.background", "badge.foreground", "activityBarBadge.background", "activityBarBadge.foreground",
+  "button.background", "button.foreground", "button.hoverBackground",
+  "button.secondaryBackground", "button.secondaryForeground", "button.secondaryHoverBackground",
+  "keybindingLabel.background", "keybindingLabel.foreground", "keybindingLabel.border", "keybindingLabel.bottomBorder",
+];
+
+// text drawn on a background in the VS Code workbench and webviews, each held to the text floor
+export const VSCODE_TEXT_PAIRS = [
+  ["textPreformat.foreground", "textPreformat.background"],
+  ["textPreformat.foreground", "textCodeBlock.background"],
+  ["foreground", "textBlockQuote.background"],
+  ["foreground", "textCodeBlock.background"],
+  ["textLink.foreground", "editor.background"],
+  ["textLink.foreground", "editorHoverWidget.background"],
+  ["textLink.activeForeground", "editor.background"],
+  ["editorWidget.foreground", "editorWidget.background"],
+  ["editorHoverWidget.foreground", "editorHoverWidget.background"],
+  ["editorHoverWidget.foreground", "editorHoverWidget.statusBarBackground"],
+  ["notifications.foreground", "notifications.background"],
+  ["notificationCenterHeader.foreground", "notificationCenterHeader.background"],
+  ["quickInput.foreground", "quickInput.background"],
+  ["quickInput.foreground", "quickInputTitle.background"],
+  ["quickInputList.focusForeground", "quickInputList.focusBackground"],
+  ["menu.foreground", "menu.background"],
+  ["menu.selectionForeground", "menu.selectionBackground"],
+  ["list.hoverForeground", "list.hoverBackground"],
+  ["list.activeSelectionForeground", "list.activeSelectionBackground"],
+  ["list.inactiveSelectionForeground", "list.inactiveSelectionBackground"],
+  ["list.focusForeground", "list.focusBackground"],
+  ["input.foreground", "input.background"],
+  ["input.placeholderForeground", "input.background"],
+  ["inputOption.activeForeground", "inputOption.activeBackground"],
+  ["dropdown.foreground", "dropdown.background"],
+  ["dropdown.foreground", "dropdown.listBackground"],
+  ["badge.foreground", "badge.background"],
+  ["activityBarBadge.foreground", "activityBarBadge.background"],
+  ["button.foreground", "button.background"],
+  ["button.foreground", "button.hoverBackground"],
+  ["button.secondaryForeground", "button.secondaryBackground"],
+  ["button.secondaryForeground", "button.secondaryHoverBackground"],
+  ["keybindingLabel.foreground", "keybindingLabel.background"],
+  ["sideBar.foreground", "sideBar.background"],
+  ["sideBarSectionHeader.foreground", "sideBarSectionHeader.background"],
+  ["activityBar.foreground", "activityBar.background"],
+  ["statusBar.foreground", "statusBar.background"],
+  ["titleBar.activeForeground", "titleBar.activeBackground"],
+  ["tab.activeForeground", "tab.activeBackground"],
+  ["tab.inactiveForeground", "tab.inactiveBackground"],
+  ["panelTitle.activeForeground", "panel.background"],
+  ["terminal.foreground", "terminal.background"],
+];
+
+// non-text marks that are not named as borders, held to the non-text floor
+export const VSCODE_NON_TEXT_PAIRS = [
+  ["textSeparator.foreground", "editor.background"],
+  ["menu.separatorBackground", "menu.background"],
+];

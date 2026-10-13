@@ -17,8 +17,8 @@
     <option name="SELECTED_INDENT_GUIDE" value="ffeb3b" />
     <option name="RIGHT_MARGIN_COLOR" value="8c8c8c" />
     <option name="WHITESPACES" value="9a9a9a" />
-    <option name="METHOD_SEPARATORS_COLOR" value="ffeb3b" />
-    <option name="TEARLINE_COLOR" value="ffeb3b" />
+    <option name="METHOD_SEPARATORS_COLOR" value="7a7a7a" />
+    <option name="TEARLINE_COLOR" value="7a7a7a" />
     <option name="ADDED_LINES_COLOR" value="9ae99c" />
     <option name="MODIFIED_LINES_COLOR" value="ddedff" />
     <option name="DELETED_LINES_COLOR" value="ffa59d" />
@@ -382,14 +382,14 @@
     <option name="IDENTIFIER_UNDER_CARET_ATTRIBUTES">
       <value>
         <option name="BACKGROUND" value="141414" />
-        <option name="EFFECT_COLOR" value="ffeb3b" />
+        <option name="EFFECT_COLOR" value="7a7a7a" />
         <option name="EFFECT_TYPE" value="0" />
       </value>
     </option>
     <option name="WRITE_IDENTIFIER_UNDER_CARET_ATTRIBUTES">
       <value>
         <option name="BACKGROUND" value="141414" />
-        <option name="EFFECT_COLOR" value="5ce1e6" />
+        <option name="EFFECT_COLOR" value="ffeb3b" />
         <option name="EFFECT_TYPE" value="0" />
       </value>
     </option>
@@ -397,7 +397,7 @@
       <value>
         <option name="BACKGROUND" value="141414" />
         <option name="FONT_TYPE" value="1" />
-        <option name="EFFECT_COLOR" value="5ce1e6" />
+        <option name="EFFECT_COLOR" value="ffeb3b" />
         <option name="EFFECT_TYPE" value="0" />
       </value>
     </option>
@@ -442,7 +442,7 @@
     </option>
     <option name="CONSOLE_NORMAL_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="ffeb3b" />
+        <option name="FOREGROUND" value="ffffff" />
       </value>
     </option>
     <option name="CONSOLE_ERROR_OUTPUT">
@@ -513,7 +513,7 @@
     </option>
     <option name="CONSOLE_GRAY_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="ffffff" />
+        <option name="FOREGROUND" value="d9d9d9" />
       </value>
     </option>
     <option name="CONSOLE_DARKGRAY_OUTPUT">

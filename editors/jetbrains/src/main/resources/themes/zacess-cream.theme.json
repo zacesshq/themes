@@ -5,7 +5,7 @@
   "editorScheme": "/themes/zacess-cream.icls",
   "ui": {
     "*": {
-      "background": "#f5edd6",
+      "background": "#f2efe9",
       "foreground": "#000000",
       "infoForeground": "#3f382c",
       "disabledForeground": "#3f382c",
@@ -40,8 +40,8 @@
       "visitedForeground": "#004498"
     },
     "Button": {
-      "startBackground": "#ebe2c8",
-      "endBackground": "#ebe2c8",
+      "startBackground": "#e9e5dd",
+      "endBackground": "#e9e5dd",
       "foreground": "#000000",
       "startBorderColor": "#6e6555",
       "endBorderColor": "#6e6555",
@@ -71,7 +71,7 @@
       "background": "#fdf6e3"
     },
     "EditorTabs": {
-      "background": "#f5edd6",
+      "background": "#f2efe9",
       "underlinedTabBackground": "#fdf6e3",
       "underlinedTabForeground": "#000000",
       "underlineColor": "#004498",
@@ -79,51 +79,51 @@
       "inactiveUnderlineColor": "#6e6555"
     },
     "ToolWindow": {
-      "Header.background": "#ebe2c8",
-      "Header.inactiveBackground": "#f5edd6",
+      "Header.background": "#e9e5dd",
+      "Header.inactiveBackground": "#f2efe9",
       "HeaderTab.selectedInactiveBackground": "#f3ead2",
       "Button.selectedBackground": "#f9e79a",
       "Button.selectedForeground": "#000000"
     },
     "MainToolbar": {
-      "background": "#ebe2c8",
-      "inactiveBackground": "#f5edd6"
+      "background": "#e9e5dd",
+      "inactiveBackground": "#f2efe9"
     },
     "StatusBar": {
-      "background": "#ebe2c8",
+      "background": "#e9e5dd",
       "borderColor": "#6e6555"
     },
     "Tree": {
-      "background": "#f5edd6",
+      "background": "#f2efe9",
       "foreground": "#000000",
       "selectionBackground": "#f9e79a",
       "selectionForeground": "#000000",
       "selectionInactiveBackground": "#f3ead2"
     },
     "List": {
-      "background": "#f5edd6",
+      "background": "#f2efe9",
       "foreground": "#000000",
       "selectionBackground": "#f9e79a",
       "selectionForeground": "#000000",
       "selectionInactiveBackground": "#f3ead2"
     },
     "Table": {
-      "background": "#f5edd6",
+      "background": "#f2efe9",
       "foreground": "#000000",
       "selectionBackground": "#f9e79a",
       "selectionForeground": "#000000"
     },
     "Popup": {
-      "background": "#f5edd6",
+      "background": "#f2efe9",
       "borderColor": "#6e6555"
     },
     "ToolTip": {
-      "background": "#f5edd6",
+      "background": "#f2efe9",
       "foreground": "#000000",
       "borderColor": "#6e6555"
     },
     "Notification": {
-      "background": "#f5edd6",
+      "background": "#f2efe9",
       "foreground": "#000000",
       "borderColor": "#6e6555"
     },

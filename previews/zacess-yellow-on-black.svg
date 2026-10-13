@@ -2,7 +2,7 @@
   <title>Zacess Yellow on Black code theme preview: TypeScript, Python, Rust, HTML and diff lines in #ffeb3b on #000000. Keywords are bold, comments and parameters italic and invalid code underlined.</title>
   <rect width="720" height="530" fill="#000000"/>
   <rect width="720" height="40" fill="#0d0d0d"/>
-  <rect y="40" width="720" height="1" fill="#ffeb3b"/>
+  <rect y="40" width="720" height="1" fill="#7a7a7a"/>
   <g font-family="'Atkinson Hyperlegible Mono', 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="15">
   <text x="20" y="26" fill="#ffeb3b" font-weight="700">Zacess Yellow on Black</text>
   <text x="40" y="64" fill="#d9d9d9" text-anchor="end">1</text>
