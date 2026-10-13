@@ -820,7 +820,7 @@
             "font_weight": null
           },
           "constructor": {
-            "color": "#9ae99c",
+            "color": "#e5c7ff",
             "font_style": null,
             "font_weight": null
           },
@@ -840,7 +840,7 @@
             "font_weight": 700
           },
           "enum": {
-            "color": "#9ae99c",
+            "color": "#e5c7ff",
             "font_style": null,
             "font_weight": null
           },
@@ -970,7 +970,7 @@
             "font_weight": 700
           },
           "type": {
-            "color": "#9ae99c",
+            "color": "#e5c7ff",
             "font_style": null,
             "font_weight": null
           },
@@ -985,7 +985,7 @@
             "font_weight": 700
           },
           "variant": {
-            "color": "#9ae99c",
+            "color": "#e5c7ff",
             "font_style": null,
             "font_weight": null
           }

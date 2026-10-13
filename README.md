@@ -65,7 +65,7 @@ Download `zacess-themes-<version>.vsix` from the
 [latest release](https://github.com/zacesshq/themes/releases/latest), then:
 
 ```sh
-code --install-extension zacess-themes-0.1.1.vsix
+code --install-extension zacess-themes-0.1.2.vsix
 ```
 
 Run **Preferences: Color Theme** (`Cmd+K Cmd+T` on macOS, `Ctrl+K Ctrl+T` elsewhere) and choose a

@@ -113,7 +113,7 @@ function vscodeColors(theme) {
     "icon.foreground": u.foreground,
     "textLink.foreground": u.link,
     "textLink.activeForeground": u.link,
-    "textPreformat.foreground": s.string,
+    "textPreformat.foreground": u.code ?? s.string,
     "textPreformat.background": u.surface,
     "textBlockQuote.border": u.border,
     "textBlockQuote.background": u.surface,
