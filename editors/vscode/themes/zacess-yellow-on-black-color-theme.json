@@ -14,7 +14,7 @@
     "icon.foreground": "#ffeb3b",
     "textLink.foreground": "#5ce1e6",
     "textLink.activeForeground": "#5ce1e6",
-    "textPreformat.foreground": "#90eaa4",
+    "textPreformat.foreground": "#ffffff",
     "textPreformat.background": "#000000",
     "textBlockQuote.border": "#7a7a7a",
     "textBlockQuote.background": "#000000",
@@ -359,7 +359,7 @@
         "entity.name.type.parameter"
       ],
       "settings": {
-        "foreground": "#9ae99c",
+        "foreground": "#e5c7ff",
         "fontStyle": ""
       }
     },
@@ -531,25 +531,25 @@
   ],
   "semanticTokenColors": {
     "namespace": {
-      "foreground": "#9ae99c"
+      "foreground": "#e5c7ff"
     },
     "class": {
-      "foreground": "#9ae99c"
+      "foreground": "#e5c7ff"
     },
     "interface": {
-      "foreground": "#9ae99c"
+      "foreground": "#e5c7ff"
     },
     "enum": {
-      "foreground": "#9ae99c"
+      "foreground": "#e5c7ff"
     },
     "struct": {
-      "foreground": "#9ae99c"
+      "foreground": "#e5c7ff"
     },
     "type": {
-      "foreground": "#9ae99c"
+      "foreground": "#e5c7ff"
     },
     "typeParameter": {
-      "foreground": "#9ae99c"
+      "foreground": "#e5c7ff"
     },
     "function": {
       "foreground": "#88c3ff"

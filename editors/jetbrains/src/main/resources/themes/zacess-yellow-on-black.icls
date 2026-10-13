@@ -112,17 +112,17 @@
     </option>
     <option name="DEFAULT_CLASS_NAME">
       <value>
-        <option name="FOREGROUND" value="9ae99c" />
+        <option name="FOREGROUND" value="e5c7ff" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_REFERENCE">
       <value>
-        <option name="FOREGROUND" value="9ae99c" />
+        <option name="FOREGROUND" value="e5c7ff" />
       </value>
     </option>
     <option name="DEFAULT_INTERFACE_NAME">
       <value>
-        <option name="FOREGROUND" value="9ae99c" />
+        <option name="FOREGROUND" value="e5c7ff" />
       </value>
     </option>
     <option name="DEFAULT_STRING">
@@ -276,7 +276,7 @@
     </option>
     <option name="TS.TYPE_PARAMETER">
       <value>
-        <option name="FOREGROUND" value="9ae99c" />
+        <option name="FOREGROUND" value="e5c7ff" />
       </value>
     </option>
     <option name="PY.KEYWORD">

@@ -1,7 +1,7 @@
 {
   "generatedFrom": "palette/zacess.json",
   "repository": "https://github.com/zacesshq/themes",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "rules": {
     "textContrast": 7,
     "findMatchContrast": 4.5,
@@ -1063,14 +1063,15 @@
         "diffAddedBackground": "#0d2a12",
         "diffRemovedBackground": "#3a0e0e",
         "indentGuide": "#8c8c8c",
-        "whitespace": "#9a9a9a"
+        "whitespace": "#9a9a9a",
+        "code": "#ffffff"
       },
       "syntax": {
         "foreground": "#ffeb3b",
         "keyword": "#ffffff",
         "control": "#49ebf3",
         "function": "#88c3ff",
-        "type": "#9ae99c",
+        "type": "#e5c7ff",
         "variable": "#ffeb3b",
         "parameter": "#ffcca3",
         "property": "#ffffff",
@@ -1125,11 +1126,11 @@
         },
         {
           "token": "type",
-          "colour": "#9ae99c",
+          "colour": "#e5c7ff",
           "style": [],
-          "background": 14.5,
-          "selection": 10.51,
-          "lineHighlight": 12.72
+          "background": 13.94,
+          "selection": 10.1,
+          "lineHighlight": 12.23
         },
         {
           "token": "variable",
@@ -1264,8 +1265,8 @@
         }
       },
       "pairs": {
-        "closestTone": 0.054,
-        "closestSimulated": 0.045
+        "closestTone": 0.062,
+        "closestSimulated": 0.041
       }
     },
     {

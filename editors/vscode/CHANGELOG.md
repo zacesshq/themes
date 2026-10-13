@@ -4,6 +4,13 @@ All notable changes to the Zacess Themes extension are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-10-14
+
+### Changed
+
+- Zacess Yellow on Black draws types and classes in lavender instead of light green, so strings are the only green in code.
+- Zacess Yellow on Black draws inline code in white in Markdown previews, hovers, settings and extension pages.
+
 ## [0.1.1] - 2026-10-14
 
 ### Changed
@@ -25,5 +32,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Editor, workbench, terminal and semantic token colours, with every text and syntax colour at 7:1 contrast or more.
 - Bold keywords, italic comments and parameters and underlined invalid code, so colour is never the only signal.
 
+[0.1.2]: https://github.com/zacesshq/themes/releases/tag/v0.1.2
 [0.1.1]: https://github.com/zacesshq/themes/releases/tag/v0.1.1
 [0.1.0]: https://github.com/zacesshq/themes/releases/tag/v0.1.0
