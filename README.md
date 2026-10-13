@@ -65,7 +65,7 @@ Download `zacess-themes-<version>.vsix` from the
 [latest release](https://github.com/zacesshq/themes/releases/latest), then:
 
 ```sh
-code --install-extension zacess-themes-0.1.0.vsix
+code --install-extension zacess-themes-0.1.1.vsix
 ```
 
 Run **Preferences: Color Theme** (`Cmd+K Cmd+T` on macOS, `Ctrl+K Ctrl+T` elsewhere) and choose a
@@ -141,8 +141,9 @@ The checks need Node.js 24 and nothing else: the scripts have no dependencies.
 | The text colour over a find match | 7:1 |
 | Every syntax colour over a find match, which also carries a border | 4.5:1 |
 | Interface text: muted text, links, errors, warnings, information, line numbers and button text | 7:1 |
-| Borders, indent guides and whitespace markers | 3:1 |
+| Borders, dividers, focus outlines, indent guides and whitespace markers, on every surface they divide | 3:1 |
 | Every terminal colour on the background | 7:1 |
+| Every coloured terminal output against the terminal's default text: tone difference or OKLab distance in normal vision and under each simulation | 0.05 or 0.04 |
 | Two paired tokens: tone difference (the cube root of relative luminance) | 0.05 |
 | Two paired tokens under simulated protanopia, deuteranopia and tritanopia: OKLab distance | 0.04 |
 

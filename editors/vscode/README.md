@@ -40,7 +40,7 @@ contrast (WCAG AAA) on the background, the selection and the current line, comme
 From a terminal the second step is:
 
 ```sh
-code --install-extension zacess-themes-0.1.0.vsix
+code --install-extension zacess-themes-0.1.1.vsix
 ```
 
 > [!NOTE]

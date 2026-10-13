@@ -1,7 +1,7 @@
 {
   "$schema": "./schema.json",
   "name": "Zacess",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "rules": {
     "textContrast": 7,
     "findMatchContrast": 4.5,
@@ -299,6 +299,7 @@
         "surfaceAlt": "#ededed",
         "muted": "#424242",
         "border": "#707070",
+        "borderActive": "#0049a3",
         "accent": "#0049a3",
         "accentForeground": "#ffffff",
         "link": "#0049a3",
@@ -359,7 +360,11 @@
           "#111111"
         ],
         "dim": [],
-        "backgroundRole": []
+        "backgroundRole": [],
+        "textRole": [
+          0,
+          15
+        ]
       }
     },
     {
@@ -376,6 +381,7 @@
         "surfaceAlt": "#232323",
         "muted": "#c8c8c8",
         "border": "#7a7a7a",
+        "borderActive": "#8cbcff",
         "accent": "#8cbcff",
         "accentForeground": "#121212",
         "link": "#8cbcff",
@@ -438,6 +444,9 @@
         "dim": [],
         "backgroundRole": [
           0
+        ],
+        "textRole": [
+          15
         ]
       }
     },
@@ -454,8 +463,9 @@
         "surface": "#000000",
         "surfaceAlt": "#0d0d0d",
         "muted": "#e6e6e6",
-        "border": "#ffeb3b",
-        "accent": "#5ce1e6",
+        "border": "#7a7a7a",
+        "borderActive": "#ffeb3b",
+        "accent": "#ffeb3b",
         "accentForeground": "#000000",
         "link": "#5ce1e6",
         "selection": "#0a2257",
@@ -496,6 +506,8 @@
         "changed": "#ddedff"
       },
       "terminal": {
+        "foreground": "#ffffff",
+        "cursor": "#ffeb3b",
         "ansi": [
           "#262626",
           "#ffa79b",
@@ -504,7 +516,7 @@
           "#90c1ff",
           "#f2a4eb",
           "#1fd3d3",
-          "#ffffff",
+          "#d9d9d9",
           "#aeaeae",
           "#ffd5ce",
           "#a2f1a4",
@@ -517,6 +529,9 @@
         "dim": [],
         "backgroundRole": [
           0
+        ],
+        "textRole": [
+          15
         ]
       }
     },
@@ -524,16 +539,17 @@
       "id": "cream",
       "name": "Zacess Cream",
       "appearance": "light",
-      "vscodeUiTheme": "hc-light",
+      "vscodeUiTheme": "vs",
       "readerProfile": "black_on_cream",
       "description": "Black on cream for dyslexia, the reader's Black on cream theme.",
       "ui": {
         "background": "#fdf6e3",
         "foreground": "#000000",
-        "surface": "#f5edd6",
-        "surfaceAlt": "#ebe2c8",
+        "surface": "#f2efe9",
+        "surfaceAlt": "#e9e5dd",
         "muted": "#3f382c",
         "border": "#6e6555",
+        "borderActive": "#004498",
         "accent": "#004498",
         "accentForeground": "#ffffff",
         "link": "#004498",
@@ -594,7 +610,11 @@
           "#000000"
         ],
         "dim": [],
-        "backgroundRole": []
+        "backgroundRole": [],
+        "textRole": [
+          0,
+          15
+        ]
       }
     }
   ]

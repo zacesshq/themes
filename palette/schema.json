@@ -72,7 +72,7 @@
         "description": { "type": "string" },
         "ui": {
           "type": "object",
-          "required": ["background", "foreground", "surface", "surfaceAlt", "muted", "border", "accent", "accentForeground", "link", "selection", "lineHighlight", "cursor", "gutter", "lineNumber", "lineNumberActive", "findMatch", "findMatchBorder", "error", "warning", "info", "diffAddedBackground", "diffRemovedBackground", "indentGuide", "whitespace"],
+          "required": ["background", "foreground", "surface", "surfaceAlt", "muted", "border", "borderActive", "accent", "accentForeground", "link", "selection", "lineHighlight", "cursor", "gutter", "lineNumber", "lineNumberActive", "findMatch", "findMatchBorder", "error", "warning", "info", "diffAddedBackground", "diffRemovedBackground", "indentGuide", "whitespace"],
           "additionalProperties": { "$ref": "#/$defs/colour" }
         },
         "syntax": {
@@ -85,6 +85,8 @@
           "required": ["ansi", "dim", "backgroundRole"],
           "additionalProperties": false,
           "properties": {
+            "foreground": { "$ref": "#/$defs/colour", "description": "The terminal's default text colour when it differs from ui.foreground, so program output in the ANSI colours stays distinct from normal text." },
+            "cursor": { "$ref": "#/$defs/colour", "description": "The terminal cursor when it differs from ui.cursor." },
             "ansi": { "type": "array", "items": { "$ref": "#/$defs/colour" }, "minItems": 16, "maxItems": 16 },
             "dim": {
               "type": "array",
@@ -94,6 +96,11 @@
             "backgroundRole": {
               "type": "array",
               "description": "ANSI indexes that programs use as a background under the text colour, checked the other way round.",
+              "items": { "type": "integer", "minimum": 0, "maximum": 15 }
+            },
+            "textRole": {
+              "type": "array",
+              "description": "ANSI indexes that stand for the default text colour by convention, such as bright white on a dark theme, so they may match the terminal foreground.",
               "items": { "type": "integer", "minimum": 0, "maximum": 15 }
             }
           }

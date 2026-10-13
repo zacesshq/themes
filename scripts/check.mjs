@@ -3,9 +3,10 @@
 // every failure so CI shows exactly which colour or file to fix
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { ROOT, loadPalette, loadSchema, styleOf } from "./lib/palette.mjs";
+import { ROOT, VSCODE_FALLBACK_KEYS, VSCODE_NON_TEXT_PAIRS, VSCODE_TEXT_PAIRS, loadPalette, loadSchema, styleOf } from "./lib/palette.mjs";
 import { validate } from "./lib/schema.mjs";
 import { measureAll } from "./lib/measure.mjs";
+import { contrast, ratio } from "./lib/colour.mjs";
 import { parseToml } from "./lib/toml.mjs";
 import { checkXml } from "./lib/xml.mjs";
 
@@ -31,7 +32,7 @@ report();
 
 // 3. contrast, terminal colours and the colour vision deficiency pairs
 const results = measureAll(palette);
-for (const { theme, contrastRows, terminalRows, pairRows } of results) {
+for (const { theme, contrastRows, terminalRows, terminalTextRows, pairRows } of results) {
   for (const x of contrastRows.filter((r) => !r.pass)) {
     fail("contrast", `${theme.id} ${x.item} on ${x.on}`, `${x.colour} on ${x.background} is ${x.ratio}:1, needs ${x.floor}:1`);
   }
@@ -44,13 +45,63 @@ for (const { theme, contrastRows, terminalRows, pairRows } of results) {
       fail("terminal", `${theme.id} ${x.item}`, `${what} is ${x.ratio}:1, needs ${floor}:1`);
     }
   }
+  for (const x of terminalTextRows.filter((r) => !r.pass)) {
+    const sims = Object.entries(x.simulated).map(([k, v]) => `${k} ${v.toFixed(3)}`).join(", ");
+    fail("terminal", `${theme.id} ansi.${x.index} and the default text`, `${x.colour} and ${x.foreground}: tone difference ${x.toneDiff.toFixed(3)} (needs ${palette.rules.toneStep}) or OKLab distance ${sims} (each needs ${palette.rules.deficiencyDistance})`);
+  }
   for (const x of pairRows.filter((r) => !r.pass)) {
     const sims = Object.entries(x.simulated).map(([k, v]) => `${k} ${v.toFixed(3)}`).join(", ");
     fail("pairs", `${theme.id} ${x.a} and ${x.b}`, `tone difference ${x.toneDiff.toFixed(3)} (needs ${palette.rules.toneStep}), OKLab distance ${sims} (needs ${palette.rules.deficiencyDistance})`);
   }
 }
 
-// 4. every generated file parses and points at files that exist
+// 4. every border, outline and divider the VS Code themes draw keeps the non-text floor on each
+// surface it can sit on, so a calmer border can never fade below WCAG 1.4.11
+const BORDER_KEY = /(border|outline|separator)/i;
+// the current line border repeats the line highlight on purpose, so the line is marked by its
+// background alone and no boundary is drawn
+const NOT_A_BOUNDARY = new Set(["editor.lineHighlightBorder"]);
+for (const theme of palette.themes) {
+  const file = `editors/vscode/themes/zacess-${theme.id}-color-theme.json`;
+  if (!existsSync(join(ROOT, file))) continue;
+  const { colors } = JSON.parse(readFileSync(join(ROOT, file), "utf8"));
+  for (const [key, value] of Object.entries(colors)) {
+    if (!BORDER_KEY.test(key) || NOT_A_BOUNDARY.has(key) || !/^#[0-9a-f]{6}$/i.test(value)) continue;
+    for (const surface of ["background", "surface", "surfaceAlt"]) {
+      const measured = contrast(value, theme.ui[surface]);
+      if (measured < palette.rules.nonTextContrast) {
+        fail("non-text", `${theme.id} ${key} on ${surface}`, `${value} on ${theme.ui[surface]} is ${ratio(value, theme.ui[surface])}:1, needs ${palette.rules.nonTextContrast}:1`);
+      }
+    }
+  }
+}
+
+// the keys VS Code would otherwise fill from its defaults are all set; the text and marks on
+// them keep their floors; a high contrast base makes a missing key far worse, so it is named
+for (const theme of palette.themes) {
+  const file = `editors/vscode/themes/zacess-${theme.id}-color-theme.json`;
+  if (!existsSync(join(ROOT, file))) continue;
+  const { colors } = JSON.parse(readFileSync(join(ROOT, file), "utf8"));
+  const highContrast = theme.vscodeUiTheme.startsWith("hc");
+  for (const key of VSCODE_FALLBACK_KEYS) {
+    if (!(key in colors)) {
+      fail("vscode", `${theme.id} ${key}`, highContrast ? `unset on the ${theme.vscodeUiTheme} base, which would fall back to the built in high contrast colour` : "unset, so it would fall back to a VS Code default");
+    }
+  }
+  const pairs = [...VSCODE_TEXT_PAIRS.map((p) => [...p, palette.rules.textContrast]), ...VSCODE_NON_TEXT_PAIRS.map((p) => [...p, palette.rules.nonTextContrast])];
+  for (const [fg, bg, floor] of pairs) {
+    const a = colors[fg];
+    const b = colors[bg];
+    if (!a || !b) {
+      fail("vscode", `${theme.id} ${fg} on ${bg}`, "one of the two keys is unset");
+      continue;
+    }
+    if (!/^#[0-9a-f]{6}$/i.test(a) || !/^#[0-9a-f]{6}$/i.test(b)) continue;
+    if (contrast(a, b) < floor) fail("vscode", `${theme.id} ${fg} on ${bg}`, `${a} on ${b} is ${ratio(a, b)}:1, needs ${floor}:1`);
+  }
+}
+
+// 5. every generated file parses and points at files that exist
 function walk(dir) {
   return readdirSync(dir).flatMap((name) => {
     const full = join(dir, name);

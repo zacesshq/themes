@@ -16,18 +16,18 @@
       "selectionBackgroundInactive": "#141414",
       "selectionInactiveForeground": "#ffeb3b",
       "hoverBackground": "#141414",
-      "borderColor": "#ffeb3b",
-      "separatorColor": "#ffeb3b",
-      "focusColor": "#5ce1e6",
-      "focusedBorderColor": "#5ce1e6",
+      "borderColor": "#7a7a7a",
+      "separatorColor": "#7a7a7a",
+      "focusColor": "#ffeb3b",
+      "focusedBorderColor": "#ffeb3b",
       "errorForeground": "#ffbeb5",
       "acceleratorForeground": "#e6e6e6"
     },
     "Component": {
       "focusWidth": 2,
-      "focusColor": "#5ce1e6",
-      "focusedBorderColor": "#5ce1e6",
-      "borderColor": "#ffeb3b",
+      "focusColor": "#ffeb3b",
+      "focusedBorderColor": "#ffeb3b",
+      "borderColor": "#7a7a7a",
       "errorFocusColor": "#ffbeb5",
       "inactiveErrorFocusColor": "#ffbeb5",
       "warningFocusColor": "#ffd8ab",
@@ -43,14 +43,14 @@
       "startBackground": "#0d0d0d",
       "endBackground": "#0d0d0d",
       "foreground": "#ffeb3b",
-      "startBorderColor": "#ffeb3b",
-      "endBorderColor": "#ffeb3b",
-      "focusedBorderColor": "#5ce1e6",
-      "default.startBackground": "#5ce1e6",
-      "default.endBackground": "#5ce1e6",
+      "startBorderColor": "#7a7a7a",
+      "endBorderColor": "#7a7a7a",
+      "focusedBorderColor": "#ffeb3b",
+      "default.startBackground": "#ffeb3b",
+      "default.endBackground": "#ffeb3b",
       "default.foreground": "#000000",
-      "default.startBorderColor": "#5ce1e6",
-      "default.endBorderColor": "#5ce1e6",
+      "default.startBorderColor": "#ffeb3b",
+      "default.endBorderColor": "#ffeb3b",
       "default.focusColor": "#ffeb3b",
       "default.focusedBorderColor": "#ffeb3b"
     },
@@ -74,9 +74,9 @@
       "background": "#000000",
       "underlinedTabBackground": "#000000",
       "underlinedTabForeground": "#ffeb3b",
-      "underlineColor": "#5ce1e6",
+      "underlineColor": "#ffeb3b",
       "underlineHeight": 3,
-      "inactiveUnderlineColor": "#ffeb3b"
+      "inactiveUnderlineColor": "#7a7a7a"
     },
     "ToolWindow": {
       "Header.background": "#0d0d0d",
@@ -91,7 +91,7 @@
     },
     "StatusBar": {
       "background": "#0d0d0d",
-      "borderColor": "#ffeb3b"
+      "borderColor": "#7a7a7a"
     },
     "Tree": {
       "background": "#000000",
@@ -115,31 +115,31 @@
     },
     "Popup": {
       "background": "#000000",
-      "borderColor": "#ffeb3b"
+      "borderColor": "#7a7a7a"
     },
     "ToolTip": {
       "background": "#000000",
       "foreground": "#ffeb3b",
-      "borderColor": "#ffeb3b"
+      "borderColor": "#7a7a7a"
     },
     "Notification": {
       "background": "#000000",
       "foreground": "#ffeb3b",
-      "borderColor": "#ffeb3b"
+      "borderColor": "#7a7a7a"
     },
     "SearchMatch": {
       "startBackground": "#3d3000",
       "endBackground": "#3d3000"
     },
     "Counter": {
-      "background": "#5ce1e6",
+      "background": "#ffeb3b",
       "foreground": "#000000"
     },
     "ScrollBar": {
       "Mac.thumbColor": "#8c8c8c",
-      "Mac.hoverThumbColor": "#ffeb3b",
+      "Mac.hoverThumbColor": "#7a7a7a",
       "thumbColor": "#8c8c8c",
-      "hoverThumbColor": "#ffeb3b"
+      "hoverThumbColor": "#7a7a7a"
     }
   }
 }
