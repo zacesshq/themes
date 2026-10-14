@@ -5,15 +5,16 @@ reader, so a student sees the same page in the reader and in the editor. One pal
 every colour. A small generator writes the files for each editor and the checks refuse any text or
 syntax colour below 7:1 contrast (WCAG AAA).
 
-Built for VS Code, JetBrains IDEs, Obsidian, Neovim, Zed, iTerm2, Alacritty, kitty, Ghostty and
-Windows Terminal.
+Built for VS Code, JetBrains IDEs, Obsidian, Neovim, Zed, Sublime Text, Helix, Emacs, iTerm2,
+Alacritty, kitty, Ghostty and Windows Terminal.
 
 > [!NOTE]
 > Zacess Themes is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes) and
 > [Open VSX](https://open-vsx.org/extension/zacess/zacess-themes). The [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/35082-zacess-themes)
-> listing is in review and the Obsidian community listing is not live yet. Until they are, install
-> those from the [latest release](https://github.com/zacesshq/themes/releases/latest) as described
-> below.
+> listing is in review. The Obsidian theme is in the [Obsidian community directory](https://community.obsidian.md/themes/zacess)
+> and the Neovim schemes install from [zacesshq/zacess.nvim](https://github.com/zacesshq/zacess.nvim).
+> Every editor can also be installed from the
+> [latest release](https://github.com/zacesshq/themes/releases/latest) as described below.
 
 ## The four themes
 
@@ -84,13 +85,24 @@ or later. Details are in [editors/jetbrains](editors/jetbrains/README.md).
 
 ### Obsidian
 
-Copy `editors/obsidian/manifest.json` and `editors/obsidian/theme.css` into
-`<vault>/.obsidian/themes/Zacess/` (the latest release also has them as `zacess-obsidian-<version>.zip`)
-then choose **Zacess** under **Settings**, **Appearance**. Light and Dark follow Obsidian's own
+Open **Settings**, then **Appearance**, select **Manage** under **Themes**, search for **Zacess** and
+select **Install and use**. The listing is in the [Obsidian community directory](https://community.obsidian.md/themes/zacess). To install
+by hand, copy `editors/obsidian/manifest.json` and `editors/obsidian/theme.css` into
+`<vault>/.obsidian/themes/Zacess/` (the latest release also has them as
+`zacess-obsidian-<version>.zip`). Light and Dark follow Obsidian's own
 setting. Yellow on Black and Cream are offered through the Style Settings plugin. Details are in
 [editors/obsidian](editors/obsidian/README.md).
 
 ### Neovim
+
+Install `zacesshq/zacess.nvim` with any plugin manager. With
+[lazy.nvim](https://github.com/folke/lazy.nvim):
+
+```lua
+{ "zacesshq/zacess.nvim", lazy = false, priority = 1000 }
+```
+
+To install by hand instead:
 
 ```sh
 mkdir -p ~/.config/nvim/colors
@@ -106,6 +118,32 @@ Run **zed: install dev extension** and choose the `editors/zed` folder. Copying
 `editors/zed/themes/zacess.json` into `~/.config/zed/themes/` works too. Details are in
 [editors/zed](editors/zed/README.md).
 
+### Sublime Text
+
+Copy the four `.sublime-color-scheme` files from `editors/sublime` into `Packages/User` (open it with
+**Preferences**, **Browse Packages...**), then run **UI: Select Color Scheme** and choose a Zacess
+scheme. It needs Sublime Text 4. Details are in [editors/sublime](editors/sublime/README.md).
+
+### Helix
+
+```sh
+mkdir -p ~/.config/helix/themes
+cp editors/helix/themes/*.toml ~/.config/helix/themes/
+```
+
+Then set `theme = "zacess_dark"` in `~/.config/helix/config.toml`. Details are in
+[editors/helix](editors/helix/README.md).
+
+### Emacs
+
+```sh
+mkdir -p ~/.emacs.d/themes
+cp editors/emacs/*-theme.el ~/.emacs.d/themes/
+```
+
+Then add `(add-to-list 'custom-theme-load-path (expand-file-name "themes" user-emacs-directory))` and
+`(load-theme 'zacess-dark t)` to your init file. Details are in [editors/emacs](editors/emacs/README.md).
+
 ### Terminals
 
 iTerm2, Alacritty, kitty, Ghostty and Windows Terminal files are in
@@ -118,7 +156,7 @@ flowchart LR
     Palette["palette/zacess.json"] --> Build["scripts/build.mjs"]
     Palette --> Check["scripts/check.mjs"]
     Palette --> Preview["scripts/preview.mjs"]
-    Build --> Editors["editors/: VS Code, JetBrains, Obsidian, Neovim, Zed, terminals"]
+    Build --> Editors["editors/: VS Code, JetBrains, Obsidian, Neovim, Zed, Sublime Text, Helix, Emacs, terminals"]
     Build --> Tables["Contrast tables in README.md and ACCESSIBILITY.md"]
     Preview --> Previews["previews/: SVG images and themes.json"]
     Check --> CI["CI fails below a floor"]
@@ -164,6 +202,9 @@ such as strings and numbers or added and removed lines, must meet them whatever 
 | `editors/obsidian/` | The Obsidian theme |
 | `editors/neovim/` | The Neovim colour schemes |
 | `editors/zed/` | The Zed theme extension |
+| `editors/sublime/` | The Sublime Text colour schemes |
+| `editors/helix/` | The Helix themes |
+| `editors/emacs/` | The Emacs themes |
 | `editors/terminals/` | iTerm2, Alacritty, kitty, Ghostty and Windows Terminal themes |
 | `previews/` | The preview images and the data for the website |
 | `assets/` | The Zacess mark the icons are made from |

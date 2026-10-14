@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-10-14
+
+### Added
+
+- Sublime Text colour schemes in `editors/sublime`, one `.sublime-color-scheme` per theme. Each names the palette colours as variables, sets the editor colours and maps the same TextMate scopes as the VS Code themes, with bold, italic and underline from the palette's font styles.
+- Helix themes in `editors/helix/themes`, one per theme, with a `[palette]` table and the interface, diagnostic, diff, Markdown and syntax scopes. Font styles map to Helix modifiers and underlines.
+- Emacs themes in `editors/emacs`, one `deftheme` file per theme, covering the default, region, current line, line number, mode line, search, parenthesis, diff, Flymake and Flycheck faces, every `font-lock` face and the 16 `ansi-color` faces. Each file adds its folder to `custom-theme-load-path` when loaded.
+- `npm run check` parses the new files: the Sublime Text schemes as JSON, the Helix themes as TOML and the Emacs themes by their brackets. It also proves that every colour, variable and palette name they use comes from the palette.
+- Each release attaches `zacess-sublime-<version>.zip`, `zacess-helix-<version>.zip` and `zacess-emacs-<version>.zip`.
+- Each release updates two read-only copies with a matching release in each: [zacesshq/obsidian-theme](https://github.com/zacesshq/obsidian-theme) for the Obsidian community directory and [zacesshq/zacess.nvim](https://github.com/zacesshq/zacess.nvim) for Neovim plugin managers.
+
+### Changed
+
+- The install guides link the [Obsidian community directory](https://community.obsidian.md/themes/zacess) listing and install Neovim from `zacesshq/zacess.nvim`.
+
 ## [0.1.3] - 2026-10-14
 
 ### Changed
@@ -45,7 +60,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - SVG previews drawn as real text and the data for the themes page on the Zacess website.
 - CI that runs the checks, proves the committed files are current, packages the VS Code extension and builds the JetBrains plugin. A release workflow that attaches the `.vsix`, the JetBrains zip and an Obsidian zip to each GitHub release and publishes to each marketplace once its token is set.
 
-[Unreleased]: https://github.com/zacesshq/themes/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/zacesshq/themes/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/zacesshq/themes/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/zacesshq/themes/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/zacesshq/themes/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/zacesshq/themes/compare/v0.1.0...v0.1.1

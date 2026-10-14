@@ -21,5 +21,7 @@ open its settings and choose **Contrast theme** under **Zacess**. Yellow on Blac
 both the light and the dark mode while they are chosen.
 
 > [!NOTE]
-> The Obsidian community theme listing is not live yet. Until it is, install the theme by hand as
-> above.
+> Zacess is in the [Obsidian community directory](https://community.obsidian.md/themes/zacess), so it can also be installed from
+> **Settings**, **Appearance**, **Manage** by searching for **Zacess**. The directory installs from
+> [zacesshq/obsidian-theme](https://github.com/zacesshq/obsidian-theme), a read-only copy of this
+> folder that each release updates.

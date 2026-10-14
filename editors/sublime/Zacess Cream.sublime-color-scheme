@@ -1,0 +1,250 @@
+{
+  "name": "Zacess Cream",
+  "author": "Zacess",
+  "variables": {
+    "background": "#fdf6e3",
+    "foreground": "#000000",
+    "surface": "#f2efe9",
+    "surface_alt": "#e9e5dd",
+    "muted": "#3f382c",
+    "border": "#6e6555",
+    "border_active": "#004498",
+    "accent": "#004498",
+    "accent_foreground": "#ffffff",
+    "link": "#004498",
+    "selection": "#f9e79a",
+    "line_highlight": "#f3ead2",
+    "cursor": "#000000",
+    "gutter": "#fdf6e3",
+    "line_number": "#4a4337",
+    "line_number_active": "#000000",
+    "find_match": "#ffd400",
+    "find_match_border": "#000000",
+    "error": "#770004",
+    "warning": "#513100",
+    "info": "#00357a",
+    "diff_added_background": "#e4f1d8",
+    "diff_removed_background": "#f9e3d8",
+    "indent_guide": "#857b69",
+    "whitespace": "#766c5b",
+    "syntax_foreground": "#000000",
+    "keyword": "#530093",
+    "control": "#550036",
+    "function": "#004498",
+    "type": "#003232",
+    "variable": "#000000",
+    "parameter": "#441f00",
+    "property": "#020068",
+    "string": "#00440c",
+    "number": "#451700",
+    "comment": "#534637",
+    "operator": "#000000",
+    "tag": "#530093",
+    "attribute": "#3a1f00",
+    "regex": "#52001c",
+    "invalid": "#540002",
+    "added": "#005512",
+    "removed": "#540002",
+    "changed": "#001538"
+  },
+  "globals": {
+    "background": "var(background)",
+    "foreground": "var(foreground)",
+    "caret": "var(cursor)",
+    "line_highlight": "var(line_highlight)",
+    "selection": "var(selection)",
+    "inactive_selection": "var(selection)",
+    "gutter": "var(gutter)",
+    "gutter_foreground": "var(line_number)",
+    "gutter_foreground_highlight": "var(line_number_active)",
+    "invisibles": "var(whitespace)",
+    "guide": "var(indent_guide)",
+    "active_guide": "var(foreground)",
+    "stack_guide": "var(indent_guide)",
+    "rulers": "var(indent_guide)",
+    "minimap_border": "var(border)",
+    "accent": "var(accent)",
+    "find_highlight": "var(find_match)",
+    "find_highlight_foreground": "var(foreground)",
+    "highlight": "var(find_match_border)",
+    "brackets_options": "underline",
+    "brackets_foreground": "var(accent)",
+    "bracket_contents_options": "underline",
+    "bracket_contents_foreground": "var(accent)",
+    "tags_options": "underline",
+    "tags_foreground": "var(accent)",
+    "line_diff_width": "3",
+    "line_diff_added": "var(added)",
+    "line_diff_modified": "var(changed)",
+    "line_diff_deleted": "var(removed)",
+    "misspelling": "var(error)"
+  },
+  "rules": [
+    {
+      "name": "Comments",
+      "scope": "comment, punctuation.definition.comment, string.quoted.docstring.multi.python",
+      "foreground": "var(comment)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Strings",
+      "scope": "string, punctuation.definition.string, constant.character, markup.inline.raw",
+      "foreground": "var(string)"
+    },
+    {
+      "name": "Regular expressions",
+      "scope": "string.regexp, constant.character.escape, constant.other.character-class.regexp",
+      "foreground": "var(regex)"
+    },
+    {
+      "name": "Numbers and constants",
+      "scope": "constant.numeric, constant.language, constant.other, support.constant, variable.other.constant, variable.other.enummember, entity.name.constant",
+      "foreground": "var(number)"
+    },
+    {
+      "name": "Keywords",
+      "scope": "keyword, storage, storage.type, storage.modifier, keyword.operator.new, keyword.operator.expression, keyword.operator.logical.python, variable.language, support.type.primitive.ts, keyword.other",
+      "foreground": "var(keyword)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Control flow",
+      "scope": "keyword.control, keyword.control.flow, keyword.control.import, keyword.control.conditional, keyword.control.loop, keyword.control.trycatch",
+      "foreground": "var(control)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Operators and punctuation",
+      "scope": "keyword.operator, punctuation, meta.brace, punctuation.separator, punctuation.terminator, punctuation.accessor",
+      "foreground": "var(operator)"
+    },
+    {
+      "name": "Functions",
+      "scope": "entity.name.function, support.function, meta.function-call entity.name.function, variable.function, entity.name.function.macro, meta.decorator, entity.name.function.decorator",
+      "foreground": "var(function)"
+    },
+    {
+      "name": "Types",
+      "scope": "entity.name.type, entity.name.class, entity.name.namespace, entity.other.inherited-class, support.type, support.class, storage.type.primitive, entity.name.type.primitive, entity.name.type.parameter",
+      "foreground": "var(type)"
+    },
+    {
+      "name": "Variables",
+      "scope": "variable, variable.other.readwrite, meta.definition.variable, support.variable",
+      "foreground": "var(variable)"
+    },
+    {
+      "name": "Parameters",
+      "scope": "variable.parameter, meta.parameters variable, entity.name.variable.parameter",
+      "foreground": "var(parameter)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Properties",
+      "scope": "variable.other.property, variable.other.object.property, variable.other.member, support.type.property-name, meta.object-literal.key, entity.name.tag.yaml, support.variable.property, entity.name.field",
+      "foreground": "var(property)"
+    },
+    {
+      "name": "Tags",
+      "scope": "entity.name.tag, punctuation.definition.tag",
+      "foreground": "var(tag)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Attributes",
+      "scope": "entity.other.attribute-name, meta.attribute, entity.other.attribute-name.id, entity.other.attribute-name.class",
+      "foreground": "var(attribute)"
+    },
+    {
+      "name": "Invalid",
+      "scope": "invalid, invalid.illegal, invalid.deprecated",
+      "foreground": "var(invalid)",
+      "font_style": "underline"
+    },
+    {
+      "name": "Added",
+      "scope": "markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted",
+      "foreground": "var(added)"
+    },
+    {
+      "name": "Removed",
+      "scope": "markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted",
+      "foreground": "var(removed)"
+    },
+    {
+      "name": "Changed",
+      "scope": "markup.changed, punctuation.definition.changed",
+      "foreground": "var(changed)"
+    },
+    {
+      "name": "Headings",
+      "scope": "markup.heading, entity.name.section",
+      "foreground": "var(keyword)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Bold",
+      "scope": "markup.bold",
+      "foreground": "var(variable)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Italic",
+      "scope": "markup.italic",
+      "foreground": "var(variable)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Links",
+      "scope": "markup.underline.link, string.other.link",
+      "foreground": "var(function)",
+      "font_style": "underline"
+    },
+    {
+      "name": "Quotes",
+      "scope": "markup.quote",
+      "foreground": "var(comment)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Region redish",
+      "scope": "region.redish",
+      "foreground": "var(error)"
+    },
+    {
+      "name": "Region orangish",
+      "scope": "region.orangish",
+      "foreground": "var(warning)"
+    },
+    {
+      "name": "Region yellowish",
+      "scope": "region.yellowish",
+      "foreground": "var(warning)"
+    },
+    {
+      "name": "Region greenish",
+      "scope": "region.greenish",
+      "foreground": "var(added)"
+    },
+    {
+      "name": "Region cyanish",
+      "scope": "region.cyanish",
+      "foreground": "var(info)"
+    },
+    {
+      "name": "Region bluish",
+      "scope": "region.bluish",
+      "foreground": "var(info)"
+    },
+    {
+      "name": "Region purplish",
+      "scope": "region.purplish",
+      "foreground": "var(keyword)"
+    },
+    {
+      "name": "Region pinkish",
+      "scope": "region.pinkish",
+      "foreground": "var(control)"
+    }
+  ]
+}

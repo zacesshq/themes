@@ -12,6 +12,9 @@ body:
         - Obsidian
         - Neovim
         - Zed
+        - Sublime Text
+        - Helix
+        - Emacs
         - iTerm2
         - Alacritty
         - kitty

@@ -127,8 +127,13 @@ for (const file of files) {
         const scheme = join(ROOT, "editors/jetbrains/src/main/resources", data.editorScheme);
         if (!existsSync(scheme)) fail("jetbrains", name, `editorScheme ${data.editorScheme} does not exist`);
       }
+    } else if (file.endsWith(".sublime-color-scheme")) {
+      checkSublime(JSON.parse(text), name);
     } else if (file.endsWith(".toml")) {
-      parseToml(text);
+      const data = parseToml(text);
+      if (name.startsWith("editors/helix/")) checkHelix(data, name);
+    } else if (file.endsWith(".el")) {
+      checkElisp(text, name);
     } else if (/\.(xml|icls|itermcolors|svg)$/.test(file)) {
       checkXml(text);
     } else if (file.endsWith(".lua")) {
@@ -157,6 +162,120 @@ if (rootVersion !== palette.version) fail("repo", "package.json", `version ${roo
 const pluginXml = readFileSync(join(ROOT, "editors/jetbrains/src/main/resources/META-INF/plugin.xml"), "utf8");
 for (const [, path] of pluginXml.matchAll(/path="([^"]+)"/g)) {
   if (!existsSync(join(ROOT, "editors/jetbrains/src/main/resources", path))) fail("jetbrains", "plugin.xml", `${path} does not exist`);
+}
+
+// every theme has its file in each editor that keeps one file per theme
+for (const theme of palette.themes) {
+  for (const path of [
+    `editors/sublime/${theme.name}.sublime-color-scheme`,
+    `editors/helix/themes/zacess_${theme.id.replace(/-/g, "_")}.toml`,
+    `editors/emacs/zacess-${theme.id}-theme.el`,
+  ]) {
+    if (!existsSync(join(ROOT, path))) fail("files", path, `missing for ${theme.name}`);
+  }
+}
+
+// the theme a per-theme file belongs to, found from its file name
+function themeOf(name) {
+  const base = name.split("/").pop();
+  const theme = palette.themes.find((t) => [
+    `${t.name}.sublime-color-scheme`,
+    `zacess_${t.id.replace(/-/g, "_")}.toml`,
+    `zacess-${t.id}-theme.el`,
+  ].includes(base));
+  if (!theme) throw new Error("matches no theme in the palette");
+  return theme;
+}
+
+// every colour a theme may use, so a generated file can never carry a colour the checks did not measure
+function coloursOf(theme) {
+  const t = theme.terminal;
+  return new Set([...Object.values(theme.ui), ...Object.values(theme.syntax), ...t.ansi, t.foreground, t.cursor].filter(Boolean).map((c) => c.toLowerCase()));
+}
+
+function checkSublime(data, name) {
+  const colours = coloursOf(themeOf(name));
+  const vars = data.variables ?? {};
+  for (const [k, v] of Object.entries(vars)) {
+    if (!colours.has(String(v).toLowerCase())) throw new Error(`variable ${k} is ${v}, which is not a palette colour`);
+  }
+  const resolve = (where, value) => {
+    const ref = /^var\(([a-z_]+)\)$/.exec(value);
+    if (!ref) throw new Error(`${where} is ${value}, not a var() of a palette colour`);
+    if (!Object.hasOwn(vars, ref[1])) throw new Error(`${where} refers to ${ref[1]}, which is not a variable`);
+  };
+  for (const [k, v] of Object.entries(data.globals ?? {})) {
+    if (/_options$|_width$/.test(k)) continue;
+    resolve(`globals.${k}`, v);
+  }
+  if (!Array.isArray(data.rules) || !data.rules.length) throw new Error("rules is empty");
+  for (const rule of data.rules) {
+    if (typeof rule.scope !== "string" || !rule.scope) throw new Error(`rule ${rule.name} has no scope`);
+    resolve(`rule ${rule.name}`, rule.foreground);
+    for (const style of (rule.font_style ?? "").split(" ").filter(Boolean)) {
+      if (!["bold", "italic", "underline"].includes(style)) throw new Error(`rule ${rule.name} has an unknown font style ${style}`);
+    }
+  }
+}
+
+function checkHelix(data, name) {
+  const colours = coloursOf(themeOf(name));
+  const { palette: named, ...styles } = data;
+  if (!named) throw new Error("no [palette] table");
+  for (const [k, v] of Object.entries(named)) {
+    if (!colours.has(String(v).toLowerCase())) throw new Error(`palette.${k} is ${v}, which is not a palette colour`);
+  }
+  const known = (where, ref) => {
+    if (!Object.hasOwn(named, ref)) throw new Error(`${where} refers to ${ref}, which is not in [palette]`);
+  };
+  const MODIFIERS = ["bold", "dim", "italic", "slow_blink", "rapid_blink", "reversed", "hidden", "crossed_out"];
+  const UNDERLINES = ["line", "curl", "dashed", "dotted", "double_line"];
+  for (const [scope, style] of Object.entries(styles)) {
+    if (typeof style === "string") { known(scope, style); continue; }
+    for (const [k, v] of Object.entries(style)) {
+      if (k === "fg" || k === "bg") known(`${scope}.${k}`, v);
+      else if (k === "modifiers") {
+        for (const m of v) if (!MODIFIERS.includes(m)) throw new Error(`${scope} has an unknown modifier ${m}`);
+      } else if (k === "underline") {
+        if (v.color) known(`${scope}.underline.color`, v.color);
+        if (v.style && !UNDERLINES.includes(v.style)) throw new Error(`${scope} has an unknown underline style ${v.style}`);
+      } else throw new Error(`${scope} has an unknown key ${k}`);
+    }
+  }
+}
+
+function checkElisp(text, name) {
+  const theme = themeOf(name);
+  const colours = coloursOf(theme);
+  // a reader for all of Emacs Lisp is not needed: brackets are counted outside strings and
+  // comments, which catches a broken face spec before Emacs refuses to load the theme
+  let depth = 0;
+  let line = 1;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (ch === "\n") line += 1;
+    else if (ch === ";") { while (i < text.length && text[i] !== "\n") i += 1; line += 1; }
+    else if (ch === "\"") {
+      for (i += 1; i < text.length && text[i] !== "\""; i += 1) {
+        if (text[i] === "\\") i += 1;
+        else if (text[i] === "\n") line += 1;
+      }
+      if (i >= text.length) throw new Error("an unterminated string");
+    } else if (ch === "(") depth += 1;
+    else if (ch === ")") {
+      depth -= 1;
+      if (depth < 0) throw new Error(`line ${line} closes a bracket that was never opened`);
+    }
+  }
+  if (depth !== 0) throw new Error(`${depth} bracket(s) left open`);
+  const id = `zacess-${theme.id}`;
+  if (!text.includes(`(deftheme ${id}\n`)) throw new Error(`no (deftheme ${id})`);
+  if (!text.includes(`(provide-theme '${id})`)) throw new Error(`no (provide-theme '${id})`);
+  if (!text.includes(";;;###autoload\n")) throw new Error("no autoload cookie for custom-theme-load-path");
+  for (const [, hex] of text.matchAll(/"(#[0-9a-zA-Z]+)"/g)) {
+    if (!/^#[0-9a-f]{6}$/.test(hex)) throw new Error(`${hex} is not a six digit colour`);
+    if (!colours.has(hex)) throw new Error(`${hex} is not a palette colour`);
+  }
 }
 
 function checkLines(text, pattern) {
