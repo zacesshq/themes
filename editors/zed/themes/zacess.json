@@ -655,7 +655,7 @@
             "font_weight": null
           }
         },
-        "terminal.ansi.black": "#2b2b2b",
+        "terminal.ansi.black": "#a3a3a3",
         "terminal.ansi.red": "#ffa79b",
         "terminal.ansi.green": "#8dcd8e",
         "terminal.ansi.yellow": "#deb967",
@@ -663,7 +663,7 @@
         "terminal.ansi.magenta": "#eba8e4",
         "terminal.ansi.cyan": "#52d0cf",
         "terminal.ansi.white": "#e6e6e6",
-        "terminal.ansi.bright_black": "#aeaeae",
+        "terminal.ansi.bright_black": "#c8c8c8",
         "terminal.ansi.bright_red": "#ffd5ce",
         "terminal.ansi.bright_green": "#aceead",
         "terminal.ansi.bright_yellow": "#ffda8a",
@@ -990,7 +990,7 @@
             "font_weight": null
           }
         },
-        "terminal.ansi.black": "#262626",
+        "terminal.ansi.black": "#a3a3a3",
         "terminal.ansi.red": "#ffa79b",
         "terminal.ansi.green": "#82d085",
         "terminal.ansi.yellow": "#e5b851",
@@ -998,7 +998,7 @@
         "terminal.ansi.magenta": "#f2a4eb",
         "terminal.ansi.cyan": "#1fd3d3",
         "terminal.ansi.white": "#d9d9d9",
-        "terminal.ansi.bright_black": "#aeaeae",
+        "terminal.ansi.bright_black": "#c8c8c8",
         "terminal.ansi.bright_red": "#ffd5ce",
         "terminal.ansi.bright_green": "#a2f1a4",
         "terminal.ansi.bright_yellow": "#ffda8a",

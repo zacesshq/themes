@@ -1,9 +1,8 @@
 # Zacess for terminals
 
 The four Zacess themes for iTerm2, Alacritty, kitty, Ghostty and Windows Terminal. Every one of the
-16 terminal colours keeps at least 7:1 contrast on the background. In the two dark themes, ANSI black
-is a background shade rather than a text colour, so it is checked the other way round: the theme's
-text keeps 7:1 on it.
+16 terminal colours keeps at least 7:1 contrast on the background, ANSI black included: in the two
+dark themes it is a mid grey, so text a program prints in black stays readable.
 
 > [!NOTE]
 > The themes are also in the [iTerm2 Color Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
