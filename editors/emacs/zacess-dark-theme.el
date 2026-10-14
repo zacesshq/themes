@@ -4,7 +4,7 @@
 
 ;; Author: Zacess <contact@zacess.com>
 ;; URL: https://github.com/zacesshq/themes
-;; Version: 0.1.4
+;; Version: 0.1.5
 ;; SPDX-License-Identifier: MIT
 
 ;;; Commentary:
@@ -87,7 +87,7 @@
  '(flycheck-error ((t (:underline (:color "#ffccc4" :style wave)))))
  '(flycheck-warning ((t (:underline (:color "#ffd182" :style wave)))))
  '(flycheck-info ((t (:underline (:color "#bddaff" :style wave)))))
- '(ansi-color-black ((t (:foreground "#2b2b2b" :background "#2b2b2b"))))
+ '(ansi-color-black ((t (:foreground "#a3a3a3" :background "#a3a3a3"))))
  '(ansi-color-red ((t (:foreground "#ffa79b" :background "#ffa79b"))))
  '(ansi-color-green ((t (:foreground "#8dcd8e" :background "#8dcd8e"))))
  '(ansi-color-yellow ((t (:foreground "#deb967" :background "#deb967"))))
@@ -95,7 +95,7 @@
  '(ansi-color-magenta ((t (:foreground "#eba8e4" :background "#eba8e4"))))
  '(ansi-color-cyan ((t (:foreground "#52d0cf" :background "#52d0cf"))))
  '(ansi-color-white ((t (:foreground "#e6e6e6" :background "#e6e6e6"))))
- '(ansi-color-bright-black ((t (:foreground "#aeaeae" :background "#aeaeae"))))
+ '(ansi-color-bright-black ((t (:foreground "#c8c8c8" :background "#c8c8c8"))))
  '(ansi-color-bright-red ((t (:foreground "#ffd5ce" :background "#ffd5ce"))))
  '(ansi-color-bright-green ((t (:foreground "#aceead" :background "#aceead"))))
  '(ansi-color-bright-yellow ((t (:foreground "#ffda8a" :background "#ffda8a"))))

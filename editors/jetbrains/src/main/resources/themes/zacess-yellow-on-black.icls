@@ -478,7 +478,7 @@
     </option>
     <option name="CONSOLE_BLACK_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="262626" />
+        <option name="FOREGROUND" value="a3a3a3" />
       </value>
     </option>
     <option name="CONSOLE_RED_OUTPUT">
@@ -518,7 +518,7 @@
     </option>
     <option name="CONSOLE_DARKGRAY_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="aeaeae" />
+        <option name="FOREGROUND" value="c8c8c8" />
       </value>
     </option>
     <option name="CONSOLE_RED_BRIGHT_OUTPUT">

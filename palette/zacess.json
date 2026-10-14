@@ -1,7 +1,7 @@
 {
   "$schema": "./schema.json",
   "name": "Zacess",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "rules": {
     "textContrast": 7,
     "findMatchContrast": 4.5,
@@ -424,7 +424,7 @@
       },
       "terminal": {
         "ansi": [
-          "#2b2b2b",
+          "#a3a3a3",
           "#ffa79b",
           "#8dcd8e",
           "#deb967",
@@ -432,7 +432,7 @@
           "#eba8e4",
           "#52d0cf",
           "#e6e6e6",
-          "#aeaeae",
+          "#c8c8c8",
           "#ffd5ce",
           "#aceead",
           "#ffda8a",
@@ -442,9 +442,7 @@
           "#ffffff"
         ],
         "dim": [],
-        "backgroundRole": [
-          0
-        ],
+        "backgroundRole": [],
         "textRole": [
           15
         ]
@@ -510,7 +508,7 @@
         "foreground": "#ffffff",
         "cursor": "#ffeb3b",
         "ansi": [
-          "#262626",
+          "#a3a3a3",
           "#ffa79b",
           "#82d085",
           "#e5b851",
@@ -518,7 +516,7 @@
           "#f2a4eb",
           "#1fd3d3",
           "#d9d9d9",
-          "#aeaeae",
+          "#c8c8c8",
           "#ffd5ce",
           "#a2f1a4",
           "#ffda8a",
@@ -528,9 +526,7 @@
           "#ffffff"
         ],
         "dim": [],
-        "backgroundRole": [
-          0
-        ],
+        "backgroundRole": [],
         "textRole": [
           15
         ]
