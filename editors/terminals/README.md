@@ -5,6 +5,11 @@ The four Zacess themes for iTerm2, Alacritty, kitty, Ghostty and Windows Termina
 is a background shade rather than a text colour, so it is checked the other way round: the theme's
 text keeps 7:1 on it.
 
+> [!NOTE]
+> The themes are also in the [iTerm2 Color Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
+> collection, which ships ports for dozens more terminals. Terminals that bundle that collection,
+> such as Ghostty and WezTerm, list them by name from their next update.
+
 | Terminal | Files | Install |
 | --- | --- | --- |
 | iTerm2 | [`iterm2/`](iterm2/) | **Settings**, **Profiles**, **Colors**, then **Color Presets...** and **Import...**. Choose the `.itermcolors` file, then pick it from the same menu |

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- The install guides note that the four themes are in the iTerm2 Color Schemes collection, which Ghostty, WezTerm and other terminals draw from.
+
 ## [0.1.4] - 2026-10-14
 
 ### Added
