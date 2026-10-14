@@ -9,10 +9,11 @@ Built for VS Code, JetBrains IDEs, Obsidian, Neovim, Zed, iTerm2, Alacritty, kit
 Windows Terminal.
 
 > [!NOTE]
-> The VS Code Marketplace, Open VSX, JetBrains Marketplace and Obsidian community listings are not
-> live yet. Until they are, install from the
-> [latest release](https://github.com/zacesshq/themes/releases/latest) or from this repository as
-> described below.
+> Zacess Themes is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes) and
+> [Open VSX](https://open-vsx.org/extension/zacess/zacess-themes). The [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/35082-zacess-themes)
+> listing is in review and the Obsidian community listing is not live yet. Until they are, install
+> those from the [latest release](https://github.com/zacesshq/themes/releases/latest) as described
+> below.
 
 ## The four themes
 
@@ -61,16 +62,18 @@ are listed in [ACCESSIBILITY.md](ACCESSIBILITY.md).
 
 ### VS Code
 
-Download `zacess-themes-<version>.vsix` from the
-[latest release](https://github.com/zacesshq/themes/releases/latest), then:
+Search for **Zacess Themes** in the Extensions view or install it from the
+[VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes):
 
 ```sh
-code --install-extension zacess-themes-0.1.2.vsix
+code --install-extension zacess.zacess-themes
 ```
 
-Run **Preferences: Color Theme** (`Cmd+K Cmd+T` on macOS, `Ctrl+K Ctrl+T` elsewhere) and choose a
-Zacess theme. Until the Marketplace listing is live, install the `.vsix` from the latest release.
-Details are in [editors/vscode](editors/vscode/README.md).
+Cursor, Windsurf, VSCodium, Antigravity, Kiro and other editors built on VS Code install it from
+[Open VSX](https://open-vsx.org/extension/zacess/zacess-themes). The `.vsix` in the
+[latest release](https://github.com/zacesshq/themes/releases/latest) works offline. Then run
+**Preferences: Color Theme** (`Cmd+K Cmd+T` on macOS, `Ctrl+K Ctrl+T` elsewhere) and choose a
+Zacess theme. Details are in [editors/vscode](editors/vscode/README.md).
 
 ### JetBrains IDEs
 
