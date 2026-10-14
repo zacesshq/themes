@@ -10,8 +10,8 @@ cannot be merged.
   panels, over the selection, over the current line and over both diff backgrounds. Comments are held
   to the same floor and are never dimmed below it.
 - The text colour keeps 7:1 over a find match. Syntax colours keep at least 4.5:1 over it. In VS Code
-  and the JetBrains IDEs the find match also carries a border. Neovim, Zed and Obsidian draw it as a
-  background only.
+  and the JetBrains IDEs the find match also carries a border. Neovim, Zed, Obsidian, Sublime Text
+  and Emacs draw it as a background only. Helix shows search results as selections.
 - Interface text, including muted text, links, errors, warnings, information, line numbers and the
   text on buttons and badges, keeps 7:1 on every surface it is drawn on.
 - Borders, dividers, focus outlines, indent guides and whitespace markers keep at least 3:1, the WCAG
@@ -152,6 +152,10 @@ always checked.
 
 - Zed's theme format sets colour, font style and weight for syntax tokens but has no underline, so
   invalid code relies on Zed's own diagnostic underline.
+- Helix has no scope for invalid code, so invalid code there is marked by the error diagnostic's
+  curly underline rather than a colour and underline of its own.
+- Emacs before version 29 has no faces for function calls, numbers, properties, operators and
+  punctuation, so those show in the text colour, which keeps 7:1.
 - Language extensions can add their own scopes or semantic tokens. A token the themes do not name
   falls back to the text colour, which keeps 7:1.
 - In Zacess Light and Zacess Cream, ANSI white and bright white are dark so that white text stays
@@ -162,7 +166,8 @@ always checked.
   weight rather than by colour.
 - Programs in a terminal sometimes choose their own colours, such as a 256 colour or true colour
   value, which these themes cannot control.
-- In Neovim the colours are exact only with `termguicolors` on and a true colour terminal.
+- In Neovim the colours are exact only with `termguicolors` on and a true colour terminal. The same
+  holds for Helix and Emacs in a terminal.
 - The PNG previews for the VS Code Marketplace are drawn with the fonts installed where they are made,
   so their letter shapes can differ from the SVG previews. The colours are the same.
 

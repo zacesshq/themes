@@ -27,6 +27,9 @@ body:
         - Obsidian
         - Neovim
         - Zed
+        - Sublime Text
+        - Helix
+        - Emacs
         - A terminal
         - Other
     validations:

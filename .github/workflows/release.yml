@@ -52,6 +52,12 @@ jobs:
       - name: Zip the Obsidian theme
         working-directory: editors/obsidian
         run: zip "../../dist/zacess-obsidian-$VERSION.zip" manifest.json theme.css
+      - name: Zip the Sublime Text, Helix and Emacs themes
+        working-directory: editors
+        run: |
+          (cd sublime && zip "../../dist/zacess-sublime-$VERSION.zip" ./*.sublime-color-scheme)
+          (cd helix/themes && zip "../../../dist/zacess-helix-$VERSION.zip" ./*.toml)
+          (cd emacs && zip "../../dist/zacess-emacs-$VERSION.zip" ./*.el)
       - name: Create the GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -91,3 +97,38 @@ jobs:
           fi
           ./gradlew publishPlugin
           echo "Published $VERSION to the JetBrains Marketplace." >> "$GITHUB_STEP_SUMMARY"
+      - name: Update the read-only Obsidian and Neovim copies
+        env:
+          MIRROR_TOKEN: ${{ secrets.THEMES_MIRROR_TOKEN }}
+        run: |
+          if [ -z "$MIRROR_TOKEN" ]; then
+            echo "Skipped the read-only copies: the THEMES_MIRROR_TOKEN secret is not set." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          # each copy keeps its own README, licence and screenshot; only the generated files move
+          mirror() {
+            repo=$1 tag=$2; shift 2
+            dir=$(mktemp -d)
+            git clone --quiet "https://x-access-token:$MIRROR_TOKEN@github.com/zacesshq/$repo.git" "$dir"
+            "$@" "$dir"
+            cd "$dir" || return 1
+            git add -A
+            if git diff --cached --quiet; then
+              echo "zacesshq/$repo already matches $VERSION." >> "$GITHUB_STEP_SUMMARY"
+            else
+              git -c user.name="Zac Bot" -c user.email=automation@isaacadjei.me commit --quiet -m "chore: update to Zacess Themes $VERSION"
+              git push --quiet origin HEAD
+            fi
+            if ! GH_TOKEN=$MIRROR_TOKEN gh release view "$tag" --repo "zacesshq/$repo" >/dev/null 2>&1; then
+              git tag "$tag" && git push --quiet origin "$tag"
+              GH_TOKEN=$MIRROR_TOKEN gh release create "$tag" --repo "zacesshq/$repo" --verify-tag --title "$tag" \
+                --notes "Matches zacesshq/themes v$VERSION." $MIRROR_ASSETS
+              echo "Released $tag in zacesshq/$repo." >> "$GITHUB_STEP_SUMMARY"
+            fi
+            cd "$GITHUB_WORKSPACE" || return 1
+          }
+          copy_obsidian() { cp editors/obsidian/manifest.json editors/obsidian/theme.css "$1/"; }
+          copy_neovim() { rm -f "$1"/colors/*.lua; cp editors/neovim/colors/*.lua "$1/colors/"; }
+          # obsidian installs from a release tagged exactly as the manifest version, with both files attached
+          MIRROR_ASSETS="$GITHUB_WORKSPACE/editors/obsidian/manifest.json $GITHUB_WORKSPACE/editors/obsidian/theme.css" mirror obsidian-theme "$VERSION" copy_obsidian
+          MIRROR_ASSETS="" mirror zacess.nvim "v$VERSION" copy_neovim

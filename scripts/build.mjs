@@ -29,12 +29,9 @@ const slug = (theme) => `zacess-${theme.id}`;
 
 // ---------------------------------------------------------------- VS Code
 
-function vscodeTokenColors(s) {
-  const rule = (name, scope, token, colour = s[token], style = fontStyle(token)) => ({
-    name,
-    scope,
-    settings: { foreground: colour, fontStyle: style },
-  });
+// the TextMate scope rules VS Code and Sublime Text share, so both editors colour a scope alike
+function textmateRules(s) {
+  const rule = (name, scope, token, colour = s[token], style = fontStyle(token)) => ({ name, scope, token, colour, style });
   return [
     rule("Comments", ["comment", "punctuation.definition.comment", "string.quoted.docstring.multi.python"], "comment"),
     rule("Strings", ["string", "punctuation.definition.string", "constant.character", "markup.inline.raw"], "string"),
@@ -60,6 +57,10 @@ function vscodeTokenColors(s) {
     rule("Links", ["markup.underline.link", "string.other.link"], "function", s.function, "underline"),
     rule("Quotes", ["markup.quote"], "comment"),
   ];
+}
+
+function vscodeTokenColors(s) {
+  return textmateRules(s).map(({ name, scope, colour, style }) => ({ name, scope, settings: { foreground: colour, fontStyle: style } }));
 }
 
 function vscodeSemantic(s) {
@@ -1257,6 +1258,352 @@ function buildZed() {
   written.push("editors/zed/LICENSE");
 }
 
+// ---------------------------------------------------------------- shared palette names
+
+// Sublime Text and Helix both name their colours once and refer to them by name, so both use the
+// palette's own role names; the syntax text colour is renamed because the interface has a
+// foreground of its own
+const snake = (key) => key.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`);
+const uiName = (key) => snake(key);
+const synName = (token) => (token === "foreground" ? "syntax_foreground" : token);
+function namedColours(theme) {
+  const out = {};
+  for (const [k, v] of Object.entries(theme.ui)) out[uiName(k)] = v;
+  for (const [k, v] of Object.entries(theme.syntax)) out[synName(k)] = v;
+  return out;
+}
+
+// ---------------------------------------------------------------- Sublime Text
+
+function sublimeScheme(theme) {
+  const s = theme.syntax;
+  const v = (name) => `var(${name})`;
+  // a rule's colour is one of the syntax tokens, so it is written as that token's variable
+  const synVar = (colour, token) => v(synName(colour === s[token] ? token : Object.keys(s).find((k) => s[k] === colour)));
+  const rules = textmateRules(s).map(({ name, scope, token, colour, style }) => {
+    const out = { name, scope: scope.join(", "), foreground: synVar(colour, token) };
+    if (style) out.font_style = style;
+    return out;
+  });
+  // region colours are what packages such as LSP and the built in diff use for marks and outlines
+  const regions = [
+    ["redish", "error"], ["orangish", "warning"], ["yellowish", "warning"], ["greenish", null, "added"],
+    ["cyanish", "info"], ["bluish", "info"], ["purplish", null, "keyword"], ["pinkish", null, "control"],
+  ];
+  for (const [region, ui, token] of regions) {
+    rules.push({ name: `Region ${region}`, scope: `region.${region}`, foreground: ui ? v(uiName(ui)) : v(synName(token)) });
+  }
+  return {
+    name: theme.name,
+    author: "Zacess",
+    variables: namedColours(theme),
+    globals: {
+      background: v("background"),
+      foreground: v("foreground"),
+      caret: v("cursor"),
+      line_highlight: v("line_highlight"),
+      selection: v("selection"),
+      inactive_selection: v("selection"),
+      gutter: v("gutter"),
+      gutter_foreground: v("line_number"),
+      gutter_foreground_highlight: v("line_number_active"),
+      invisibles: v("whitespace"),
+      guide: v("indent_guide"),
+      active_guide: v("foreground"),
+      stack_guide: v("indent_guide"),
+      rulers: v("indent_guide"),
+      minimap_border: v("border"),
+      accent: v("accent"),
+      // the current find match is filled and the other matches are outlined, as in VS Code
+      find_highlight: v("find_match"),
+      find_highlight_foreground: v("foreground"),
+      highlight: v("find_match_border"),
+      brackets_options: "underline",
+      brackets_foreground: v("accent"),
+      bracket_contents_options: "underline",
+      bracket_contents_foreground: v("accent"),
+      tags_options: "underline",
+      tags_foreground: v("accent"),
+      line_diff_width: "3",
+      line_diff_added: v("added"),
+      line_diff_modified: v("changed"),
+      line_diff_deleted: v("removed"),
+      misspelling: v("error"),
+    },
+    rules,
+  };
+}
+
+function buildSublime() {
+  for (const theme of palette.themes) write(`editors/sublime/${theme.name}.sublime-color-scheme`, json(sublimeScheme(theme)));
+}
+
+// ---------------------------------------------------------------- Helix
+
+function helix(theme) {
+  const tok = (token, extra = {}) => {
+    const out = { fg: synName(token) };
+    const modifiers = [];
+    if (has(token, "bold")) modifiers.push("bold");
+    if (has(token, "italic")) modifiers.push("italic");
+    if (modifiers.length) out.modifiers = modifiers;
+    if (has(token, "underline")) out.underline = { color: synName(token), style: "line" };
+    return { ...out, ...extra };
+  };
+  const ui = (fg, bg, extra = {}) => ({ ...(fg ? { fg } : {}), ...(bg ? { bg } : {}), ...extra });
+  const bold = { modifiers: ["bold"] };
+  const styles = {
+    "ui.background": ui(null, "background"),
+    "ui.background.separator": ui("border"),
+    "ui.text": ui("foreground"),
+    "ui.text.focus": ui("foreground", null, bold),
+    "ui.text.inactive": ui("muted"),
+    "ui.text.info": ui("foreground", "surface"),
+    "ui.cursor": ui("background", "cursor"),
+    "ui.cursor.primary": ui("background", "cursor"),
+    "ui.cursor.match": ui(null, "line_highlight", { modifiers: ["bold"], underline: { color: "accent", style: "line" } }),
+    "ui.cursorline.primary": ui(null, "line_highlight"),
+    "ui.gutter": ui(null, "gutter"),
+    "ui.linenr": ui("line_number"),
+    "ui.linenr.selected": ui("line_number_active", null, bold),
+    "ui.selection": ui(null, "selection"),
+    "ui.selection.primary": ui(null, "selection"),
+    "ui.highlight": ui(null, "line_highlight"),
+    "ui.statusline": ui("foreground", "surface_alt"),
+    "ui.statusline.inactive": ui("muted", "surface"),
+    "ui.statusline.normal": ui("accent_foreground", "accent", bold),
+    "ui.statusline.insert": ui("accent_foreground", "accent", bold),
+    "ui.statusline.select": ui("accent_foreground", "accent", bold),
+    "ui.bufferline": ui("muted", "surface"),
+    "ui.bufferline.active": ui("foreground", "background", { modifiers: ["bold"], underline: { color: "accent", style: "line" } }),
+    "ui.bufferline.background": ui(null, "surface"),
+    "ui.window": ui("border"),
+    "ui.help": ui("foreground", "surface"),
+    "ui.popup": ui("foreground", "surface"),
+    "ui.popup.info": ui("foreground", "surface"),
+    "ui.menu": ui("foreground", "surface"),
+    "ui.menu.selected": ui("foreground", "selection", bold),
+    "ui.menu.scroll": ui("indent_guide", "surface_alt"),
+    "ui.picker.header": ui("foreground", "surface_alt", bold),
+    "ui.virtual.whitespace": ui("whitespace"),
+    "ui.virtual.indent-guide": ui("indent_guide"),
+    "ui.virtual.ruler": ui(null, "line_highlight"),
+    "ui.virtual.inlay-hint": ui("muted", "surface"),
+    "ui.virtual.jump-label": ui("accent", null, { modifiers: ["bold"], underline: { color: "accent", style: "line" } }),
+    "diagnostic.error": { underline: { color: "error", style: "curl" } },
+    "diagnostic.warning": { underline: { color: "warning", style: "curl" } },
+    "diagnostic.info": { underline: { color: "info", style: "curl" } },
+    "diagnostic.hint": { underline: { color: "muted", style: "curl" } },
+    "diagnostic.deprecated": { modifiers: ["crossed_out"] },
+    error: ui("error", null, bold),
+    warning: ui("warning", null, bold),
+    info: ui("info", null, bold),
+    hint: ui("muted", null, bold),
+    "diff.plus": tok("added"),
+    "diff.minus": tok("removed"),
+    "diff.delta": tok("changed"),
+    "markup.heading": ui("keyword", null, bold),
+    "markup.bold": bold,
+    "markup.italic": { modifiers: ["italic"] },
+    "markup.strikethrough": { modifiers: ["crossed_out"] },
+    "markup.link.url": ui("link", null, { underline: { color: "link", style: "line" } }),
+    "markup.link.text": ui("link"),
+    "markup.link.label": ui("link"),
+    "markup.quote": tok("comment"),
+    "markup.raw": tok("string"),
+    "markup.list": tok("operator"),
+    keyword: tok("keyword"),
+    "keyword.control": tok("control"),
+    "keyword.directive": tok("keyword"),
+    "keyword.function": tok("keyword"),
+    "keyword.storage": tok("keyword"),
+    "keyword.operator": tok("keyword"),
+    label: tok("control"),
+    function: tok("function"),
+    "function.builtin": tok("function"),
+    "function.macro": tok("function"),
+    type: tok("type"),
+    "type.builtin": tok("type"),
+    constructor: tok("type"),
+    namespace: tok("type"),
+    variable: tok("variable"),
+    "variable.builtin": tok("keyword"),
+    "variable.parameter": tok("parameter"),
+    "variable.other.member": tok("property"),
+    string: tok("string"),
+    "string.regexp": tok("regex"),
+    "string.special": tok("regex"),
+    "string.special.url": ui("link", null, { underline: { color: "link", style: "line" } }),
+    "constant.character": tok("string"),
+    "constant.character.escape": tok("regex"),
+    "constant.numeric": tok("number"),
+    constant: tok("number"),
+    comment: tok("comment"),
+    operator: tok("operator"),
+    punctuation: tok("operator"),
+    special: tok("regex"),
+    tag: tok("tag"),
+    attribute: tok("attribute"),
+  };
+  const value = (x) => {
+    if (typeof x === "string") return JSON.stringify(x);
+    if (Array.isArray(x)) return `[${x.map(value).join(", ")}]`;
+    return `{ ${Object.entries(x).map(([k, val]) => `${k} = ${value(val)}`).join(", ")} }`;
+  };
+  return [
+    `# ${theme.name}`,
+    `# ${HEADER}`,
+    "",
+    ...Object.entries(styles).map(([k, x]) => `${JSON.stringify(k)} = ${value(x)}`),
+    "",
+    "[palette]",
+    ...Object.entries(namedColours(theme)).map(([k, x]) => `${k} = "${x}"`),
+    "",
+  ].join("\n");
+}
+
+function buildHelix() {
+  for (const theme of palette.themes) write(`editors/helix/themes/${slug(theme).replace(/-/g, "_")}.toml`, helix(theme));
+}
+
+// ---------------------------------------------------------------- Emacs
+
+function emacs(theme) {
+  const u = theme.ui;
+  const s = theme.syntax;
+  const a = theme.terminal.ansi;
+  const tok = (token, extra = {}) => {
+    const out = { foreground: s[token] };
+    if (has(token, "bold")) out.weight = "bold";
+    if (has(token, "italic")) out.slant = "italic";
+    if (has(token, "underline")) out.underline = true;
+    return { ...out, ...extra };
+  };
+  const wave = (colour) => ({ underline: { color: colour, style: "wave" } });
+  const box = (colour) => ({ box: { "line-width": 1, color: colour } });
+  const faces = {
+    default: { foreground: u.foreground, background: u.background },
+    cursor: { background: u.cursor },
+    region: { background: u.selection, extend: true },
+    "secondary-selection": { background: u.lineHighlight, extend: true },
+    highlight: { background: u.lineHighlight },
+    "hl-line": { background: u.lineHighlight, extend: true },
+    fringe: { foreground: u.lineNumber, background: u.gutter },
+    "line-number": { foreground: u.lineNumber, background: u.gutter },
+    "line-number-current-line": { foreground: u.lineNumberActive, background: u.lineHighlight, weight: "bold" },
+    "mode-line": { foreground: u.foreground, background: u.surfaceAlt, ...box(u.border) },
+    "mode-line-inactive": { foreground: u.muted, background: u.surface, ...box(u.border) },
+    "header-line": { foreground: u.foreground, background: u.surfaceAlt },
+    "vertical-border": { foreground: u.border },
+    "window-divider": { foreground: u.border },
+    "minibuffer-prompt": { foreground: u.accent, weight: "bold" },
+    tooltip: { foreground: u.foreground, background: u.surface },
+    shadow: { foreground: u.muted },
+    link: { foreground: u.link, underline: true },
+    "link-visited": { foreground: u.link, underline: true },
+    error: { foreground: u.error, weight: "bold" },
+    warning: { foreground: u.warning, weight: "bold" },
+    success: { foreground: s.added, weight: "bold" },
+    "trailing-whitespace": { background: u.diffRemovedBackground },
+    "font-lock-keyword-face": tok("keyword"),
+    "font-lock-builtin-face": tok("function"),
+    "font-lock-function-name-face": tok("function"),
+    "font-lock-function-call-face": tok("function"),
+    "font-lock-type-face": tok("type"),
+    "font-lock-variable-name-face": tok("variable"),
+    "font-lock-variable-use-face": tok("variable"),
+    "font-lock-property-name-face": tok("property"),
+    "font-lock-property-use-face": tok("property"),
+    "font-lock-string-face": tok("string"),
+    "font-lock-doc-face": tok("comment"),
+    "font-lock-doc-markup-face": tok("comment", { weight: "bold" }),
+    "font-lock-constant-face": tok("number"),
+    "font-lock-number-face": tok("number"),
+    "font-lock-comment-face": tok("comment"),
+    "font-lock-comment-delimiter-face": tok("comment"),
+    "font-lock-preprocessor-face": tok("keyword"),
+    "font-lock-regexp-grouping-backslash": tok("regex", { weight: "bold" }),
+    "font-lock-regexp-grouping-construct": tok("regex", { weight: "bold" }),
+    "font-lock-escape-face": tok("regex"),
+    "font-lock-operator-face": tok("operator"),
+    "font-lock-punctuation-face": tok("operator"),
+    "font-lock-bracket-face": tok("operator"),
+    "font-lock-delimiter-face": tok("operator"),
+    "font-lock-misc-punctuation-face": tok("operator"),
+    "font-lock-negation-char-face": tok("control"),
+    "font-lock-warning-face": tok("invalid", { weight: "bold" }),
+    "show-paren-match": { background: u.lineHighlight, weight: "bold", underline: { color: u.accent } },
+    "show-paren-mismatch": tok("invalid", { weight: "bold" }),
+    isearch: { foreground: u.foreground, background: u.findMatch, weight: "bold" },
+    "isearch-fail": { foreground: u.error, weight: "bold" },
+    "lazy-highlight": { background: u.lineHighlight, underline: { color: u.findMatchBorder } },
+    match: { background: u.lineHighlight, underline: { color: u.findMatchBorder } },
+    "diff-added": { foreground: s.added, background: u.diffAddedBackground, extend: true },
+    "diff-removed": { foreground: s.removed, background: u.diffRemovedBackground, extend: true },
+    "diff-changed": { foreground: s.changed, background: u.lineHighlight, extend: true },
+    "diff-header": { foreground: u.foreground, background: u.surfaceAlt },
+    "diff-file-header": { foreground: u.foreground, background: u.surfaceAlt, weight: "bold" },
+    "flymake-error": wave(u.error),
+    "flymake-warning": wave(u.warning),
+    "flymake-note": wave(u.info),
+    "flycheck-error": wave(u.error),
+    "flycheck-warning": wave(u.warning),
+    "flycheck-info": wave(u.info),
+  };
+  ANSI_NAMES.forEach((name, i) => {
+    const face = `ansi-color-${name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}`;
+    faces[face] = { foreground: a[i], background: a[i] };
+  });
+  const lisp = (key, x) => {
+    if (x === true) return "t";
+    if (typeof x === "number") return String(x);
+    if (typeof x === "object") return `(${Object.entries(x).map(([k, val]) => `:${k} ${lisp(k, val)}`).join(" ")})`;
+    // weight, slant and style take a symbol rather than a string
+    return ["weight", "slant", "style"].includes(key) ? x : JSON.stringify(x);
+  };
+  const name = slug(theme);
+  const spec = (attrs) => Object.entries(attrs).map(([k, x]) => `:${k} ${lisp(k, x)}`).join(" ");
+  return [
+    `;;; ${name}-theme.el --- ${theme.name} theme -*- lexical-binding: t; -*-`,
+    "",
+    `;; ${HEADER}`,
+    "",
+    ";; Author: Zacess <contact@zacess.com>",
+    `;; URL: ${REPO}`,
+    `;; Version: ${palette.version}`,
+    ";; SPDX-License-Identifier: MIT",
+    "",
+    ";;; Commentary:",
+    "",
+    `;; ${theme.description}`,
+    ";; Every text and syntax colour keeps at least 7:1 contrast on the",
+    ";; background, the selection and the current line.",
+    "",
+    ";;; Code:",
+    "",
+    `(deftheme ${name}`,
+    `  ${JSON.stringify(theme.description)})`,
+    "",
+    "(custom-theme-set-faces",
+    ` '${name}`,
+    ...Object.entries(faces).map(([face, attrs], i, all) => ` '(${face} ((t (${spec(attrs)}))))${i === all.length - 1 ? ")" : ""}`),
+    "",
+    ";;;###autoload",
+    "(when (and (boundp 'custom-theme-load-path) load-file-name)",
+    "  (add-to-list 'custom-theme-load-path",
+    "               (file-name-as-directory (file-name-directory load-file-name))))",
+    "",
+    `(provide-theme '${name})`,
+    "",
+    `;;; ${name}-theme.el ends here`,
+    "",
+  ].join("\n");
+}
+
+function buildEmacs() {
+  for (const theme of palette.themes) write(`editors/emacs/${slug(theme)}-theme.el`, emacs(theme));
+}
+
 // ---------------------------------------------------------------- terminals
 
 function terminalColours(theme) {
@@ -1448,6 +1795,9 @@ buildJetbrains();
 buildObsidian();
 buildNeovim();
 buildZed();
+buildSublime();
+buildHelix();
+buildEmacs();
 buildTerminals();
 buildDocs();
 console.log(`wrote ${written.length} files from palette/zacess.json`);
