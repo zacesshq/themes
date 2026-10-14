@@ -30,22 +30,22 @@ contrast (WCAG AAA) on the background, the selection and the current line, comme
 
 ## Install
 
-1. Download `zacess-themes-<version>.vsix` from the
-   [latest release](https://github.com/zacesshq/themes/releases/latest).
-2. In VS Code open the Command Palette (`Cmd+Shift+P` on macOS, `Ctrl+Shift+P` elsewhere), run
-   **Extensions: Install from VSIX...** and choose the file.
-3. Run **Preferences: Color Theme** (`Cmd+K Cmd+T` on macOS, `Ctrl+K Ctrl+T` elsewhere) and pick a
+1. Search for **Zacess Themes** in the Extensions view (`Cmd+Shift+X` on macOS, `Ctrl+Shift+X`
+   elsewhere) and select **Install**. It is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes)
+   and, for Cursor, Windsurf, VSCodium, Antigravity, Kiro and other editors built on VS Code, on
+   [Open VSX](https://open-vsx.org/extension/zacess/zacess-themes).
+2. Run **Preferences: Color Theme** (`Cmd+K Cmd+T` on macOS, `Ctrl+K Ctrl+T` elsewhere) and pick a
    Zacess theme.
 
-From a terminal the second step is:
+From a terminal the first step is:
 
 ```sh
-code --install-extension zacess-themes-0.1.2.vsix
+code --install-extension zacess.zacess-themes
 ```
 
-> [!NOTE]
-> The VS Code Marketplace and Open VSX listings are not live yet. Until they are, install the `.vsix`
-> from the latest release.
+To install offline, download `zacess-themes-<version>.vsix` from the
+[latest release](https://github.com/zacesshq/themes/releases/latest) and run
+**Extensions: Install from VSIX...**.
 
 ## More
 

@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-10-14
+
+### Changed
+
+- The install guides link the VS Code Marketplace, Open VSX and JetBrains Marketplace listings. The VS Code guide installs by extension ID instead of a downloaded file. The release files stay available for offline installs.
+
 ## [0.1.2] - 2026-10-14
 
 ### Changed
@@ -39,7 +45,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - SVG previews drawn as real text and the data for the themes page on the Zacess website.
 - CI that runs the checks, proves the committed files are current, packages the VS Code extension and builds the JetBrains plugin. A release workflow that attaches the `.vsix`, the JetBrains zip and an Obsidian zip to each GitHub release and publishes to each marketplace once its token is set.
 
-[Unreleased]: https://github.com/zacesshq/themes/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/zacesshq/themes/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/zacesshq/themes/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/zacesshq/themes/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/zacesshq/themes/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/zacesshq/themes/releases/tag/v0.1.0

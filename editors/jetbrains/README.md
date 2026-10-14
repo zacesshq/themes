@@ -15,8 +15,8 @@ font styles as every other Zacess theme.
    The matching editor colour scheme switches with it.
 
 > [!NOTE]
-> The JetBrains Marketplace listing is not live yet. Until it is, install the zip from the latest
-> release.
+> The [JetBrains Marketplace listing](https://plugins.jetbrains.com/plugin/35082-zacess-themes) is in review. Until
+> it is approved, install the zip from the latest release.
 
 ## Build from source
 
