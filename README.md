@@ -146,8 +146,11 @@ Then add `(add-to-list 'custom-theme-load-path (expand-file-name "themes" user-e
 
 ### Terminals
 
-iTerm2, Alacritty, kitty, Ghostty and Windows Terminal files are in
-[editors/terminals](editors/terminals/README.md), with the install step for each.
+The four themes are in the [iTerm2 Color Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
+collection as Zacess Light, Zacess Dark, Zacess Yellow on Black and Zacess Cream. Terminals that
+draw their theme lists from it, such as Ghostty and WezTerm, include them from their next update.
+The files here, for iTerm2, Alacritty, kitty, Ghostty and Windows Terminal, are in
+[editors/terminals](editors/terminals/README.md) with the install step for each.
 
 ## How it works
 
