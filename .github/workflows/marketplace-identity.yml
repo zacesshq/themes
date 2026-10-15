@@ -1,0 +1,35 @@
+name: Marketplace identity
+
+# a manual check of the Microsoft Entra identity the release uses for the VS Code Marketplace. It signs in
+# without any stored secret, prints the identity's Azure DevOps profile id (the id added as a member of the
+# zacess publisher) and asks the Marketplace whether that identity may publish. Nothing is published.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check the publishing identity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # the federated credential trusts this environment, so the sign-in only works inside it
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          # an app registration needs no subscription, so expiring subscription credits never break publishing
+          allow-no-subscriptions: true
+      - name: Show the Azure DevOps profile id
+        run: |
+          # 499b84ac-1321-427f-aa17-267ca6975798 is the fixed resource id of Azure DevOps
+          id=$(az rest -u https://app.vssps.visualstudio.com/_apis/profile/profiles/me --resource 499b84ac-1321-427f-aa17-267ca6975798 --query id -o tsv)
+          echo "Profile id to add as a Contributor on the zacess publisher: $id" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Check publish rights on the zacess publisher
+        run: npx --yes @vscode/vsce@4.0.0 verify-pat --azure-credential zacess
