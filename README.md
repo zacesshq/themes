@@ -11,7 +11,8 @@ Alacritty, kitty, Ghostty and Windows Terminal.
 > [!NOTE]
 > Zacess Themes is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes) and
 > [Open VSX](https://open-vsx.org/extension/zacess/zacess-themes). The [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/35082-zacess-themes)
-> listing is in review. The Obsidian theme is in the [Obsidian community directory](https://community.obsidian.md/themes/zacess)
+> listing is in review. Zed lists it in the [Zed extension store](https://zed.dev/extensions?query=zacess). The Obsidian
+> theme is in the [Obsidian community directory](https://community.obsidian.md/themes/zacess)
 > and the Neovim schemes install from [zacesshq/zacess.nvim](https://github.com/zacesshq/zacess.nvim).
 > Every editor can also be installed from the
 > [latest release](https://github.com/zacesshq/themes/releases/latest) as described below.
@@ -114,8 +115,9 @@ Details are in [editors/neovim](editors/neovim/README.md).
 
 ### Zed
 
-Run **zed: install dev extension** and choose the `editors/zed` folder. Copying
-`editors/zed/themes/zacess.json` into `~/.config/zed/themes/` works too. Details are in
+Run **zed: extensions** from the command palette, search for **Zacess Themes** and install it, then
+run **theme selector: toggle** and choose a Zacess theme. It is in the
+[Zed extension store](https://zed.dev/extensions?query=zacess). Details are in
 [editors/zed](editors/zed/README.md).
 
 ### Sublime Text
