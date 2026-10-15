@@ -15,6 +15,8 @@ jobs:
     permissions:
       # creating the GitHub release needs write access to the repository's contents
       contents: write
+      # Open VSX trusted publishing trades this job's ID token for a registry token valid for minutes
+      id-token: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -77,14 +79,9 @@ jobs:
           npx --yes @vscode/vsce@4.0.0 publish --packagePath "dist/zacess-themes-$VERSION.vsix"
           echo "Published $VERSION to the VS Code Marketplace." >> "$GITHUB_STEP_SUMMARY"
       - name: Publish to Open VSX
-        env:
-          OVSX_PAT: ${{ secrets.OVSX_PAT }}
         run: |
-          if [ -z "$OVSX_PAT" ]; then
-            echo "Skipped Open VSX: the OVSX_PAT secret is not set." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          npx --yes ovsx@1.2.0 publish "dist/zacess-themes-$VERSION.vsix"
+          # no stored token: the registry accepts this repository and workflow as a trusted publisher
+          npx --yes ovsx@1.2.0 publish --trusted-publishing "dist/zacess-themes-$VERSION.vsix"
           echo "Published $VERSION to Open VSX." >> "$GITHUB_STEP_SUMMARY"
       - name: Publish to the JetBrains Marketplace
         working-directory: editors/jetbrains
