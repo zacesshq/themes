@@ -12,10 +12,12 @@ jobs:
     name: Build and release
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # the Microsoft Entra federated credential trusts this environment, so Marketplace sign-in only works inside it
+    environment: release
     permissions:
       # creating the GitHub release needs write access to the repository's contents
       contents: write
-      # Open VSX trusted publishing trades this job's ID token for a registry token valid for minutes
+      # Open VSX trusted publishing and the Marketplace sign-in both trade this job's ID token for short-lived ones
       id-token: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -68,15 +70,16 @@ jobs:
           awk -v v="$VERSION" '$0 ~ "^## \\[" v "\\]" { on = 1; next } /^## \[/ { on = 0 } on' CHANGELOG.md > notes.md
           [ -s notes.md ] || { echo "CHANGELOG.md has no section for $VERSION" >&2; exit 1; }
           gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --verify-tag --title "Zacess Themes $VERSION" --notes-file notes.md
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          # an app registration needs no subscription, so expiring subscription credits never break publishing
+          allow-no-subscriptions: true
       - name: Publish to the VS Code Marketplace
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
-          if [ -z "$VSCE_PAT" ]; then
-            echo "Skipped the VS Code Marketplace: the VSCE_PAT secret is not set." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          npx --yes @vscode/vsce@4.0.0 publish --packagePath "dist/zacess-themes-$VERSION.vsix"
+          # no stored token: the Entra identity is a Contributor on the zacess publisher
+          npx --yes @vscode/vsce@4.0.0 publish --azure-credential --packagePath "dist/zacess-themes-$VERSION.vsix"
           echo "Published $VERSION to the VS Code Marketplace." >> "$GITHUB_STEP_SUMMARY"
       - name: Publish to Open VSX
         run: |
