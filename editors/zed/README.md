@@ -5,7 +5,13 @@ theme family, in `themes/zacess.json`.
 
 ## Install
 
-Either install this folder as a dev extension:
+Zacess Themes is in the [Zed extension store](https://zed.dev/extensions?query=zacess):
+
+1. Open the command palette and run **zed: extensions**.
+2. Search for **Zacess Themes** and click **Install**.
+
+To try changes from this repository before they are released, install this folder as a dev extension
+instead:
 
 1. Open the command palette and run **zed: install dev extension**.
 2. Choose this `editors/zed` folder.
