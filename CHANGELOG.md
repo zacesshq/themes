@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
+- Zacess Themes is on the JetBrains Marketplace, so the JetBrains install guides install from there first. The plugin zip on each release stays available for offline installs.
 - Zacess Themes is in the Zed extension store, so the Zed install guides point there first. The dev extension and the copied theme file stay as ways to try unreleased changes.
 
 ## [0.1.5] - 2026-10-14

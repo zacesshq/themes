@@ -9,9 +9,9 @@ Built for VS Code, JetBrains IDEs, Obsidian, Neovim, Zed, Sublime Text, Helix, E
 Alacritty, kitty, Ghostty and Windows Terminal.
 
 > [!NOTE]
-> Zacess Themes is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes) and
-> [Open VSX](https://open-vsx.org/extension/zacess/zacess-themes). The [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/35082-zacess-themes)
-> listing is in review. Zed lists it in the [Zed extension store](https://zed.dev/extensions?query=zacess). The Obsidian
+> Zacess Themes is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes),
+> [Open VSX](https://open-vsx.org/extension/zacess/zacess-themes) and the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/35082-zacess-themes).
+> Zed lists it in the [Zed extension store](https://zed.dev/extensions?query=zacess). The Obsidian
 > theme is in the [Obsidian community directory](https://community.obsidian.md/themes/zacess)
 > and the Neovim schemes install from [zacesshq/zacess.nvim](https://github.com/zacesshq/zacess.nvim).
 > Every editor can also be installed from the
@@ -79,10 +79,11 @@ Zacess theme. Details are in [editors/vscode](editors/vscode/README.md).
 
 ### JetBrains IDEs
 
-Download `zacess-themes-<version>.zip` from the latest release. In **Settings**, open **Plugins**,
-select the gear icon, choose **Install Plugin from Disk...** and pick the zip. Then choose a Zacess
-theme under **Appearance & Behavior**, **Appearance**. It needs an IDE on the IntelliJ Platform 2025.3
-or later. Details are in [editors/jetbrains](editors/jetbrains/README.md).
+In **Settings**, open **Plugins**, search the **Marketplace** tab for Zacess Themes and install it.
+It is also on the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/35082-zacess-themes) page. Then choose a Zacess theme under
+**Appearance & Behavior**, **Appearance**. It needs an IDE on the IntelliJ Platform 2025.3 or later.
+For an offline install, download `zacess-themes-<version>.zip` from the latest release and choose
+**Install Plugin from Disk...** from the gear icon in **Plugins**. Details are in [editors/jetbrains](editors/jetbrains/README.md).
 
 ### Obsidian
 
