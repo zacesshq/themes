@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
+- zacess.nvim is listed in awesome-neovim, so the README and the Neovim guide link to the listing.
 - Releases publish to the VS Code Marketplace through a Microsoft Entra identity that trusts this repository's `release` environment, so no Marketplace access token is stored. A manual workflow checks the identity's publish rights.
 - Releases publish to Open VSX through trusted publishing: the registry accepts this repository's release workflow directly, so no Open VSX access token is stored as a secret.
 - Zacess Themes is on the JetBrains Marketplace, so the JetBrains install guides install from there first. The plugin zip on each release stays available for offline installs.
