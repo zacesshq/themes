@@ -97,6 +97,7 @@ setting. Yellow on Black and Cream are offered through the Style Settings plugin
 
 ### Neovim
 
+zacess.nvim is listed in [awesome-neovim](https://github.com/rockerBOO/awesome-neovim).
 Install `zacesshq/zacess.nvim` with any plugin manager. With
 [lazy.nvim](https://github.com/folke/lazy.nvim):
 
