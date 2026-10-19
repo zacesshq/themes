@@ -105,6 +105,8 @@ jobs:
             echo "Skipped the read-only copies: the THEMES_MIRROR_TOKEN secret is not set." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
+          # each copy's release carries the same changelog section as the main release, so its notes are never a bare version line
+          { cat notes.md; printf '\nMatches [zacesshq/themes v%s](https://github.com/zacesshq/themes/releases/tag/v%s).\n' "$VERSION" "$VERSION"; } > "$RUNNER_TEMP/mirror-notes.md"
           # each copy keeps its own README, licence and screenshot; only the generated files move
           mirror() {
             repo=$1 tag=$2; shift 2
@@ -122,7 +124,7 @@ jobs:
             if ! GH_TOKEN=$MIRROR_TOKEN gh release view "$tag" --repo "zacesshq/$repo" >/dev/null 2>&1; then
               git tag "$tag" && git push --quiet origin "$tag"
               GH_TOKEN=$MIRROR_TOKEN gh release create "$tag" --repo "zacesshq/$repo" --verify-tag --title "$tag" \
-                --notes "Matches zacesshq/themes v$VERSION." $MIRROR_ASSETS
+                --notes-file "$RUNNER_TEMP/mirror-notes.md" $MIRROR_ASSETS
               echo "Released $tag in zacesshq/$repo." >> "$GITHUB_STEP_SUMMARY"
             fi
             cd "$GITHUB_WORKSPACE" || return 1

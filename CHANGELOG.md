@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-19
+
+### Fixed
+
+- The JetBrains Marketplace listing shows these update notes: the plugin build takes its change notes from this changelog's section for the version. A version with no section fails the build.
+- The releases in zacesshq/obsidian-theme and zacesshq/zacess.nvim carry this changelog's section as their notes instead of a single line.
+
+### Changed
+
+- Includes the two high contrast themes from 0.2.0, Zacess High Contrast Dark and Zacess High Contrast Light, for every editor and terminal.
+
 ## [0.2.0] - 2026-10-19
 
 ### Added
