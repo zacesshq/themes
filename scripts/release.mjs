@@ -1,0 +1,160 @@
+#!/usr/bin/env node
+// finishes a release once release.yml has published a tag to the stores: creates the GitHub release
+// from the workflow's artifact and updates the read-only Obsidian and Neovim copies. It runs on a
+// maintainer's machine with their own gh login and git identity, so every commit, tag and release it
+// makes is theirs and signed with their key. Safe to run again: anything already done is skipped.
+//
+//   node scripts/release.mjs [version] [--dry-run]
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { ROOT, loadPalette } from "./lib/palette.mjs";
+
+const OWNER = "zacesshq";
+const SOURCE = `${OWNER}/themes`;
+
+const args = process.argv.slice(2);
+const dryRun = args.includes("--dry-run");
+const version = args.find((arg) => !arg.startsWith("--")) ?? loadPalette().version;
+const tag = `v${version}`;
+
+function run(command, commandArgs, { cwd = ROOT, allowFail = false, input } = {}) {
+  const result = spawnSync(command, commandArgs, { cwd, encoding: "utf8", input, stdio: ["pipe", "pipe", "pipe"] });
+  if (result.status !== 0 && !allowFail) {
+    console.error(`${command} ${commandArgs.join(" ")} failed:\n${result.stderr || result.stdout}`);
+    process.exit(1);
+  }
+  return { ok: result.status === 0, out: (result.stdout ?? "").trim() };
+}
+
+// a write step only prints what it would do in a dry run
+function act(description, command, commandArgs, options) {
+  console.log(`${dryRun ? "would run" : "running"}: ${description}`);
+  if (!dryRun) run(command, commandArgs, options);
+}
+
+// the commits, tags and releases must be a person's, never an automation account's
+const login = run("gh", ["api", "user", "--jq", ".login + \" \" + .type"]).out;
+const [account, accountType] = login.split(" ");
+if (accountType !== "User" || /bot$/i.test(account)) {
+  console.error(`gh is signed in as ${account}. Switch to a maintainer's own account first with gh auth switch.`);
+  process.exit(1);
+}
+console.log(`Releasing ${tag} as ${account}${dryRun ? " (dry run)" : ""}.`);
+
+// the release builds from the signed tag, so the local copy of the tag must match the remote one
+run("git", ["fetch", "--quiet", "origin", `refs/tags/${tag}:refs/tags/${tag}`]);
+if (run("git", ["cat-file", "-t", tag]).out !== "tag") {
+  console.error(`${tag} is not an annotated tag. Create it with git tag -s ${tag} -m "Zacess Themes ${version}".`);
+  process.exit(1);
+}
+
+// the stores are published by release.yml; a GitHub release before that succeeds would announce a version the stores lack
+const runs = JSON.parse(run("gh", ["run", "list", "--repo", SOURCE, "--workflow", "release.yml", "--branch", tag, "--limit", "1", "--json", "databaseId,status,conclusion"]).out);
+if (!runs.length || runs[0].conclusion !== "success") {
+  const state = runs.length ? `${runs[0].status} ${runs[0].conclusion || ""}`.trim() : "not found";
+  console.error(`The release workflow for ${tag} is ${state}. Wait for it to succeed, then run this again.`);
+  process.exit(1);
+}
+
+// the notes are this version's section of the changelog, read from the tagged commit
+const changelog = run("git", ["show", `${tag}:CHANGELOG.md`]).out.split("\n");
+const notes = [];
+let inSection = false;
+for (const line of changelog) {
+  if (line.startsWith("## [")) inSection = line.startsWith(`## [${version}]`);
+  else if (inSection) notes.push(line);
+}
+const notesText = notes.join("\n").trim();
+if (!notesText) {
+  console.error(`CHANGELOG.md at ${tag} has no section for ${version}.`);
+  process.exit(1);
+}
+
+const work = mkdtempSync(join(tmpdir(), `zacess-release-${version}-`));
+const notesFile = join(work, "notes.md");
+writeFileSync(notesFile, `${notesText}\n`);
+// each copy's release carries the same section, so its notes are never a bare version line
+const mirrorNotesFile = join(work, "mirror-notes.md");
+writeFileSync(mirrorNotesFile, `${notesText}\n\nMatches [${SOURCE} ${tag}](https://github.com/${SOURCE}/releases/tag/${tag}).\n`);
+
+const hasRelease = (repo, releaseTag) => run("gh", ["release", "view", releaseTag, "--repo", repo], { allowFail: true }).ok;
+
+// 1. the GitHub release on the source repository, with the files the workflow built
+if (hasRelease(SOURCE, tag)) {
+  console.log(`${SOURCE} already has the ${tag} release.`);
+} else {
+  const dist = join(work, "dist");
+  const download = run("gh", ["run", "download", String(runs[0].databaseId), "--repo", SOURCE, "--name", `zacess-themes-${version}`, "--dir", dist], { allowFail: true });
+  if (!download.ok) {
+    console.error(`Could not download the zacess-themes-${version} artifact from run ${runs[0].databaseId}. Artifacts expire after the repository's retention period, so rerun the workflow if it has gone.`);
+    if (!dryRun) process.exit(1);
+  }
+  const assets = download.ok ? readdirSync(dist).map((name) => join(dist, name)) : [];
+  console.log(`assets: ${assets.map((path) => path.slice(dist.length + 1)).join(", ") || "none"}`);
+  act(`create the ${tag} release on ${SOURCE}`, "gh", ["release", "create", tag, ...assets, "--repo", SOURCE, "--verify-tag", "--title", `Zacess Themes ${version}`, "--notes-file", notesFile]);
+}
+
+// 2. the read-only copies: each keeps its own README, licence and screenshot, only the generated files move
+// read untrimmed so each copied file is byte for byte what the tag holds
+const fromTag = (path) => spawnSync("git", ["show", `${tag}:${path}`], { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 }).stdout;
+const neovimColours = run("git", ["ls-tree", "--name-only", tag, "editors/neovim/colors/"]).out.split("\n").filter((path) => path.endsWith(".lua"));
+
+const mirrors = [
+  {
+    repo: "obsidian-theme",
+    // obsidian installs from a release tagged exactly as the manifest version, with both files attached
+    tag: version,
+    files: { "manifest.json": "editors/obsidian/manifest.json", "theme.css": "editors/obsidian/theme.css" },
+    assets: ["manifest.json", "theme.css"],
+    clear: () => {},
+  },
+  {
+    repo: "zacess.nvim",
+    tag,
+    files: Object.fromEntries(neovimColours.map((path) => [`colors/${path.split("/").pop()}`, path])),
+    assets: [],
+    // a scheme removed from the palette must disappear from the copy too
+    clear: (dir) => {
+      const colours = join(dir, "colors");
+      for (const name of readdirSync(colours)) if (name.endsWith(".lua")) rmSync(join(colours, name));
+    },
+  },
+];
+
+for (const mirror of mirrors) {
+  const repo = `${OWNER}/${mirror.repo}`;
+  const dir = join(work, mirror.repo);
+  run("gh", ["repo", "clone", repo, dir, "--", "--quiet"]);
+  mirror.clear(dir);
+  for (const [target, source] of Object.entries(mirror.files)) {
+    mkdirSync(join(dir, target, ".."), { recursive: true });
+    writeFileSync(join(dir, target), fromTag(source));
+  }
+  run("git", ["add", "-A"], { cwd: dir });
+  const changed = !run("git", ["diff", "--cached", "--quiet"], { cwd: dir, allowFail: true }).ok;
+  if (changed) {
+    console.log(run("git", ["diff", "--cached", "--stat"], { cwd: dir }).out);
+    act(`commit and push the ${version} files to ${repo}`, "git", ["commit", "--quiet", "-S", "-m", `chore: update to Zacess Themes ${version}`], { cwd: dir });
+    act(`push ${repo}`, "git", ["push", "--quiet", "origin", "HEAD"], { cwd: dir });
+  } else {
+    console.log(`${repo} already matches ${version}.`);
+  }
+  if (hasRelease(repo, mirror.tag)) {
+    console.log(`${repo} already has the ${mirror.tag} release.`);
+    continue;
+  }
+  if (!run("git", ["rev-parse", "--verify", "--quiet", `refs/tags/${mirror.tag}`], { cwd: dir, allowFail: true }).ok) {
+    act(`tag ${repo} ${mirror.tag} with a signed annotated tag`, "git", ["tag", "-s", mirror.tag, "-m", `Zacess Themes ${version}`], { cwd: dir });
+    act(`push the ${mirror.tag} tag to ${repo}`, "git", ["push", "--quiet", "origin", mirror.tag], { cwd: dir });
+  }
+  const assets = mirror.assets.map((name) => join(dir, name));
+  act(`create the ${mirror.tag} release on ${repo}`, "gh", ["release", "create", mirror.tag, ...assets, "--repo", repo, "--verify-tag", "--title", mirror.tag, "--notes-file", mirrorNotesFile]);
+}
+
+if (dryRun) console.log(`Dry run finished. Nothing was committed, tagged or released. Working files are in ${work}.`);
+else {
+  rmSync(work, { recursive: true, force: true });
+  console.log(`Released ${tag}.`);
+}

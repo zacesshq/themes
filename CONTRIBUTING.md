@@ -67,3 +67,40 @@ README.
 - JetBrains: `./gradlew buildPlugin` in `editors/jetbrains`, with Java 21.
 
 CI runs both on every pull request.
+
+## Releasing
+
+A release is two steps: the workflow publishes to the stores, then a maintainer's machine makes the
+GitHub release and updates the read-only copies, so every tag and release is signed by a maintainer.
+
+1. Bump `version` in `palette/zacess.json`, `package.json` and
+   `editors/jetbrains/gradle.properties`, then run `npm run build` and `npm run preview` so every
+   generated manifest follows. Move the changelog's `Unreleased` entries into a section for the
+   version, add a matching section to `editors/vscode/CHANGELOG.md` and merge that through a pull
+   request.
+2. Tag the merged commit with a signed annotated tag and push it:
+
+   ```sh
+   git tag -s v0.2.1 -m "Zacess Themes 0.2.1"
+   git push origin v0.2.1
+   ```
+
+3. The tag runs [`release.yml`](.github/workflows/release.yml). It checks and builds everything,
+   publishes to the VS Code Marketplace, Open VSX and the JetBrains Marketplace and uploads the
+   built files as a workflow artifact named `zacess-themes-<version>`.
+4. Once the workflow succeeds, with `gh` signed in to your own account and commit signing set up,
+   run:
+
+   ```sh
+   # see what it would do first
+   node scripts/release.mjs 0.2.1 --dry-run
+   node scripts/release.mjs 0.2.1
+   ```
+
+   The script downloads the artifact and creates the GitHub release with this version's changelog
+   section as the notes. It then copies the generated files into
+   [zacesshq/obsidian-theme](https://github.com/zacesshq/obsidian-theme) and
+   [zacesshq/zacess.nvim](https://github.com/zacesshq/zacess.nvim) with a signed commit, a signed
+   annotated tag and a release in each. The Obsidian tag is the bare version, such as `0.2.1`, and
+   its release carries `manifest.json` and `theme.css` because Obsidian installs from them. Running
+   it again skips anything already done.

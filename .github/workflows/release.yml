@@ -15,8 +15,8 @@ jobs:
     # the Microsoft Entra federated credential trusts this environment, so Marketplace sign-in only works inside it
     environment: release
     permissions:
-      # creating the GitHub release needs write access to the repository's contents
-      contents: write
+      # the GitHub release and the read-only copies are made afterwards by scripts/release.mjs, so this job never writes to the repository
+      contents: read
       # Open VSX trusted publishing and the Marketplace sign-in both trade this job's ID token for short-lived ones
       id-token: write
     steps:
@@ -62,14 +62,16 @@ jobs:
           (cd sublime && zip "../../dist/zacess-sublime-$VERSION.zip" ./*.sublime-color-scheme)
           (cd helix/themes && zip "../../../dist/zacess-helix-$VERSION.zip" ./*.toml)
           (cd emacs && zip "../../dist/zacess-emacs-$VERSION.zip" ./*.el)
-      - name: Create the GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Check the changelog has a section for this version
         run: |
-          # the release notes are this version's section of the changelog
-          awk -v v="$VERSION" '$0 ~ "^## \\[" v "\\]" { on = 1; next } /^## \[/ { on = 0 } on' CHANGELOG.md > notes.md
-          [ -s notes.md ] || { echo "CHANGELOG.md has no section for $VERSION" >&2; exit 1; }
-          gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --verify-tag --title "Zacess Themes $VERSION" --notes-file notes.md
+          # scripts/release.mjs uses this section as the release notes, so a missing one stops the release before anything is published
+          grep -q "^## \\[$VERSION\\]" CHANGELOG.md || { echo "CHANGELOG.md has no section for $VERSION" >&2; exit 1; }
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          # scripts/release.mjs downloads this artifact by name and attaches its files to the GitHub release
+          name: zacess-themes-${{ env.VERSION }}
+          path: dist/*
+          if-no-files-found: error
       - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
@@ -97,40 +99,6 @@ jobs:
           fi
           ./gradlew publishPlugin
           echo "Published $VERSION to the JetBrains Marketplace." >> "$GITHUB_STEP_SUMMARY"
-      - name: Update the read-only Obsidian and Neovim copies
-        env:
-          MIRROR_TOKEN: ${{ secrets.THEMES_MIRROR_TOKEN }}
+      - name: Say what is left
         run: |
-          if [ -z "$MIRROR_TOKEN" ]; then
-            echo "Skipped the read-only copies: the THEMES_MIRROR_TOKEN secret is not set." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          # each copy's release carries the same changelog section as the main release, so its notes are never a bare version line
-          { cat notes.md; printf '\nMatches [zacesshq/themes v%s](https://github.com/zacesshq/themes/releases/tag/v%s).\n' "$VERSION" "$VERSION"; } > "$RUNNER_TEMP/mirror-notes.md"
-          # each copy keeps its own README, licence and screenshot; only the generated files move
-          mirror() {
-            repo=$1 tag=$2; shift 2
-            dir=$(mktemp -d)
-            git clone --quiet "https://x-access-token:$MIRROR_TOKEN@github.com/zacesshq/$repo.git" "$dir"
-            "$@" "$dir"
-            cd "$dir" || return 1
-            git add -A
-            if git diff --cached --quiet; then
-              echo "zacesshq/$repo already matches $VERSION." >> "$GITHUB_STEP_SUMMARY"
-            else
-              git -c user.name="Zac Bot" -c user.email=automation@isaacadjei.me commit --quiet -m "chore: update to Zacess Themes $VERSION"
-              git push --quiet origin HEAD
-            fi
-            if ! GH_TOKEN=$MIRROR_TOKEN gh release view "$tag" --repo "zacesshq/$repo" >/dev/null 2>&1; then
-              git tag "$tag" && git push --quiet origin "$tag"
-              GH_TOKEN=$MIRROR_TOKEN gh release create "$tag" --repo "zacesshq/$repo" --verify-tag --title "$tag" \
-                --notes-file "$RUNNER_TEMP/mirror-notes.md" $MIRROR_ASSETS
-              echo "Released $tag in zacesshq/$repo." >> "$GITHUB_STEP_SUMMARY"
-            fi
-            cd "$GITHUB_WORKSPACE" || return 1
-          }
-          copy_obsidian() { cp editors/obsidian/manifest.json editors/obsidian/theme.css "$1/"; }
-          copy_neovim() { rm -f "$1"/colors/*.lua; cp editors/neovim/colors/*.lua "$1/colors/"; }
-          # obsidian installs from a release tagged exactly as the manifest version, with both files attached
-          MIRROR_ASSETS="$GITHUB_WORKSPACE/editors/obsidian/manifest.json $GITHUB_WORKSPACE/editors/obsidian/theme.css" mirror obsidian-theme "$VERSION" copy_obsidian
-          MIRROR_ASSETS="" mirror zacess.nvim "v$VERSION" copy_neovim
+          echo "Built and published $VERSION. Run \`node scripts/release.mjs $VERSION\` to create the GitHub release and update the read-only copies." >> "$GITHUB_STEP_SUMMARY"
