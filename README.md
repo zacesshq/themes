@@ -1,7 +1,8 @@
 # Zacess themes
 
 High contrast code themes that match the four contrast themes in the [Zacess](https://zacess.com)
-reader, so a student sees the same page in the reader and in the editor. One palette is the source of
+reader, so a student sees the same page in the reader and in the editor, plus two maximum contrast
+themes for anyone who needs the strongest contrast a screen can give. One palette is the source of
 every colour. A small generator writes the files for each editor and the checks refuse any text or
 syntax colour below 7:1 contrast (WCAG AAA).
 
@@ -17,7 +18,7 @@ Alacritty, kitty, Ghostty and Windows Terminal.
 > Every editor can also be installed from the
 > [latest release](https://github.com/zacesshq/themes/releases/latest) as described below.
 
-## The four themes
+## The six themes
 
 | Theme | Reader theme | For | Text on background |
 | --- | --- | --- | --- |
@@ -25,6 +26,8 @@ Alacritty, kitty, Ghostty and Windows Terminal.
 | Zacess Dark | Light on dark | Everyday use in a dim room | `#f5f5f5` on `#121212` |
 | Zacess Yellow on Black | Yellow on black | Low vision | `#ffeb3b` on `#000000` |
 | Zacess Cream | Black on cream | Dyslexia friendly reading | `#000000` on `#fdf6e3` |
+| Zacess High Contrast Dark | Light on dark | The highest contrast on a dark screen | `#ffffff` on `#000000` |
+| Zacess High Contrast Light | Dark on light | The highest contrast on a light screen | `#000000` on `#ffffff` |
 
 ![Zacess Light: TypeScript, Python, Rust and HTML lines in dark colours on white, keywords in bold and comments in italics](previews/zacess-light.svg)
 
@@ -33,6 +36,10 @@ Alacritty, kitty, Ghostty and Windows Terminal.
 ![Zacess Yellow on Black: the same code in yellow, white and pale colours on black](previews/zacess-yellow-on-black.svg)
 
 ![Zacess Cream: the same code in dark colours on cream](previews/zacess-cream.svg)
+
+![Zacess High Contrast Dark: the same code in white and bright colours on black, with a yellow accent](previews/zacess-high-contrast-dark.svg)
+
+![Zacess High Contrast Light: the same code in black and deep colours on white](previews/zacess-high-contrast-light.svg)
 
 ## Colour is never the only signal
 
@@ -55,6 +62,8 @@ the ones CI enforced. Every ratio is rounded down.
 | Zacess Dark | `#f5f5f5` on `#121212`, 17.1:1 | 8.7:1 (removed) | 7.1:1 (removed on diffAddedBackground) |
 | Zacess Yellow on Black | `#ffeb3b` on `#000000`, 17.1:1 | 11.0:1 (number) | 8.0:1 (number on selection) |
 | Zacess Cream | `#000000` on `#fdf6e3`, 19.4:1 | 8.4:1 (added) | 7.3:1 (added on selection) |
+| Zacess High Contrast Dark | `#ffffff` on `#000000`, 21.0:1 | 10.5:1 (property) | 7.5:1 (property on selection) |
+| Zacess High Contrast Light | `#000000` on `#ffffff`, 21.0:1 | 9.0:1 (string) | 7.5:1 (string on diffRemovedBackground) |
 <!-- contrast summary end -->
 
 Every token in every theme, the interface colours, the terminal colours and the colour vision results
@@ -92,7 +101,8 @@ select **Install and use**. The listing is in the [Obsidian community directory]
 by hand, copy `editors/obsidian/manifest.json` and `editors/obsidian/theme.css` into
 `<vault>/.obsidian/themes/Zacess/` (the latest release also has them as
 `zacess-obsidian-<version>.zip`). Light and Dark follow Obsidian's own
-setting. Yellow on Black and Cream are offered through the Style Settings plugin. Details are in
+setting. Yellow on Black, Cream, High Contrast Dark and High Contrast Light are offered through the
+Style Settings plugin. Details are in
 [editors/obsidian](editors/obsidian/README.md).
 
 ### Neovim
@@ -124,7 +134,7 @@ run **theme selector: toggle** and choose a Zacess theme. It is in the
 
 ### Sublime Text
 
-Copy the four `.sublime-color-scheme` files from `editors/sublime` into `Packages/User` (open it with
+Copy the six `.sublime-color-scheme` files from `editors/sublime` into `Packages/User` (open it with
 **Preferences**, **Browse Packages...**), then run **UI: Select Color Scheme** and choose a Zacess
 scheme. It needs Sublime Text 4. Details are in [editors/sublime](editors/sublime/README.md).
 
@@ -150,9 +160,10 @@ Then add `(add-to-list 'custom-theme-load-path (expand-file-name "themes" user-e
 
 ### Terminals
 
-The four themes are in the [iTerm2 Color Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
-collection as Zacess Light, Zacess Dark, Zacess Yellow on Black and Zacess Cream. Terminals that
-draw their theme lists from it, such as Ghostty and WezTerm, include them from their next update.
+Zacess Light, Zacess Dark, Zacess Yellow on Black and Zacess Cream are in the
+[iTerm2 Color Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes) collection. Zacess High
+Contrast Dark and Zacess High Contrast Light have been submitted to it. Terminals that draw their
+theme lists from it, such as Ghostty and WezTerm, include them from their next update.
 The files here, for iTerm2, Alacritty, kitty, Ghostty and Windows Terminal, are in
 [editors/terminals](editors/terminals/README.md) with the install step for each.
 

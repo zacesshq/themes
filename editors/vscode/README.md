@@ -1,8 +1,9 @@
 # Zacess Themes
 
-Four high contrast code themes that match the [Zacess](https://zacess.com) reader, so a student sees
-the same page in the reader and in the editor. Every text and syntax colour keeps at least 7:1
-contrast (WCAG AAA) on the background, the selection and the current line, comments included.
+Six high contrast code themes. Four match the [Zacess](https://zacess.com) reader, so a student sees
+the same page in the reader and in the editor. Two more give the highest contrast a screen can show.
+Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background, the selection
+and the current line, comments included.
 
 | Theme | For | Text on background |
 | --- | --- | --- |
@@ -10,6 +11,8 @@ contrast (WCAG AAA) on the background, the selection and the current line, comme
 | Zacess Dark | Everyday use in a dim room | `#f5f5f5` on `#121212` |
 | Zacess Yellow on Black | Low vision | `#ffeb3b` on `#000000` |
 | Zacess Cream | Dyslexia friendly reading | `#000000` on `#fdf6e3` |
+| Zacess High Contrast Dark | The highest contrast on a dark screen | `#ffffff` on `#000000` |
+| Zacess High Contrast Light | The highest contrast on a light screen | `#000000` on `#ffffff` |
 
 ![Zacess Light: TypeScript, Python, Rust and HTML lines in dark colours on white, with keywords in bold and comments in italics](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-light.png)
 
@@ -18,6 +21,10 @@ contrast (WCAG AAA) on the background, the selection and the current line, comme
 ![Zacess Yellow on Black: the same code in yellow, white and pale colours on black](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-yellow-on-black.png)
 
 ![Zacess Cream: the same code in dark colours on a cream background](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-cream.png)
+
+![Zacess High Contrast Dark: the same code in white and bright colours on black, with a yellow accent](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-high-contrast-dark.png)
+
+![Zacess High Contrast Light: the same code in black and deep colours on white](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-high-contrast-light.png)
 
 ## Colour is never the only signal
 

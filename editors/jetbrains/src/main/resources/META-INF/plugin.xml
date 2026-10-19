@@ -4,12 +4,14 @@
   <name>Zacess Themes</name>
   <vendor url="https://zacess.com" email="contact@zacess.com">Zacess</vendor>
   <description><![CDATA[
-<p>Four high contrast themes that match the Zacess reader, so a page looks the same in the reader and in the IDE.</p>
+<p>Six high contrast themes that match the Zacess reader, so a page looks the same in the reader and in the IDE.</p>
 <ul>
 <li><b>Zacess Light</b>: Ink on white, the reader's Dark on light theme.</li>
 <li><b>Zacess Dark</b>: Near white on near black, the reader's Light on dark theme.</li>
 <li><b>Zacess Yellow on Black</b>: Yellow on black for low vision, the reader's Yellow on black theme.</li>
 <li><b>Zacess Cream</b>: Black on cream for dyslexia, the reader's Black on cream theme.</li>
+<li><b>Zacess High Contrast Dark</b>: White on black with strong borders and a yellow focus ring, for the highest contrast on a dark screen.</li>
+<li><b>Zacess High Contrast Light</b>: Black on white with strong dark borders and focus outlines, for the highest contrast on a light screen.</li>
 </ul>
 <p>Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background, the selection and the current line. Comments are never dimmed below it. Keywords are bold, comments italic and invalid code underlined, so colour is never the only signal.</p>
 <p>Source, contrast tables and issues: <a href="https://github.com/zacesshq/themes">https://github.com/zacesshq/themes</a></p>
@@ -20,5 +22,7 @@
     <themeProvider id="zacess-dark" path="/themes/zacess-dark.theme.json" />
     <themeProvider id="zacess-yellow-on-black" path="/themes/zacess-yellow-on-black.theme.json" />
     <themeProvider id="zacess-cream" path="/themes/zacess-cream.theme.json" />
+    <themeProvider id="zacess-high-contrast-dark" path="/themes/zacess-high-contrast-dark.theme.json" />
+    <themeProvider id="zacess-high-contrast-light" path="/themes/zacess-high-contrast-light.theme.json" />
   </extensions>
 </idea-plugin>

@@ -1,0 +1,250 @@
+{
+  "name": "Zacess High Contrast Dark",
+  "author": "Zacess",
+  "variables": {
+    "background": "#000000",
+    "foreground": "#ffffff",
+    "surface": "#000000",
+    "surface_alt": "#0f0f0f",
+    "muted": "#e0e0e0",
+    "border": "#a6a6a6",
+    "border_active": "#f5c400",
+    "accent": "#f5c400",
+    "accent_foreground": "#000000",
+    "link": "#8fd0ff",
+    "selection": "#0a2552",
+    "line_highlight": "#1a1a1a",
+    "cursor": "#f5c400",
+    "gutter": "#000000",
+    "line_number": "#e6e6e6",
+    "line_number_active": "#f5c400",
+    "find_match": "#403300",
+    "find_match_border": "#f5c400",
+    "error": "#ff9e94",
+    "warning": "#ffd28a",
+    "info": "#a9d4ff",
+    "diff_added_background": "#00290d",
+    "diff_removed_background": "#3d0008",
+    "indent_guide": "#8c8c8c",
+    "whitespace": "#8c8c8c",
+    "syntax_foreground": "#ffffff",
+    "keyword": "#f5c400",
+    "control": "#ffcdf0",
+    "function": "#8fd0ff",
+    "type": "#5ef0e0",
+    "variable": "#ffffff",
+    "parameter": "#ffcf9e",
+    "property": "#c9a8ff",
+    "string": "#a3ee9f",
+    "number": "#ffb27a",
+    "comment": "#c0ccd8",
+    "operator": "#ffffff",
+    "tag": "#f5c400",
+    "attribute": "#fff0b8",
+    "regex": "#ffa6c9",
+    "invalid": "#ff9e94",
+    "added": "#9df29f",
+    "removed": "#ffaba3",
+    "changed": "#e6f2ff"
+  },
+  "globals": {
+    "background": "var(background)",
+    "foreground": "var(foreground)",
+    "caret": "var(cursor)",
+    "line_highlight": "var(line_highlight)",
+    "selection": "var(selection)",
+    "inactive_selection": "var(selection)",
+    "gutter": "var(gutter)",
+    "gutter_foreground": "var(line_number)",
+    "gutter_foreground_highlight": "var(line_number_active)",
+    "invisibles": "var(whitespace)",
+    "guide": "var(indent_guide)",
+    "active_guide": "var(foreground)",
+    "stack_guide": "var(indent_guide)",
+    "rulers": "var(indent_guide)",
+    "minimap_border": "var(border)",
+    "accent": "var(accent)",
+    "find_highlight": "var(find_match)",
+    "find_highlight_foreground": "var(foreground)",
+    "highlight": "var(find_match_border)",
+    "brackets_options": "underline",
+    "brackets_foreground": "var(accent)",
+    "bracket_contents_options": "underline",
+    "bracket_contents_foreground": "var(accent)",
+    "tags_options": "underline",
+    "tags_foreground": "var(accent)",
+    "line_diff_width": "3",
+    "line_diff_added": "var(added)",
+    "line_diff_modified": "var(changed)",
+    "line_diff_deleted": "var(removed)",
+    "misspelling": "var(error)"
+  },
+  "rules": [
+    {
+      "name": "Comments",
+      "scope": "comment, punctuation.definition.comment, string.quoted.docstring.multi.python",
+      "foreground": "var(comment)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Strings",
+      "scope": "string, punctuation.definition.string, constant.character, markup.inline.raw",
+      "foreground": "var(string)"
+    },
+    {
+      "name": "Regular expressions",
+      "scope": "string.regexp, constant.character.escape, constant.other.character-class.regexp",
+      "foreground": "var(regex)"
+    },
+    {
+      "name": "Numbers and constants",
+      "scope": "constant.numeric, constant.language, constant.other, support.constant, variable.other.constant, variable.other.enummember, entity.name.constant",
+      "foreground": "var(number)"
+    },
+    {
+      "name": "Keywords",
+      "scope": "keyword, storage, storage.type, storage.modifier, keyword.operator.new, keyword.operator.expression, keyword.operator.logical.python, variable.language, support.type.primitive.ts, keyword.other",
+      "foreground": "var(keyword)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Control flow",
+      "scope": "keyword.control, keyword.control.flow, keyword.control.import, keyword.control.conditional, keyword.control.loop, keyword.control.trycatch",
+      "foreground": "var(control)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Operators and punctuation",
+      "scope": "keyword.operator, punctuation, meta.brace, punctuation.separator, punctuation.terminator, punctuation.accessor",
+      "foreground": "var(operator)"
+    },
+    {
+      "name": "Functions",
+      "scope": "entity.name.function, support.function, meta.function-call entity.name.function, variable.function, entity.name.function.macro, meta.decorator, entity.name.function.decorator",
+      "foreground": "var(function)"
+    },
+    {
+      "name": "Types",
+      "scope": "entity.name.type, entity.name.class, entity.name.namespace, entity.other.inherited-class, support.type, support.class, storage.type.primitive, entity.name.type.primitive, entity.name.type.parameter",
+      "foreground": "var(type)"
+    },
+    {
+      "name": "Variables",
+      "scope": "variable, variable.other.readwrite, meta.definition.variable, support.variable",
+      "foreground": "var(variable)"
+    },
+    {
+      "name": "Parameters",
+      "scope": "variable.parameter, meta.parameters variable, entity.name.variable.parameter",
+      "foreground": "var(parameter)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Properties",
+      "scope": "variable.other.property, variable.other.object.property, variable.other.member, support.type.property-name, meta.object-literal.key, entity.name.tag.yaml, support.variable.property, entity.name.field",
+      "foreground": "var(property)"
+    },
+    {
+      "name": "Tags",
+      "scope": "entity.name.tag, punctuation.definition.tag",
+      "foreground": "var(tag)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Attributes",
+      "scope": "entity.other.attribute-name, meta.attribute, entity.other.attribute-name.id, entity.other.attribute-name.class",
+      "foreground": "var(attribute)"
+    },
+    {
+      "name": "Invalid",
+      "scope": "invalid, invalid.illegal, invalid.deprecated",
+      "foreground": "var(invalid)",
+      "font_style": "underline"
+    },
+    {
+      "name": "Added",
+      "scope": "markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted",
+      "foreground": "var(added)"
+    },
+    {
+      "name": "Removed",
+      "scope": "markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted",
+      "foreground": "var(removed)"
+    },
+    {
+      "name": "Changed",
+      "scope": "markup.changed, punctuation.definition.changed",
+      "foreground": "var(changed)"
+    },
+    {
+      "name": "Headings",
+      "scope": "markup.heading, entity.name.section",
+      "foreground": "var(keyword)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Bold",
+      "scope": "markup.bold",
+      "foreground": "var(variable)",
+      "font_style": "bold"
+    },
+    {
+      "name": "Italic",
+      "scope": "markup.italic",
+      "foreground": "var(variable)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Links",
+      "scope": "markup.underline.link, string.other.link",
+      "foreground": "var(function)",
+      "font_style": "underline"
+    },
+    {
+      "name": "Quotes",
+      "scope": "markup.quote",
+      "foreground": "var(comment)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Region redish",
+      "scope": "region.redish",
+      "foreground": "var(error)"
+    },
+    {
+      "name": "Region orangish",
+      "scope": "region.orangish",
+      "foreground": "var(warning)"
+    },
+    {
+      "name": "Region yellowish",
+      "scope": "region.yellowish",
+      "foreground": "var(warning)"
+    },
+    {
+      "name": "Region greenish",
+      "scope": "region.greenish",
+      "foreground": "var(added)"
+    },
+    {
+      "name": "Region cyanish",
+      "scope": "region.cyanish",
+      "foreground": "var(info)"
+    },
+    {
+      "name": "Region bluish",
+      "scope": "region.bluish",
+      "foreground": "var(info)"
+    },
+    {
+      "name": "Region purplish",
+      "scope": "region.purplish",
+      "foreground": "var(keyword)"
+    },
+    {
+      "name": "Region pinkish",
+      "scope": "region.pinkish",
+      "foreground": "var(control)"
+    }
+  ]
+}

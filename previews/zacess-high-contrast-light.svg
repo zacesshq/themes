@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="530" viewBox="0 0 720 530" role="img" aria-label="Zacess High Contrast Light code theme preview: TypeScript, Python, Rust, HTML and diff lines in #000000 on #ffffff. Keywords are bold, comments and parameters italic and invalid code underlined.">
+  <title>Zacess High Contrast Light code theme preview: TypeScript, Python, Rust, HTML and diff lines in #000000 on #ffffff. Keywords are bold, comments and parameters italic and invalid code underlined.</title>
+  <rect width="720" height="530" fill="#ffffff"/>
+  <rect width="720" height="40" fill="#efefef"/>
+  <rect y="40" width="720" height="1" fill="#262626"/>
+  <g font-family="'Atkinson Hyperlegible Mono', 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="15">
+  <text x="20" y="26" fill="#000000" font-weight="700">Zacess High Contrast Light</text>
+  <text x="40" y="64" fill="#262626" text-anchor="end">1</text>
+  <text x="56" y="64" xml:space="preserve"><tspan fill="#3d4752" font-style="italic">// read the page aloud at the reader's pace</tspan></text>
+  <text x="40" y="90" fill="#262626" text-anchor="end">2</text>
+  <text x="56" y="90" xml:space="preserve"><tspan fill="#4b0091" font-weight="700">export</tspan><tspan fill="#000000"> </tspan><tspan fill="#4b0091" font-weight="700">function</tspan><tspan fill="#000000"> </tspan><tspan fill="#00347f">speak</tspan><tspan fill="#000000">(</tspan><tspan fill="#6b3100" font-style="italic">page</tspan><tspan fill="#000000">: </tspan><tspan fill="#004f4e">Page</tspan><tspan fill="#000000">, </tspan><tspan fill="#6b3100" font-style="italic">rate</tspan><tspan fill="#000000"> = </tspan><tspan fill="#521e00">1.25</tspan><tspan fill="#000000">): </tspan><tspan fill="#004f4e">string</tspan><tspan fill="#000000"> {</tspan></text>
+  <rect x="0" y="98" width="720" height="26" fill="#f2f2f2"/>
+  <text x="40" y="116" fill="#000000" text-anchor="end">3</text>
+  <text x="56" y="116" xml:space="preserve"><tspan fill="#000000">  </tspan><tspan fill="#8a0046" font-weight="700">if</tspan><tspan fill="#000000"> (!</tspan><tspan fill="#000000">page</tspan><tspan fill="#000000">.</tspan><tspan fill="#1e0090">text</tspan><tspan fill="#000000">) </tspan><tspan fill="#8a0046" font-weight="700">return</tspan><tspan fill="#000000"> </tspan><tspan fill="#005518">&quot;&quot;</tspan><tspan fill="#000000">;</tspan></text>
+  <text x="40" y="142" fill="#262626" text-anchor="end">4</text>
+  <text x="56" y="142" xml:space="preserve"><tspan fill="#000000">  </tspan><tspan fill="#8a0046" font-weight="700">return</tspan><tspan fill="#000000"> </tspan><tspan fill="#000000">page</tspan><tspan fill="#000000">.</tspan><tspan fill="#1e0090">text</tspan><tspan fill="#000000">.</tspan><tspan fill="#00347f">replace</tspan><tspan fill="#000000">(</tspan><tspan fill="#720030">/\s+/g</tspan><tspan fill="#000000">, </tspan><tspan fill="#005518">&quot; &quot;</tspan><tspan fill="#000000">);</tspan></text>
+  <text x="40" y="168" fill="#262626" text-anchor="end">5</text>
+  <text x="56" y="168" xml:space="preserve"><tspan fill="#000000">}</tspan></text>
+  <text x="40" y="194" fill="#262626" text-anchor="end">6</text>
+  <text x="40" y="220" fill="#262626" text-anchor="end">7</text>
+  <text x="56" y="220" xml:space="preserve"><tspan fill="#4b0091" font-weight="700">def</tspan><tspan fill="#000000"> </tspan><tspan fill="#00347f">ratio</tspan><tspan fill="#000000">(</tspan><tspan fill="#6b3100" font-style="italic">hi</tspan><tspan fill="#000000">: </tspan><tspan fill="#004f4e">float</tspan><tspan fill="#000000">, </tspan><tspan fill="#6b3100" font-style="italic">lo</tspan><tspan fill="#000000">: </tspan><tspan fill="#004f4e">float</tspan><tspan fill="#000000">) -&gt; </tspan><tspan fill="#004f4e">float</tspan><tspan fill="#000000">:</tspan></text>
+  <text x="40" y="246" fill="#262626" text-anchor="end">8</text>
+  <text x="56" y="246" xml:space="preserve"><tspan fill="#000000">    </tspan><tspan fill="#005518">&quot;&quot;&quot;Return the WCAG contrast ratio.&quot;&quot;&quot;</tspan></text>
+  <text x="40" y="272" fill="#262626" text-anchor="end">9</text>
+  <text x="56" y="272" xml:space="preserve"><tspan fill="#000000">    </tspan><tspan fill="#8a0046" font-weight="700">return</tspan><tspan fill="#000000"> (</tspan><tspan fill="#000000">hi</tspan><tspan fill="#000000"> + </tspan><tspan fill="#521e00">0.05</tspan><tspan fill="#000000">) / (</tspan><tspan fill="#000000">lo</tspan><tspan fill="#000000"> + </tspan><tspan fill="#521e00">0.05</tspan><tspan fill="#000000">)</tspan></text>
+  <text x="40" y="298" fill="#262626" text-anchor="end">10</text>
+  <text x="40" y="324" fill="#262626" text-anchor="end">11</text>
+  <text x="56" y="324" xml:space="preserve"><tspan fill="#4b0091" font-weight="700">pub struct</tspan><tspan fill="#000000"> </tspan><tspan fill="#004f4e">Profile</tspan><tspan fill="#000000"> { </tspan><tspan fill="#1e0090">name</tspan><tspan fill="#000000">: </tspan><tspan fill="#004f4e">String</tspan><tspan fill="#000000">, </tspan><tspan fill="#1e0090">size</tspan><tspan fill="#000000">: </tspan><tspan fill="#004f4e">u8</tspan><tspan fill="#000000"> }</tspan></text>
+  <text x="40" y="350" fill="#262626" text-anchor="end">12</text>
+  <text x="56" y="350" xml:space="preserve"><tspan fill="#4b0091" font-weight="700">let</tspan><tspan fill="#000000"> </tspan><tspan fill="#000000">floor</tspan><tspan fill="#000000">: </tspan><tspan fill="#004f4e">f64</tspan><tspan fill="#000000"> = </tspan><tspan fill="#521e00">7.0</tspan><tspan fill="#000000">; </tspan><tspan fill="#3d4752" font-style="italic">// WCAG AAA</tspan></text>
+  <text x="40" y="376" fill="#262626" text-anchor="end">13</text>
+  <text x="40" y="402" fill="#262626" text-anchor="end">14</text>
+  <text x="56" y="402" xml:space="preserve"><tspan fill="#000000">&lt;</tspan><tspan fill="#4b0091" font-weight="700">a</tspan><tspan fill="#000000"> </tspan><tspan fill="#4f3200">href</tspan><tspan fill="#000000">=</tspan><tspan fill="#005518">&quot;/themes/&quot;</tspan><tspan fill="#000000">&gt;Code themes&lt;/</tspan><tspan fill="#4b0091" font-weight="700">a</tspan><tspan fill="#000000">&gt;</tspan></text>
+  <text x="40" y="428" fill="#262626" text-anchor="end">15</text>
+  <text x="56" y="428" xml:space="preserve"><tspan fill="#005518">+ comments keep 7:1 contrast</tspan></text>
+  <text x="40" y="454" fill="#262626" text-anchor="end">16</text>
+  <text x="56" y="454" xml:space="preserve"><tspan fill="#4a0000">- comments faded to grey</tspan></text>
+  <text x="40" y="480" fill="#262626" text-anchor="end">17</text>
+  <text x="56" y="480" xml:space="preserve"><tspan fill="#600000" text-decoration="underline">let 7up = 1;</tspan><tspan fill="#000000"> </tspan><tspan fill="#3d4752" font-style="italic">// invalid: underlined</tspan></text>
+  </g>
+</svg>

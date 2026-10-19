@@ -1,7 +1,7 @@
 # Zacess for Emacs
 
-Four themes, `zacess-light`, `zacess-dark`, `zacess-yellow-on-black` and `zacess-cream`, written with
-`deftheme`. Each sets the default, cursor, region, current line, line number, mode line, link,
+Six themes, `zacess-light`, `zacess-dark`, `zacess-yellow-on-black`, `zacess-cream`,
+`zacess-high-contrast-dark` and `zacess-high-contrast-light`, written with `deftheme`. Each sets the default, cursor, region, current line, line number, mode line, link,
 search, parenthesis, diff, Flymake and Flycheck faces, every `font-lock` face and the 16
 `ansi-color` faces used by shells and compilation buffers.
 
