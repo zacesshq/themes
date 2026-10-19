@@ -1,7 +1,7 @@
 {
   "generatedFrom": "palette/zacess.json",
   "repository": "https://github.com/zacesshq/themes",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "rules": {
     "textContrast": 7,
     "findMatchContrast": 4.5,
@@ -1503,6 +1503,478 @@
       "pairs": {
         "closestTone": 0.053,
         "closestSimulated": 0.047
+      }
+    },
+    {
+      "id": "high-contrast-dark",
+      "name": "Zacess High Contrast Dark",
+      "appearance": "dark",
+      "readerProfile": "light_on_dark",
+      "description": "White on black with strong borders and a yellow focus ring, for the highest contrast on a dark screen.",
+      "ui": {
+        "background": "#000000",
+        "foreground": "#ffffff",
+        "surface": "#000000",
+        "surfaceAlt": "#0f0f0f",
+        "muted": "#e0e0e0",
+        "border": "#a6a6a6",
+        "borderActive": "#f5c400",
+        "accent": "#f5c400",
+        "accentForeground": "#000000",
+        "link": "#8fd0ff",
+        "selection": "#0a2552",
+        "lineHighlight": "#1a1a1a",
+        "cursor": "#f5c400",
+        "gutter": "#000000",
+        "lineNumber": "#e6e6e6",
+        "lineNumberActive": "#f5c400",
+        "findMatch": "#403300",
+        "findMatchBorder": "#f5c400",
+        "error": "#ff9e94",
+        "warning": "#ffd28a",
+        "info": "#a9d4ff",
+        "diffAddedBackground": "#00290d",
+        "diffRemovedBackground": "#3d0008",
+        "indentGuide": "#8c8c8c",
+        "whitespace": "#8c8c8c"
+      },
+      "syntax": {
+        "foreground": "#ffffff",
+        "keyword": "#f5c400",
+        "control": "#ffcdf0",
+        "function": "#8fd0ff",
+        "type": "#5ef0e0",
+        "variable": "#ffffff",
+        "parameter": "#ffcf9e",
+        "property": "#c9a8ff",
+        "string": "#a3ee9f",
+        "number": "#ffb27a",
+        "comment": "#c0ccd8",
+        "operator": "#ffffff",
+        "tag": "#f5c400",
+        "attribute": "#fff0b8",
+        "regex": "#ffa6c9",
+        "invalid": "#ff9e94",
+        "added": "#9df29f",
+        "removed": "#ffaba3",
+        "changed": "#e6f2ff"
+      },
+      "ratios": [
+        {
+          "token": "foreground",
+          "colour": "#ffffff",
+          "style": [],
+          "background": 21,
+          "selection": 15,
+          "lineHighlight": 17.4
+        },
+        {
+          "token": "keyword",
+          "colour": "#f5c400",
+          "style": [
+            "bold"
+          ],
+          "background": 12.77,
+          "selection": 9.13,
+          "lineHighlight": 10.59
+        },
+        {
+          "token": "control",
+          "colour": "#ffcdf0",
+          "style": [
+            "bold"
+          ],
+          "background": 15.24,
+          "selection": 10.89,
+          "lineHighlight": 12.63
+        },
+        {
+          "token": "function",
+          "colour": "#8fd0ff",
+          "style": [],
+          "background": 12.63,
+          "selection": 9.02,
+          "lineHighlight": 10.47
+        },
+        {
+          "token": "type",
+          "colour": "#5ef0e0",
+          "style": [],
+          "background": 15.01,
+          "selection": 10.73,
+          "lineHighlight": 12.44
+        },
+        {
+          "token": "variable",
+          "colour": "#ffffff",
+          "style": [],
+          "background": 21,
+          "selection": 15,
+          "lineHighlight": 17.4
+        },
+        {
+          "token": "parameter",
+          "colour": "#ffcf9e",
+          "style": [
+            "italic"
+          ],
+          "background": 14.67,
+          "selection": 10.48,
+          "lineHighlight": 12.15
+        },
+        {
+          "token": "property",
+          "colour": "#c9a8ff",
+          "style": [],
+          "background": 10.52,
+          "selection": 7.52,
+          "lineHighlight": 8.72
+        },
+        {
+          "token": "string",
+          "colour": "#a3ee9f",
+          "style": [],
+          "background": 15.28,
+          "selection": 10.92,
+          "lineHighlight": 12.67
+        },
+        {
+          "token": "number",
+          "colour": "#ffb27a",
+          "style": [],
+          "background": 11.9,
+          "selection": 8.5,
+          "lineHighlight": 9.86
+        },
+        {
+          "token": "comment",
+          "colour": "#c0ccd8",
+          "style": [
+            "italic"
+          ],
+          "background": 12.87,
+          "selection": 9.19,
+          "lineHighlight": 10.66
+        },
+        {
+          "token": "operator",
+          "colour": "#ffffff",
+          "style": [],
+          "background": 21,
+          "selection": 15,
+          "lineHighlight": 17.4
+        },
+        {
+          "token": "tag",
+          "colour": "#f5c400",
+          "style": [
+            "bold"
+          ],
+          "background": 12.77,
+          "selection": 9.13,
+          "lineHighlight": 10.59
+        },
+        {
+          "token": "attribute",
+          "colour": "#fff0b8",
+          "style": [],
+          "background": 18.4,
+          "selection": 13.15,
+          "lineHighlight": 15.25
+        },
+        {
+          "token": "regex",
+          "colour": "#ffa6c9",
+          "style": [],
+          "background": 11.54,
+          "selection": 8.25,
+          "lineHighlight": 9.57
+        },
+        {
+          "token": "invalid",
+          "colour": "#ff9e94",
+          "style": [
+            "underline"
+          ],
+          "background": 10.57,
+          "selection": 7.55,
+          "lineHighlight": 8.76
+        },
+        {
+          "token": "added",
+          "colour": "#9df29f",
+          "style": [],
+          "background": 15.63,
+          "selection": 11.17,
+          "lineHighlight": 12.95
+        },
+        {
+          "token": "removed",
+          "colour": "#ffaba3",
+          "style": [],
+          "background": 11.6,
+          "selection": 8.29,
+          "lineHighlight": 9.61
+        },
+        {
+          "token": "changed",
+          "colour": "#e6f2ff",
+          "style": [],
+          "background": 18.5,
+          "selection": 13.22,
+          "lineHighlight": 15.34
+        }
+      ],
+      "lowest": {
+        "background": {
+          "token": "property",
+          "ratio": 10.52
+        },
+        "anySurface": {
+          "token": "property",
+          "on": "selection",
+          "ratio": 7.52
+        }
+      },
+      "pairs": {
+        "closestTone": 0.053,
+        "closestSimulated": 0.041
+      }
+    },
+    {
+      "id": "high-contrast-light",
+      "name": "Zacess High Contrast Light",
+      "appearance": "light",
+      "readerProfile": "dark_on_light",
+      "description": "Black on white with strong dark borders and focus outlines, for the highest contrast on a light screen.",
+      "ui": {
+        "background": "#ffffff",
+        "foreground": "#000000",
+        "surface": "#f7f7f7",
+        "surfaceAlt": "#efefef",
+        "muted": "#2e2e2e",
+        "border": "#262626",
+        "borderActive": "#003d99",
+        "accent": "#003d99",
+        "accentForeground": "#ffffff",
+        "link": "#003d99",
+        "selection": "#fff1a0",
+        "lineHighlight": "#f2f2f2",
+        "cursor": "#000000",
+        "gutter": "#ffffff",
+        "lineNumber": "#262626",
+        "lineNumberActive": "#000000",
+        "findMatch": "#ffd400",
+        "findMatchBorder": "#000000",
+        "error": "#8b0000",
+        "warning": "#5a3a00",
+        "info": "#00337f",
+        "diffAddedBackground": "#e0f5e3",
+        "diffRemovedBackground": "#fde4e4",
+        "indentGuide": "#6e6e6e",
+        "whitespace": "#6e6e6e"
+      },
+      "syntax": {
+        "foreground": "#000000",
+        "keyword": "#4b0091",
+        "control": "#8a0046",
+        "function": "#00347f",
+        "type": "#004f4e",
+        "variable": "#000000",
+        "parameter": "#6b3100",
+        "property": "#1e0090",
+        "string": "#005518",
+        "number": "#521e00",
+        "comment": "#3d4752",
+        "operator": "#000000",
+        "tag": "#4b0091",
+        "attribute": "#4f3200",
+        "regex": "#720030",
+        "invalid": "#600000",
+        "added": "#005518",
+        "removed": "#4a0000",
+        "changed": "#00307a"
+      },
+      "ratios": [
+        {
+          "token": "foreground",
+          "colour": "#000000",
+          "style": [],
+          "background": 21,
+          "selection": 18.34,
+          "lineHighlight": 18.75
+        },
+        {
+          "token": "keyword",
+          "colour": "#4b0091",
+          "style": [
+            "bold"
+          ],
+          "background": 12.29,
+          "selection": 10.73,
+          "lineHighlight": 10.98
+        },
+        {
+          "token": "control",
+          "colour": "#8a0046",
+          "style": [
+            "bold"
+          ],
+          "background": 9.68,
+          "selection": 8.45,
+          "lineHighlight": 8.64
+        },
+        {
+          "token": "function",
+          "colour": "#00347f",
+          "style": [],
+          "background": 11.68,
+          "selection": 10.2,
+          "lineHighlight": 10.43
+        },
+        {
+          "token": "type",
+          "colour": "#004f4e",
+          "style": [],
+          "background": 9.42,
+          "selection": 8.23,
+          "lineHighlight": 8.41
+        },
+        {
+          "token": "variable",
+          "colour": "#000000",
+          "style": [],
+          "background": 21,
+          "selection": 18.34,
+          "lineHighlight": 18.75
+        },
+        {
+          "token": "parameter",
+          "colour": "#6b3100",
+          "style": [
+            "italic"
+          ],
+          "background": 10.17,
+          "selection": 8.88,
+          "lineHighlight": 9.08
+        },
+        {
+          "token": "property",
+          "colour": "#1e0090",
+          "style": [],
+          "background": 14.4,
+          "selection": 12.58,
+          "lineHighlight": 12.86
+        },
+        {
+          "token": "string",
+          "colour": "#005518",
+          "style": [],
+          "background": 9.08,
+          "selection": 7.93,
+          "lineHighlight": 8.11
+        },
+        {
+          "token": "number",
+          "colour": "#521e00",
+          "style": [],
+          "background": 13.59,
+          "selection": 11.87,
+          "lineHighlight": 12.14
+        },
+        {
+          "token": "comment",
+          "colour": "#3d4752",
+          "style": [
+            "italic"
+          ],
+          "background": 9.45,
+          "selection": 8.25,
+          "lineHighlight": 8.44
+        },
+        {
+          "token": "operator",
+          "colour": "#000000",
+          "style": [],
+          "background": 21,
+          "selection": 18.34,
+          "lineHighlight": 18.75
+        },
+        {
+          "token": "tag",
+          "colour": "#4b0091",
+          "style": [
+            "bold"
+          ],
+          "background": 12.29,
+          "selection": 10.73,
+          "lineHighlight": 10.98
+        },
+        {
+          "token": "attribute",
+          "colour": "#4f3200",
+          "style": [],
+          "background": 11.74,
+          "selection": 10.25,
+          "lineHighlight": 10.48
+        },
+        {
+          "token": "regex",
+          "colour": "#720030",
+          "style": [],
+          "background": 11.94,
+          "selection": 10.43,
+          "lineHighlight": 10.66
+        },
+        {
+          "token": "invalid",
+          "colour": "#600000",
+          "style": [
+            "underline"
+          ],
+          "background": 14.02,
+          "selection": 12.24,
+          "lineHighlight": 12.52
+        },
+        {
+          "token": "added",
+          "colour": "#005518",
+          "style": [],
+          "background": 9.08,
+          "selection": 7.93,
+          "lineHighlight": 8.11
+        },
+        {
+          "token": "removed",
+          "colour": "#4a0000",
+          "style": [],
+          "background": 16.26,
+          "selection": 14.2,
+          "lineHighlight": 14.52
+        },
+        {
+          "token": "changed",
+          "colour": "#00307a",
+          "style": [],
+          "background": 12.32,
+          "selection": 10.76,
+          "lineHighlight": 11
+        }
+      ],
+      "lowest": {
+        "background": {
+          "token": "string",
+          "ratio": 9.08
+        },
+        "anySurface": {
+          "token": "string",
+          "on": "diffRemovedBackground",
+          "ratio": 7.52
+        }
+      },
+      "pairs": {
+        "closestTone": 0.052,
+        "closestSimulated": 0.041
       }
     }
   ]

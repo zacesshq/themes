@@ -4,7 +4,7 @@
 
 ;; Author: Zacess <contact@zacess.com>
 ;; URL: https://github.com/zacesshq/themes
-;; Version: 0.1.5
+;; Version: 0.2.0
 ;; SPDX-License-Identifier: MIT
 
 ;;; Commentary:

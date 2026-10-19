@@ -6,8 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-19
+
+### Added
+
+- Zacess High Contrast Dark: white on pure black with strong grey borders, a yellow accent and a yellow focus ring, for the highest contrast on a dark screen. Every syntax colour keeps 10.5:1 or more on the background.
+- Zacess High Contrast Light: black on pure white with strong dark borders and deep blue focus outlines, for the highest contrast on a light screen. Every syntax colour keeps 9:1 or more on the background.
+- Both themes ship for every editor and terminal: VS Code (on the high contrast bases), the JetBrains IDEs, Obsidian (through the Style Settings contrast option), Neovim, Zed, Sublime Text, Helix, Emacs, iTerm2, Alacritty, kitty, Ghostty and Windows Terminal, with previews and issue form options.
+
 ### Changed
 
+- Every install guide, store description and issue form names all six themes.
 - zacess.nvim is listed in awesome-neovim, so the README and the Neovim guide link to the listing.
 - Releases publish to the VS Code Marketplace through a Microsoft Entra identity that trusts this repository's `release` environment, so no Marketplace access token is stored. A manual workflow checks the identity's publish rights.
 - Releases publish to Open VSX through trusted publishing: the registry accepts this repository's release workflow directly, so no Open VSX access token is stored as a secret.
@@ -75,7 +84,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - SVG previews drawn as real text and the data for the themes page on the Zacess website.
 - CI that runs the checks, proves the committed files are current, packages the VS Code extension and builds the JetBrains plugin. A release workflow that attaches the `.vsix`, the JetBrains zip and an Obsidian zip to each GitHub release and publishes to each marketplace once its token is set.
 
-[Unreleased]: https://github.com/zacesshq/themes/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/zacesshq/themes/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/zacesshq/themes/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/zacesshq/themes/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/zacesshq/themes/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/zacesshq/themes/compare/v0.1.2...v0.1.3

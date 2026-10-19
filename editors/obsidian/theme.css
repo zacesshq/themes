@@ -6,7 +6,7 @@ id: zacess-theme
 settings:
   - id: zacess-contrast
     title: Contrast theme
-    description: Light and Dark follow Obsidian's own appearance setting. Yellow on Black and Cream replace both.
+    description: Light and Dark follow Obsidian's own appearance setting. The others replace both.
     type: class-select
     allowEmpty: false
     default: zacess-follow
@@ -17,6 +17,10 @@ settings:
         value: zacess-yellow-on-black
       - label: Cream (dyslexia friendly)
         value: zacess-cream
+      - label: High Contrast Dark
+        value: zacess-high-contrast-dark
+      - label: High Contrast Light
+        value: zacess-high-contrast-light
 */
 
 .theme-light {
@@ -332,6 +336,164 @@ body.zacess-cream.theme-dark {
   --zacess-focus: #004498;
   --zacess-added: #005512;
   --zacess-removed: #540002;
+}
+
+body.zacess-high-contrast-dark.theme-light,
+body.zacess-high-contrast-dark.theme-dark {
+  color-scheme: dark;
+  --color-base-00: #000000;
+  --color-base-05: #000000;
+  --color-base-10: #000000;
+  --color-base-20: #0f0f0f;
+  --color-base-25: #0f0f0f;
+  --color-base-30: #a6a6a6;
+  --color-base-35: #a6a6a6;
+  --color-base-40: #a6a6a6;
+  --color-base-50: #e0e0e0;
+  --color-base-60: #e0e0e0;
+  --color-base-70: #e0e0e0;
+  --color-base-100: #ffffff;
+  --background-modifier-form-field: #000000;
+  --background-primary: #000000;
+  --background-primary-alt: #000000;
+  --background-secondary: #000000;
+  --background-secondary-alt: #0f0f0f;
+  --background-modifier-border: #a6a6a6;
+  --background-modifier-border-hover: #ffffff;
+  --background-modifier-border-focus: #f5c400;
+  --background-modifier-hover: #1a1a1a;
+  --background-modifier-active-hover: #1a1a1a;
+  --background-modifier-error: #ff9e94;
+  --background-modifier-success: #9df29f;
+  --text-normal: #ffffff;
+  --text-muted: #e0e0e0;
+  --text-faint: #e0e0e0;
+  --text-error: #ff9e94;
+  --text-warning: #ffd28a;
+  --text-success: #9df29f;
+  --text-accent: #f5c400;
+  --text-accent-hover: #f5c400;
+  --text-on-accent: #000000;
+  --text-on-accent-inverted: #000000;
+  --text-selection: #0a2552;
+  --text-highlight-bg: #403300;
+  --interactive-normal: #0f0f0f;
+  --interactive-hover: #1a1a1a;
+  --interactive-accent: #f5c400;
+  --interactive-accent-hover: #f5c400;
+  --link-color: #8fd0ff;
+  --link-color-hover: #8fd0ff;
+  --link-external-color: #8fd0ff;
+  --link-external-color-hover: #8fd0ff;
+  --link-unresolved-color: #8fd0ff;
+  --link-unresolved-opacity: 1;
+  --link-decoration: underline;
+  --link-decoration-hover: underline;
+  --link-external-decoration: underline;
+  --link-unresolved-decoration-style: dashed;
+  --code-background: #000000;
+  --code-normal: #ffffff;
+  --code-comment: #c0ccd8;
+  --code-function: #8fd0ff;
+  --code-important: #ffcdf0;
+  --code-keyword: #f5c400;
+  --code-operator: #ffffff;
+  --code-property: #c9a8ff;
+  --code-punctuation: #ffffff;
+  --code-string: #a3ee9f;
+  --code-tag: #f5c400;
+  --code-value: #ffb27a;
+  --caret-color: #f5c400;
+  --checkbox-color: #f5c400;
+  --checkbox-border-color: #a6a6a6;
+  --blockquote-border-color: #a6a6a6;
+  --hr-color: #a6a6a6;
+  --tag-color: #f5c400;
+  --tag-background: #000000;
+  --tag-border-color: #a6a6a6;
+  --tag-border-width: 1px;
+  --zacess-focus: #f5c400;
+  --zacess-added: #9df29f;
+  --zacess-removed: #ffaba3;
+}
+
+body.zacess-high-contrast-light.theme-light,
+body.zacess-high-contrast-light.theme-dark {
+  color-scheme: light;
+  --color-base-00: #ffffff;
+  --color-base-05: #f7f7f7;
+  --color-base-10: #f7f7f7;
+  --color-base-20: #efefef;
+  --color-base-25: #efefef;
+  --color-base-30: #262626;
+  --color-base-35: #262626;
+  --color-base-40: #262626;
+  --color-base-50: #2e2e2e;
+  --color-base-60: #2e2e2e;
+  --color-base-70: #2e2e2e;
+  --color-base-100: #000000;
+  --background-modifier-form-field: #ffffff;
+  --background-primary: #ffffff;
+  --background-primary-alt: #f7f7f7;
+  --background-secondary: #f7f7f7;
+  --background-secondary-alt: #efefef;
+  --background-modifier-border: #262626;
+  --background-modifier-border-hover: #000000;
+  --background-modifier-border-focus: #003d99;
+  --background-modifier-hover: #f2f2f2;
+  --background-modifier-active-hover: #f2f2f2;
+  --background-modifier-error: #8b0000;
+  --background-modifier-success: #005518;
+  --text-normal: #000000;
+  --text-muted: #2e2e2e;
+  --text-faint: #2e2e2e;
+  --text-error: #8b0000;
+  --text-warning: #5a3a00;
+  --text-success: #005518;
+  --text-accent: #003d99;
+  --text-accent-hover: #003d99;
+  --text-on-accent: #ffffff;
+  --text-on-accent-inverted: #ffffff;
+  --text-selection: #fff1a0;
+  --text-highlight-bg: #ffd400;
+  --interactive-normal: #efefef;
+  --interactive-hover: #f2f2f2;
+  --interactive-accent: #003d99;
+  --interactive-accent-hover: #003d99;
+  --link-color: #003d99;
+  --link-color-hover: #003d99;
+  --link-external-color: #003d99;
+  --link-external-color-hover: #003d99;
+  --link-unresolved-color: #003d99;
+  --link-unresolved-opacity: 1;
+  --link-decoration: underline;
+  --link-decoration-hover: underline;
+  --link-external-decoration: underline;
+  --link-unresolved-decoration-style: dashed;
+  --code-background: #f7f7f7;
+  --code-normal: #000000;
+  --code-comment: #3d4752;
+  --code-function: #00347f;
+  --code-important: #8a0046;
+  --code-keyword: #4b0091;
+  --code-operator: #000000;
+  --code-property: #1e0090;
+  --code-punctuation: #000000;
+  --code-string: #005518;
+  --code-tag: #4b0091;
+  --code-value: #521e00;
+  --caret-color: #000000;
+  --checkbox-color: #003d99;
+  --checkbox-border-color: #262626;
+  --blockquote-border-color: #262626;
+  --hr-color: #262626;
+  --tag-color: #003d99;
+  --tag-background: #f7f7f7;
+  --tag-border-color: #262626;
+  --tag-border-width: 1px;
+  --zacess-focus: #003d99;
+  --zacess-added: #005518;
+  --zacess-removed: #4a0000;
 }
 
 /* links are underlined so colour is never the only signal */
