@@ -17,6 +17,8 @@ body:
         - Zacess Cream
         - Zacess High Contrast Dark
         - Zacess High Contrast Light
+        - Zacess Deep Contrast Dark
+        - Zacess Deep Contrast Light
     validations:
       required: true
   - type: dropdown
@@ -32,6 +34,7 @@ body:
         - Sublime Text
         - Helix
         - Emacs
+        - Eclipse
         - A terminal
         - Other
     validations:

@@ -207,20 +207,20 @@
     "terminalCursor.foreground": "#000000",
     "terminal.selectionBackground": "#f9e79a",
     "terminal.ansiBlack": "#000000",
-    "terminal.ansiRed": "#5b0002",
-    "terminal.ansiGreen": "#003107",
-    "terminal.ansiYellow": "#3b2500",
-    "terminal.ansiBlue": "#00275c",
-    "terminal.ansiMagenta": "#4f004d",
-    "terminal.ansiCyan": "#002f2f",
+    "terminal.ansiRed": "#c1000a",
+    "terminal.ansiGreen": "#016f1b",
+    "terminal.ansiYellow": "#815601",
+    "terminal.ansiBlue": "#015ac2",
+    "terminal.ansiMagenta": "#a901a6",
+    "terminal.ansiCyan": "#016969",
     "terminal.ansiWhite": "#434343",
     "terminal.ansiBrightBlack": "#484848",
-    "terminal.ansiBrightRed": "#8b0006",
-    "terminal.ansiBrightGreen": "#004f10",
-    "terminal.ansiBrightYellow": "#5c3c00",
-    "terminal.ansiBrightBlue": "#003f8e",
-    "terminal.ansiBrightMagenta": "#7b0077",
-    "terminal.ansiBrightCyan": "#004b4b",
+    "terminal.ansiBrightRed": "#df0010",
+    "terminal.ansiBrightGreen": "#008120",
+    "terminal.ansiBrightYellow": "#966501",
+    "terminal.ansiBrightBlue": "#0069e3",
+    "terminal.ansiBrightMagenta": "#c500bf",
+    "terminal.ansiBrightCyan": "#027b7b",
     "terminal.ansiBrightWhite": "#000000"
   },
   "tokenColors": [
@@ -232,7 +232,7 @@
         "string.quoted.docstring.multi.python"
       ],
       "settings": {
-        "foreground": "#534637",
+        "foreground": "#8b0162",
         "fontStyle": "italic"
       }
     },
@@ -521,7 +521,7 @@
         "markup.quote"
       ],
       "settings": {
-        "foreground": "#534637",
+        "foreground": "#8b0162",
         "fontStyle": "italic"
       }
     }
@@ -582,7 +582,7 @@
       "bold": true
     },
     "comment": {
-      "foreground": "#534637",
+      "foreground": "#8b0162",
       "italic": true
     },
     "string": {

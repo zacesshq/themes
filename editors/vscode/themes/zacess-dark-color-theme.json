@@ -14,7 +14,7 @@
     "icon.foreground": "#f5f5f5",
     "textLink.foreground": "#8cbcff",
     "textLink.activeForeground": "#8cbcff",
-    "textPreformat.foreground": "#96d797",
+    "textPreformat.foreground": "#1ee646",
     "textPreformat.background": "#1a1a1a",
     "textBlockQuote.border": "#7a7a7a",
     "textBlockQuote.background": "#1a1a1a",
@@ -43,7 +43,7 @@
     "editorBracketMatch.background": "#12121200",
     "editorBracketMatch.border": "#8cbcff",
     "editorGutter.background": "#121212",
-    "editorGutter.addedBackground": "#99da9b",
+    "editorGutter.addedBackground": "#01ea45",
     "editorGutter.modifiedBackground": "#c9e0ff",
     "editorGutter.deletedBackground": "#f39992",
     "editorError.foreground": "#ffccc4",
@@ -193,8 +193,8 @@
     "peekViewEditor.matchHighlightBackground": "#12121200",
     "peekViewEditor.matchHighlightBorder": "#ffd400",
     "peekViewResult.matchHighlightBackground": "#1a2436",
-    "gitDecoration.addedResourceForeground": "#99da9b",
-    "gitDecoration.untrackedResourceForeground": "#99da9b",
+    "gitDecoration.addedResourceForeground": "#01ea45",
+    "gitDecoration.untrackedResourceForeground": "#01ea45",
     "gitDecoration.modifiedResourceForeground": "#c9e0ff",
     "gitDecoration.deletedResourceForeground": "#f39992",
     "gitDecoration.ignoredResourceForeground": "#c8c8c8",
@@ -208,19 +208,19 @@
     "terminal.selectionBackground": "#1a2436",
     "terminal.ansiBlack": "#a3a3a3",
     "terminal.ansiRed": "#ffa79b",
-    "terminal.ansiGreen": "#8dcd8e",
-    "terminal.ansiYellow": "#deb967",
+    "terminal.ansiGreen": "#1bdb41",
+    "terminal.ansiYellow": "#f0b40b",
     "terminal.ansiBlue": "#90c1ff",
-    "terminal.ansiMagenta": "#eba8e4",
-    "terminal.ansiCyan": "#52d0cf",
+    "terminal.ansiMagenta": "#f7a0f1",
+    "terminal.ansiCyan": "#37d2cf",
     "terminal.ansiWhite": "#e6e6e6",
     "terminal.ansiBrightBlack": "#c8c8c8",
     "terminal.ansiBrightRed": "#ffd5ce",
-    "terminal.ansiBrightGreen": "#aceead",
+    "terminal.ansiBrightGreen": "#34ff57",
     "terminal.ansiBrightYellow": "#ffda8a",
     "terminal.ansiBrightBlue": "#c9e0ff",
     "terminal.ansiBrightMagenta": "#ffd0fa",
-    "terminal.ansiBrightCyan": "#76f1f0",
+    "terminal.ansiBrightCyan": "#23f6f8",
     "terminal.ansiBrightWhite": "#ffffff"
   },
   "tokenColors": [
@@ -232,7 +232,7 @@
         "string.quoted.docstring.multi.python"
       ],
       "settings": {
-        "foreground": "#abb6c1",
+        "foreground": "#80c201",
         "fontStyle": "italic"
       }
     },
@@ -245,7 +245,7 @@
         "markup.inline.raw"
       ],
       "settings": {
-        "foreground": "#96d797",
+        "foreground": "#1ee646",
         "fontStyle": ""
       }
     },
@@ -356,7 +356,7 @@
         "entity.name.type.parameter"
       ],
       "settings": {
-        "foreground": "#5ddad9",
+        "foreground": "#03dedd",
         "fontStyle": ""
       }
     },
@@ -446,7 +446,7 @@
         "punctuation.definition.inserted"
       ],
       "settings": {
-        "foreground": "#99da9b",
+        "foreground": "#01ea45",
         "fontStyle": ""
       }
     },
@@ -521,32 +521,32 @@
         "markup.quote"
       ],
       "settings": {
-        "foreground": "#abb6c1",
+        "foreground": "#80c201",
         "fontStyle": "italic"
       }
     }
   ],
   "semanticTokenColors": {
     "namespace": {
-      "foreground": "#5ddad9"
+      "foreground": "#03dedd"
     },
     "class": {
-      "foreground": "#5ddad9"
+      "foreground": "#03dedd"
     },
     "interface": {
-      "foreground": "#5ddad9"
+      "foreground": "#03dedd"
     },
     "enum": {
-      "foreground": "#5ddad9"
+      "foreground": "#03dedd"
     },
     "struct": {
-      "foreground": "#5ddad9"
+      "foreground": "#03dedd"
     },
     "type": {
-      "foreground": "#5ddad9"
+      "foreground": "#03dedd"
     },
     "typeParameter": {
-      "foreground": "#5ddad9"
+      "foreground": "#03dedd"
     },
     "function": {
       "foreground": "#84b7fa"
@@ -582,11 +582,11 @@
       "bold": true
     },
     "comment": {
-      "foreground": "#abb6c1",
+      "foreground": "#80c201",
       "italic": true
     },
     "string": {
-      "foreground": "#96d797"
+      "foreground": "#1ee646"
     },
     "number": {
       "foreground": "#ffd9ba"

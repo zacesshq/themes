@@ -1,7 +1,8 @@
 # Zacess for Helix
 
-Six themes, `zacess_light`, `zacess_dark`, `zacess_yellow_on_black`, `zacess_cream`,
-`zacess_high_contrast_dark` and `zacess_high_contrast_light`. Each names
+Eight themes, `zacess_light`, `zacess_dark`, `zacess_yellow_on_black`, `zacess_cream`,
+`zacess_high_contrast_dark`, `zacess_high_contrast_light`, `zacess_deep_contrast_dark` and
+`zacess_deep_contrast_light`. Each names
 every palette colour once in a `[palette]` table, then sets the interface, the diagnostics, the diff
 gutter, Markdown and the syntax scopes from it. Bold, italic and underline follow the palette's font
 styles, as in every other editor.

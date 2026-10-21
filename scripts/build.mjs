@@ -340,7 +340,7 @@ function buildVscode() {
   write("editors/vscode/package.json", json({
     name: "zacess-themes",
     displayName: "Zacess Themes",
-    description: "Six high contrast code themes matching the Zacess reader: Light, Dark, Yellow on Black for low vision, Cream for dyslexia and two maximum contrast themes, High Contrast Dark and High Contrast Light. Every text and syntax colour keeps 7:1 contrast.",
+    description: "Eight high contrast code themes matching the Zacess reader: Light, Dark, Yellow on Black for low vision, Cream for dyslexia and four maximum contrast themes, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light. Every text and syntax colour keeps 7:1 contrast.",
     version: palette.version,
     publisher: "zacess",
     license: "MIT",
@@ -629,7 +629,7 @@ function buildJetbrains() {
     "  <name>Zacess Themes</name>",
     "  <vendor url=\"https://zacess.com\" email=\"contact@zacess.com\">Zacess</vendor>",
     "  <description><![CDATA[",
-    "<p>Six high contrast themes that match the Zacess reader, so a page looks the same in the reader and in the IDE.</p>",
+    "<p>Eight high contrast themes that match the Zacess reader, so a page looks the same in the reader and in the IDE.</p>",
     "<ul>",
     ...palette.themes.map((t) => `<li><b>${t.name}</b>: ${t.description}</li>`),
     "</ul>",
@@ -759,6 +759,10 @@ function buildObsidian() {
     "        value: zacess-high-contrast-dark",
     "      - label: High Contrast Light",
     "        value: zacess-high-contrast-light",
+    "      - label: Deep Contrast Dark",
+    "        value: zacess-deep-contrast-dark",
+    "      - label: Deep Contrast Light",
+    "        value: zacess-deep-contrast-light",
     "*/",
     "",
     block(".theme-light", byId.light),
@@ -768,6 +772,8 @@ function buildObsidian() {
     block("body.zacess-cream.theme-light,\nbody.zacess-cream.theme-dark", byId.cream),
     block("body.zacess-high-contrast-dark.theme-light,\nbody.zacess-high-contrast-dark.theme-dark", byId["high-contrast-dark"]),
     block("body.zacess-high-contrast-light.theme-light,\nbody.zacess-high-contrast-light.theme-dark", byId["high-contrast-light"]),
+    block("body.zacess-deep-contrast-dark.theme-light,\nbody.zacess-deep-contrast-dark.theme-dark", byId["deep-contrast-dark"]),
+    block("body.zacess-deep-contrast-light.theme-light,\nbody.zacess-deep-contrast-light.theme-dark", byId["deep-contrast-light"]),
     "/* links are underlined so colour is never the only signal */",
     ".markdown-rendered a,",
     ".cm-s-obsidian span.cm-hmd-internal-link,",
@@ -1256,7 +1262,7 @@ function buildZed() {
     `version = "${palette.version}"`,
     "schema_version = 1",
     "authors = [\"Zacess <contact@zacess.com>\"]",
-    "description = \"High contrast themes matching the Zacess reader: Light, Dark, Yellow on Black, Cream, High Contrast Dark and High Contrast Light, every text and syntax colour at 7:1 or more.\"",
+    "description = \"High contrast themes matching the Zacess reader: Light, Dark, Yellow on Black, Cream, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light, every text and syntax colour at 7:1 or more.\"",
     `repository = "${REPO}"`,
     "",
   ].join("\n"));
@@ -1610,6 +1616,177 @@ function buildEmacs() {
   for (const theme of palette.themes) write(`editors/emacs/${slug(theme)}-theme.el`, emacs(theme));
 }
 
+// ---------------------------------------------------------------- Eclipse
+
+// Eclipse keeps its colours as preferences, so each theme is a preference export (.epf) that
+// File > Import > Preferences applies; every key here was read from the installed plugins' own
+// constants and plugin.xml; keys that Eclipse only migrates from older versions are left out
+const rgb = (hex) => parseHex(hex).join(",");
+
+// the semantic highlightings JDT registers, each with the token that colours it; enabling every
+// one that is coloured stops Eclipse's dark appearance from filling any of them with its own colours
+const ECLIPSE_SEMANTIC = [
+  ["staticFinalField", "number"],
+  ["staticField", "property"],
+  ["field", "property"],
+  ["inheritedField", "property"],
+  ["annotationElementReference", "property"],
+  ["methodDeclarationName", "function"],
+  ["method", "function"],
+  ["staticMethodInvocation", "function"],
+  ["inheritedMethodInvocation", "function"],
+  ["abstractMethodInvocation", "function"],
+  ["annotation", "function"],
+  ["localVariableDeclaration", "variable"],
+  ["localVariable", "variable"],
+  ["parameterVariable", "parameter"],
+  ["class", "type"],
+  ["abstractClass", "type"],
+  ["interface", "type"],
+  ["enum", "type"],
+  ["record", "type"],
+  ["typeParameter", "type"],
+  ["typeArgument", "type"],
+  ["number", "number"],
+  ["restrictedKeywords", "keyword"],
+];
+
+function eclipsePrefs(theme) {
+  const u = theme.ui;
+  const s = theme.syntax;
+  const jdt = [];
+  const editors = [];
+  const workbench = [];
+  const styled = (out, key, token, { colour = s[token], bold = has(token, "bold"), italic = has(token, "italic"), underline = has(token, "underline") } = {}) => {
+    out.push([key, rgb(colour)], [`${key}_bold`, bold], [`${key}_italic`, italic], [`${key}_underline`, underline], [`${key}_strikethrough`, false]);
+  };
+
+  // Java syntax colours; return is the only control keyword the Java scanner colours on its own
+  styled(jdt, "java_default", "variable");
+  styled(jdt, "java_keyword", "keyword");
+  styled(jdt, "java_keyword_return", "control");
+  styled(jdt, "java_operator", "operator");
+  styled(jdt, "java_bracket", "operator");
+  styled(jdt, "java_string", "string");
+  styled(jdt, "java_single_line_comment", "comment");
+  styled(jdt, "java_multi_line_comment", "comment");
+  styled(jdt, "java_doc_default", "comment");
+  styled(jdt, "java_doc_tag", "comment");
+  // Javadoc @tags and TODO markers are bold italic, as in the JetBrains scheme
+  styled(jdt, "java_doc_keyword", "comment", { bold: true, italic: true });
+  styled(jdt, "java_comment_task_tag", "control", { bold: true, italic: true });
+  // a {@link} reads as a link: the function colour, underlined, as the TextMate link rule
+  styled(jdt, "java_doc_link", "function", { italic: false, underline: true });
+
+  // properties files
+  styled(jdt, "pf_coloring_key", "property");
+  styled(jdt, "pf_coloring_value", "string");
+  styled(jdt, "pf_coloring_assignment", "operator");
+  styled(jdt, "pf_coloring_argument", "parameter");
+  styled(jdt, "pf_coloring_comment", "comment");
+
+  for (const [name, token] of ECLIPSE_SEMANTIC) {
+    const key = `semanticHighlighting.${name}`;
+    jdt.push(
+      [`${key}.color`, rgb(s[token])], [`${key}.bold`, has(token, "bold")], [`${key}.italic`, has(token, "italic")],
+      [`${key}.underline`, has(token, "underline")], [`${key}.strikethrough`, false], [`${key}.enabled`, true],
+    );
+  }
+  // deprecated members keep Eclipse's own strikethrough in the text colour; autoboxing stays off
+  // as in Eclipse, with a palette colour in case it is turned on
+  jdt.push(
+    ["semanticHighlighting.deprecatedMember.color", rgb(s.variable)], ["semanticHighlighting.deprecatedMember.bold", false],
+    ["semanticHighlighting.deprecatedMember.italic", false], ["semanticHighlighting.deprecatedMember.underline", false],
+    ["semanticHighlighting.deprecatedMember.strikethrough", true], ["semanticHighlighting.deprecatedMember.enabled", true],
+    ["semanticHighlighting.autoboxing.color", rgb(s.variable)], ["semanticHighlighting.autoboxing.enabled", false],
+  );
+
+  jdt.push(
+    ["matchingBracketsColor", rgb(u.accent)],
+    ["sourceHoverBackgroundColor", rgb(u.surface)],
+    ["sourceHoverBackgroundColor.SystemDefault", false],
+    ["content_assist_proposals_background", rgb(u.surface)],
+    ["content_assist_proposals_foreground", rgb(u.foreground)],
+    ["content_assist_parameters_background", rgb(u.surface)],
+    ["content_assist_parameters_foreground", rgb(u.foreground)],
+    ["content_assist_completion_replacement_background", rgb(u.selection)],
+    ["content_assist_completion_replacement_foreground", rgb(u.foreground)],
+  );
+
+  // the text editor colours every Eclipse editor shares; each SystemDefault flag must be false or
+  // Eclipse keeps drawing the operating system's colour
+  editors.push(
+    ["AbstractTextEditor.Color.Background", rgb(u.background)],
+    ["AbstractTextEditor.Color.Background.SystemDefault", false],
+    ["AbstractTextEditor.Color.Foreground", rgb(u.foreground)],
+    ["AbstractTextEditor.Color.Foreground.SystemDefault", false],
+    ["AbstractTextEditor.Color.SelectionBackground", rgb(u.selection)],
+    ["AbstractTextEditor.Color.SelectionBackground.SystemDefault", false],
+    ["AbstractTextEditor.Color.SelectionForeground", rgb(u.foreground)],
+    ["AbstractTextEditor.Color.SelectionForeground.SystemDefault", false],
+    ["currentLineColor", rgb(u.lineHighlight)],
+    ["lineNumberColor", rgb(u.lineNumber)],
+    ["printMarginColor", rgb(u.indentGuide)],
+    ["hyperlinkColor", rgb(u.link)],
+    ["hyperlinkColor.SystemDefault", false],
+    ["org.eclipse.ui.editors.stickyLinesSeparatorColor", rgb(u.border)],
+  );
+  const annotation = (prefix, colour, { text, highlight, style } = {}) => {
+    editors.push([`${prefix}IndicationColor`, rgb(colour)]);
+    if (text !== undefined) editors.push([`${prefix}Indication`, text]);
+    if (highlight !== undefined) editors.push([`${prefix}Highlighting`, highlight]);
+    if (style) editors.push([`${prefix}TextStyle`, style]);
+  };
+  // marked occurrences and search results are boxed in the find match outline rather than
+  // filled, as in VS Code's high contrast themes, so every token keeps its own colour on the
+  // editor background at full contrast and the box carries the non-text floor
+  annotation("occurrence", u.findMatchBorder, { text: true, highlight: false, style: "BOX" });
+  annotation("writeOccurrence", u.findMatchBorder, { text: true, highlight: false, style: "BOX" });
+  annotation("searchResult", u.findMatchBorder, { text: true, highlight: false, style: "BOX" });
+  annotation("error", u.error);
+  annotation("warning", u.warning);
+  annotation("info", u.info);
+  annotation("spelling", u.info);
+  annotation("change", s.changed);
+  annotation("addition", s.added);
+  annotation("deletion", s.removed);
+  // linked mode fills the other copies of a renamed name, so it uses the selection, which every
+  // syntax colour keeps 7:1 over
+  editors.push(["linked.slave.color", rgb(u.selection)], ["jdt.linked.slave.color", rgb(u.selection)]);
+
+  // code minings and other inline annotations take a workbench colour rather than an editor one
+  workbench.push(["org.eclipse.ui.editors.inlineAnnotationColor", rgb(u.muted)]);
+
+  // the Terminal view keeps its own palette under its plugin's node; the key names are the
+  // TerminalColor constants in the installed org.eclipse.terminal.control plugin
+  const t = terminalColours(theme);
+  const terminal = [
+    ...ANSI_NAMES.map((name, i) => [name.replace(/([A-Z])/g, "_$1").toUpperCase(), rgb(t.ansi[i])]),
+    ["FOREGROUND", rgb(t.foreground)],
+    ["BACKGROUND", rgb(t.background)],
+    ["SELECTION_FOREGROUND", rgb(t.selectionText)],
+    ["SELECTION_BACKGROUND", rgb(t.selection)],
+  ];
+
+  const lines = (node, entries) => entries.map(([k, v]) => `/instance/${node}/${k}=${v}`);
+  return [
+    `# ${theme.name} for Eclipse, ${HEADER}`,
+    "# editor and Terminal view colours; import with File > Import > General > Preferences, then restart Eclipse",
+    // no export root line (\!/=) is written: on import it would first clear every preference
+    // under the root, the user's own settings included
+    "file_export_version=3.0",
+    ...lines("org.eclipse.jdt.ui", jdt),
+    ...lines("org.eclipse.ui.editors", editors),
+    ...lines("org.eclipse.ui.workbench", workbench),
+    ...lines("org.eclipse.terminal.control", terminal),
+    "",
+  ].join("\n");
+}
+
+function buildEclipse() {
+  for (const theme of palette.themes) write(`editors/eclipse/${theme.name}.epf`, eclipsePrefs(theme));
+}
+
 // ---------------------------------------------------------------- terminals
 
 function terminalColours(theme) {
@@ -1804,6 +1981,7 @@ buildZed();
 buildSublime();
 buildHelix();
 buildEmacs();
+buildEclipse();
 buildTerminals();
 buildDocs();
 console.log(`wrote ${written.length} files from palette/zacess.json`);

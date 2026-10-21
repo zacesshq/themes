@@ -1,7 +1,8 @@
 # Zacess for Obsidian
 
 An Obsidian theme with Zacess Light for light mode and Zacess Dark for dark mode, plus the Yellow on
-Black, Cream, High Contrast Dark and High Contrast Light themes through the Style Settings plugin. Body text, muted text, links and code
+Black, Cream, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light
+themes through the Style Settings plugin. Body text, muted text, links and code
 colours all keep at least 7:1 contrast. Links are underlined and every control shows a focus ring.
 
 ## Install
@@ -18,7 +19,7 @@ Obsidian's own **Base color scheme** setting switches between Zacess Light and Z
 
 Install the community plugin [Style Settings](https://github.com/mgmeyers/obsidian-style-settings),
 open its settings and choose **Contrast theme** under **Zacess**. Yellow on Black, Cream, High
-Contrast Dark and High Contrast Light replace both the light and the dark mode while they are
+Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light replace both the light and the dark mode while they are
 chosen.
 
 > [!NOTE]

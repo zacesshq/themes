@@ -14,7 +14,7 @@
     "icon.foreground": "#ffffff",
     "textLink.foreground": "#8fd0ff",
     "textLink.activeForeground": "#8fd0ff",
-    "textPreformat.foreground": "#a3ee9f",
+    "textPreformat.foreground": "#20fe34",
     "textPreformat.background": "#000000",
     "textBlockQuote.border": "#a6a6a6",
     "textBlockQuote.background": "#000000",
@@ -43,7 +43,7 @@
     "editorBracketMatch.background": "#00000000",
     "editorBracketMatch.border": "#f5c400",
     "editorGutter.background": "#000000",
-    "editorGutter.addedBackground": "#9df29f",
+    "editorGutter.addedBackground": "#3bff59",
     "editorGutter.modifiedBackground": "#e6f2ff",
     "editorGutter.deletedBackground": "#ffaba3",
     "editorError.foreground": "#ff9e94",
@@ -193,8 +193,8 @@
     "peekViewEditor.matchHighlightBackground": "#00000000",
     "peekViewEditor.matchHighlightBorder": "#f5c400",
     "peekViewResult.matchHighlightBackground": "#0a2552",
-    "gitDecoration.addedResourceForeground": "#9df29f",
-    "gitDecoration.untrackedResourceForeground": "#9df29f",
+    "gitDecoration.addedResourceForeground": "#3bff59",
+    "gitDecoration.untrackedResourceForeground": "#3bff59",
     "gitDecoration.modifiedResourceForeground": "#e6f2ff",
     "gitDecoration.deletedResourceForeground": "#ffaba3",
     "gitDecoration.ignoredResourceForeground": "#e0e0e0",
@@ -208,19 +208,19 @@
     "terminal.selectionBackground": "#0a2552",
     "terminal.ansiBlack": "#b3b3b3",
     "terminal.ansiRed": "#ff9e94",
-    "terminal.ansiGreen": "#8fe88f",
+    "terminal.ansiGreen": "#26f444",
     "terminal.ansiYellow": "#f5c400",
     "terminal.ansiBlue": "#8fd0ff",
     "terminal.ansiMagenta": "#f2a6ff",
-    "terminal.ansiCyan": "#5ef0e0",
+    "terminal.ansiCyan": "#00f4e0",
     "terminal.ansiWhite": "#e0e0e0",
     "terminal.ansiBrightBlack": "#cccccc",
     "terminal.ansiBrightRed": "#ffc4bd",
-    "terminal.ansiBrightGreen": "#b8f7b8",
+    "terminal.ansiBrightGreen": "#95ff98",
     "terminal.ansiBrightYellow": "#ffe08a",
     "terminal.ansiBrightBlue": "#c8e6ff",
     "terminal.ansiBrightMagenta": "#ffcdf7",
-    "terminal.ansiBrightCyan": "#9ef7ee",
+    "terminal.ansiBrightCyan": "#56fff3",
     "terminal.ansiBrightWhite": "#ffffff",
     "contrastBorder": "#a6a6a6",
     "contrastActiveBorder": "#f5c400",
@@ -235,7 +235,7 @@
         "string.quoted.docstring.multi.python"
       ],
       "settings": {
-        "foreground": "#c0ccd8",
+        "foreground": "#c7b404",
         "fontStyle": "italic"
       }
     },
@@ -248,7 +248,7 @@
         "markup.inline.raw"
       ],
       "settings": {
-        "foreground": "#a3ee9f",
+        "foreground": "#20fe34",
         "fontStyle": ""
       }
     },
@@ -359,7 +359,7 @@
         "entity.name.type.parameter"
       ],
       "settings": {
-        "foreground": "#5ef0e0",
+        "foreground": "#00f4e0",
         "fontStyle": ""
       }
     },
@@ -449,7 +449,7 @@
         "punctuation.definition.inserted"
       ],
       "settings": {
-        "foreground": "#9df29f",
+        "foreground": "#3bff59",
         "fontStyle": ""
       }
     },
@@ -524,32 +524,32 @@
         "markup.quote"
       ],
       "settings": {
-        "foreground": "#c0ccd8",
+        "foreground": "#c7b404",
         "fontStyle": "italic"
       }
     }
   ],
   "semanticTokenColors": {
     "namespace": {
-      "foreground": "#5ef0e0"
+      "foreground": "#00f4e0"
     },
     "class": {
-      "foreground": "#5ef0e0"
+      "foreground": "#00f4e0"
     },
     "interface": {
-      "foreground": "#5ef0e0"
+      "foreground": "#00f4e0"
     },
     "enum": {
-      "foreground": "#5ef0e0"
+      "foreground": "#00f4e0"
     },
     "struct": {
-      "foreground": "#5ef0e0"
+      "foreground": "#00f4e0"
     },
     "type": {
-      "foreground": "#5ef0e0"
+      "foreground": "#00f4e0"
     },
     "typeParameter": {
-      "foreground": "#5ef0e0"
+      "foreground": "#00f4e0"
     },
     "function": {
       "foreground": "#8fd0ff"
@@ -585,11 +585,11 @@
       "bold": true
     },
     "comment": {
-      "foreground": "#c0ccd8",
+      "foreground": "#c7b404",
       "italic": true
     },
     "string": {
-      "foreground": "#a3ee9f"
+      "foreground": "#20fe34"
     },
     "number": {
       "foreground": "#ffb27a"

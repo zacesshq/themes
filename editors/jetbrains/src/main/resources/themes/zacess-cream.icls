@@ -159,31 +159,31 @@
     </option>
     <option name="DEFAULT_LINE_COMMENT">
       <value>
-        <option name="FOREGROUND" value="534637" />
+        <option name="FOREGROUND" value="8b0162" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_BLOCK_COMMENT">
       <value>
-        <option name="FOREGROUND" value="534637" />
+        <option name="FOREGROUND" value="8b0162" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="534637" />
+        <option name="FOREGROUND" value="8b0162" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT_TAG">
       <value>
-        <option name="FOREGROUND" value="534637" />
+        <option name="FOREGROUND" value="8b0162" />
         <option name="FONT_TYPE" value="3" />
       </value>
     </option>
     <option name="DEFAULT_DOC_MARKUP">
       <value>
-        <option name="FOREGROUND" value="534637" />
+        <option name="FOREGROUND" value="8b0162" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
@@ -483,32 +483,32 @@
     </option>
     <option name="CONSOLE_RED_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="5b0002" />
+        <option name="FOREGROUND" value="c1000a" />
       </value>
     </option>
     <option name="CONSOLE_GREEN_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="003107" />
+        <option name="FOREGROUND" value="016f1b" />
       </value>
     </option>
     <option name="CONSOLE_YELLOW_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="3b2500" />
+        <option name="FOREGROUND" value="815601" />
       </value>
     </option>
     <option name="CONSOLE_BLUE_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="00275c" />
+        <option name="FOREGROUND" value="015ac2" />
       </value>
     </option>
     <option name="CONSOLE_MAGENTA_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="4f004d" />
+        <option name="FOREGROUND" value="a901a6" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="002f2f" />
+        <option name="FOREGROUND" value="016969" />
       </value>
     </option>
     <option name="CONSOLE_GRAY_OUTPUT">
@@ -523,32 +523,32 @@
     </option>
     <option name="CONSOLE_RED_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="8b0006" />
+        <option name="FOREGROUND" value="df0010" />
       </value>
     </option>
     <option name="CONSOLE_GREEN_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="004f10" />
+        <option name="FOREGROUND" value="008120" />
       </value>
     </option>
     <option name="CONSOLE_YELLOW_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="5c3c00" />
+        <option name="FOREGROUND" value="966501" />
       </value>
     </option>
     <option name="CONSOLE_BLUE_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="003f8e" />
+        <option name="FOREGROUND" value="0069e3" />
       </value>
     </option>
     <option name="CONSOLE_MAGENTA_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="7b0077" />
+        <option name="FOREGROUND" value="c500bf" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="004b4b" />
+        <option name="FOREGROUND" value="027b7b" />
       </value>
     </option>
     <option name="CONSOLE_WHITE_OUTPUT">

@@ -19,7 +19,7 @@
     <option name="WHITESPACES" value="9a9a9a" />
     <option name="METHOD_SEPARATORS_COLOR" value="7a7a7a" />
     <option name="TEARLINE_COLOR" value="7a7a7a" />
-    <option name="ADDED_LINES_COLOR" value="9ae99c" />
+    <option name="ADDED_LINES_COLOR" value="28f74f" />
     <option name="MODIFIED_LINES_COLOR" value="ddedff" />
     <option name="DELETED_LINES_COLOR" value="ffa59d" />
     <option name="WHITESPACES_MODIFIED_LINES_COLOR" value="ddedff" />
@@ -29,10 +29,10 @@
     <option name="QUESTION_HINT" value="000000" />
     <option name="LOOKUP_COLOR" value="000000" />
     <option name="CONSOLE_BACKGROUND_KEY" value="000000" />
-    <option name="FILESTATUS_ADDED" value="9ae99c" />
+    <option name="FILESTATUS_ADDED" value="28f74f" />
     <option name="FILESTATUS_MODIFIED" value="ddedff" />
     <option name="FILESTATUS_DELETED" value="ffa59d" />
-    <option name="FILESTATUS_UNKNOWN" value="9ae99c" />
+    <option name="FILESTATUS_UNKNOWN" value="28f74f" />
     <option name="FILESTATUS_IDEA_FILESTATUS_IGNORED" value="e6e6e6" />
   </colors>
   <attributes>
@@ -127,7 +127,7 @@
     </option>
     <option name="DEFAULT_STRING">
       <value>
-        <option name="FOREGROUND" value="90eaa4" />
+        <option name="FOREGROUND" value="43f480" />
       </value>
     </option>
     <option name="DEFAULT_VALID_STRING_ESCAPE">
@@ -159,31 +159,31 @@
     </option>
     <option name="DEFAULT_LINE_COMMENT">
       <value>
-        <option name="FOREGROUND" value="b4bfca" />
+        <option name="FOREGROUND" value="88c200" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_BLOCK_COMMENT">
       <value>
-        <option name="FOREGROUND" value="b4bfca" />
+        <option name="FOREGROUND" value="88c200" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="b4bfca" />
+        <option name="FOREGROUND" value="88c200" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT_TAG">
       <value>
-        <option name="FOREGROUND" value="b4bfca" />
+        <option name="FOREGROUND" value="88c200" />
         <option name="FONT_TYPE" value="3" />
       </value>
     </option>
     <option name="DEFAULT_DOC_MARKUP">
       <value>
-        <option name="FOREGROUND" value="b4bfca" />
+        <option name="FOREGROUND" value="88c200" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
@@ -229,7 +229,7 @@
     </option>
     <option name="DEFAULT_LABEL">
       <value>
-        <option name="FOREGROUND" value="49ebf3" />
+        <option name="FOREGROUND" value="0cedf6" />
         <option name="FONT_TYPE" value="1" />
       </value>
     </option>
@@ -287,7 +287,7 @@
     </option>
     <option name="PY.DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="90eaa4" />
+        <option name="FOREGROUND" value="43f480" />
       </value>
     </option>
     <option name="PY.DECORATOR">
@@ -346,15 +346,15 @@
     </option>
     <option name="HYPERLINK_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="5ce1e6" />
-        <option name="EFFECT_COLOR" value="5ce1e6" />
+        <option name="FOREGROUND" value="1be4ed" />
+        <option name="EFFECT_COLOR" value="1be4ed" />
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
     <option name="FOLLOWED_HYPERLINK_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="5ce1e6" />
-        <option name="EFFECT_COLOR" value="5ce1e6" />
+        <option name="FOREGROUND" value="1be4ed" />
+        <option name="EFFECT_COLOR" value="1be4ed" />
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
@@ -410,7 +410,7 @@
     </option>
     <option name="TODO_DEFAULT_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="49ebf3" />
+        <option name="FOREGROUND" value="0cedf6" />
         <option name="FONT_TYPE" value="3" />
       </value>
     </option>
@@ -488,12 +488,12 @@
     </option>
     <option name="CONSOLE_GREEN_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="82d085" />
+        <option name="FOREGROUND" value="01dc3f" />
       </value>
     </option>
     <option name="CONSOLE_YELLOW_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="e5b851" />
+        <option name="FOREGROUND" value="edb618" />
       </value>
     </option>
     <option name="CONSOLE_BLUE_OUTPUT">
@@ -503,7 +503,7 @@
     </option>
     <option name="CONSOLE_MAGENTA_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="f2a4eb" />
+        <option name="FOREGROUND" value="fd9cf8" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_OUTPUT">
@@ -528,7 +528,7 @@
     </option>
     <option name="CONSOLE_GREEN_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="a2f1a4" />
+        <option name="FOREGROUND" value="3cff5d" />
       </value>
     </option>
     <option name="CONSOLE_YELLOW_BRIGHT_OUTPUT">
@@ -548,7 +548,7 @@
     </option>
     <option name="CONSOLE_CYAN_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="55f4f3" />
+        <option name="FOREGROUND" value="00f7f5" />
       </value>
     </option>
     <option name="CONSOLE_WHITE_OUTPUT">

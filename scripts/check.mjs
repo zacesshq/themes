@@ -134,6 +134,8 @@ for (const file of files) {
       if (name.startsWith("editors/helix/")) checkHelix(data, name);
     } else if (file.endsWith(".el")) {
       checkElisp(text, name);
+    } else if (file.endsWith(".epf")) {
+      checkEclipse(text, name);
     } else if (/\.(xml|icls|itermcolors|svg)$/.test(file)) {
       checkXml(text);
     } else if (file.endsWith(".lua")) {
@@ -170,6 +172,7 @@ for (const theme of palette.themes) {
     `editors/sublime/${theme.name}.sublime-color-scheme`,
     `editors/helix/themes/zacess_${theme.id.replace(/-/g, "_")}.toml`,
     `editors/emacs/zacess-${theme.id}-theme.el`,
+    `editors/eclipse/${theme.name}.epf`,
   ]) {
     if (!existsSync(join(ROOT, path))) fail("files", path, `missing for ${theme.name}`);
   }
@@ -182,6 +185,7 @@ function themeOf(name) {
     `${t.name}.sublime-color-scheme`,
     `zacess_${t.id.replace(/-/g, "_")}.toml`,
     `zacess-${t.id}-theme.el`,
+    `${t.name}.epf`,
   ].includes(base));
   if (!theme) throw new Error("matches no theme in the palette");
   return theme;
@@ -275,6 +279,44 @@ function checkElisp(text, name) {
   for (const [, hex] of text.matchAll(/"(#[0-9a-zA-Z]+)"/g)) {
     if (!/^#[0-9a-f]{6}$/.test(hex)) throw new Error(`${hex} is not a six digit colour`);
     if (!colours.has(hex)) throw new Error(`${hex} is not a palette colour`);
+  }
+}
+
+function checkEclipse(text, name) {
+  // the preference nodes the Eclipse files write to (the Terminal view's included) and the text
+  // styles an annotation accepts
+  const NODES = ["org.eclipse.jdt.ui", "org.eclipse.ui.editors", "org.eclipse.ui.workbench", "org.eclipse.terminal.control"];
+  const STYLES = ["NONE", "SQUIGGLES", "PROBLEM_UNDERLINE", "BOX", "DASHED_BOX", "UNDERLINE", "IBEAM"];
+  const colours = coloursOf(themeOf(name));
+  const values = new Map();
+  let version = false;
+  text.split("\n").forEach((line, i) => {
+    if (!line || line.startsWith("#")) return;
+    // an export root line makes the import clear every preference under it first
+    if (line.startsWith("!") || line.startsWith("\\!")) throw new Error(`line ${i + 1} is an export root, which would clear the user's preferences on import`);
+    if (line === "file_export_version=3.0") { version = true; return; }
+    const m = /^\/instance\/([a-z.]+)\/([A-Za-z0-9_.]+)=(.+)$/.exec(line);
+    if (!m) throw new Error(`line ${i + 1} is not an instance preference: ${line}`);
+    const [, node, key, value] = m;
+    if (!NODES.includes(node)) throw new Error(`line ${i + 1} writes to ${node}, which is not an editor colour node`);
+    if (values.has(`${node}/${key}`)) throw new Error(`${node}/${key} is set twice`);
+    values.set(`${node}/${key}`, value);
+    const rgb = /^(\d{1,3}),(\d{1,3}),(\d{1,3})$/.exec(value);
+    if (rgb) {
+      if (rgb.slice(1).some((v) => Number(v) > 255)) throw new Error(`${key} has a channel above 255`);
+      const hex = `#${rgb.slice(1).map((v) => Number(v).toString(16).padStart(2, "0")).join("")}`;
+      if (!colours.has(hex)) throw new Error(`${key} is ${value} (${hex}), which is not a palette colour`);
+    } else if (key.endsWith("TextStyle")) {
+      if (!STYLES.includes(value)) throw new Error(`${key} has an unknown text style ${value}`);
+    } else if (value !== "true" && value !== "false") {
+      throw new Error(`${key} is ${value}, which is neither a colour, a text style nor a boolean`);
+    }
+  });
+  if (!version) throw new Error("no file_export_version=3.0 line, so Eclipse would read it as a legacy file");
+  // Eclipse ignores these colours and draws the operating system's while their SystemDefault flag is on
+  for (const key of values.keys()) {
+    if (!/(AbstractTextEditor\.Color\.(Background|Foreground|SelectionBackground|SelectionForeground)|hyperlinkColor|sourceHoverBackgroundColor)$/.test(key)) continue;
+    if (values.get(`${key}.SystemDefault`) !== "false") throw new Error(`${key} is set without ${key.split("/")[1]}.SystemDefault=false`);
   }
 }
 

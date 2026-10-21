@@ -207,20 +207,20 @@
     "terminalCursor.foreground": "#111111",
     "terminal.selectionBackground": "#fff1a8",
     "terminal.ansiBlack": "#111111",
-    "terminal.ansiRed": "#640003",
-    "terminal.ansiGreen": "#003708",
-    "terminal.ansiYellow": "#412900",
-    "terminal.ansiBlue": "#002c66",
-    "terminal.ansiMagenta": "#580055",
-    "terminal.ansiCyan": "#003434",
+    "terminal.ansiRed": "#ca010e",
+    "terminal.ansiGreen": "#01751c",
+    "terminal.ansiYellow": "#885a00",
+    "terminal.ansiBlue": "#005fcc",
+    "terminal.ansiMagenta": "#b301ae",
+    "terminal.ansiCyan": "#026f6f",
     "terminal.ansiWhite": "#484848",
     "terminal.ansiBrightBlack": "#4d4d4d",
-    "terminal.ansiBrightRed": "#950007",
-    "terminal.ansiBrightGreen": "#005512",
-    "terminal.ansiBrightYellow": "#634100",
-    "terminal.ansiBrightBlue": "#004498",
-    "terminal.ansiBrightMagenta": "#84007f",
-    "terminal.ansiBrightCyan": "#005151",
+    "terminal.ansiBrightRed": "#e90112",
+    "terminal.ansiBrightGreen": "#008722",
+    "terminal.ansiBrightYellow": "#9d6902",
+    "terminal.ansiBrightBlue": "#006eed",
+    "terminal.ansiBrightMagenta": "#cf01c7",
+    "terminal.ansiBrightCyan": "#028181",
     "terminal.ansiBrightWhite": "#111111"
   },
   "tokenColors": [
@@ -232,7 +232,7 @@
         "string.quoted.docstring.multi.python"
       ],
       "settings": {
-        "foreground": "#434f5b",
+        "foreground": "#97016b",
         "fontStyle": "italic"
       }
     },
@@ -292,7 +292,7 @@
         "keyword.other"
       ],
       "settings": {
-        "foreground": "#58099c",
+        "foreground": "#59029f",
         "fontStyle": "bold"
       }
     },
@@ -409,7 +409,7 @@
         "punctuation.definition.tag"
       ],
       "settings": {
-        "foreground": "#58099c",
+        "foreground": "#59029f",
         "fontStyle": "bold"
       }
     },
@@ -480,7 +480,7 @@
         "entity.name.section"
       ],
       "settings": {
-        "foreground": "#58099c",
+        "foreground": "#59029f",
         "fontStyle": "bold"
       }
     },
@@ -521,7 +521,7 @@
         "markup.quote"
       ],
       "settings": {
-        "foreground": "#434f5b",
+        "foreground": "#97016b",
         "fontStyle": "italic"
       }
     }
@@ -574,15 +574,15 @@
       "foreground": "#4c1b00"
     },
     "keyword": {
-      "foreground": "#58099c",
+      "foreground": "#59029f",
       "bold": true
     },
     "selfKeyword": {
-      "foreground": "#58099c",
+      "foreground": "#59029f",
       "bold": true
     },
     "comment": {
-      "foreground": "#434f5b",
+      "foreground": "#97016b",
       "italic": true
     },
     "string": {
