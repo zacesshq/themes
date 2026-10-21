@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-21
+
 ### Added
 
 - Zacess Deep Contrast Dark: white on pure black with deep, fully saturated syntax colours, cyan frames and yellow focus outlines and find boxes, for low vision. Keywords, comments and numbers sit at 9:1 on the background and paired tokens step up in lightness from there.
@@ -111,7 +113,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - SVG previews drawn as real text and the data for the themes page on the Zacess website.
 - CI that runs the checks, proves the committed files are current, packages the VS Code extension and builds the JetBrains plugin. A release workflow that attaches the `.vsix`, the JetBrains zip and an Obsidian zip to each GitHub release and publishes to each marketplace once its token is set.
 
-[Unreleased]: https://github.com/zacesshq/themes/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/zacesshq/themes/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/zacesshq/themes/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/zacesshq/themes/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/zacesshq/themes/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/zacesshq/themes/compare/v0.1.4...v0.1.5

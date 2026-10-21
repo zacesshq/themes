@@ -4,6 +4,18 @@ All notable changes to the Zacess Themes extension are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-10-21
+
+### Added
+
+- Zacess Deep Contrast Dark and Zacess Deep Contrast Light: deep, fully saturated syntax colours on pure black and pure white, with yellow and red focus outlines, for low vision.
+
+### Changed
+
+- Every theme's syntax and terminal colours are now fully saturated at unchanged contrast.
+- Comments have their own colour instead of grey in the six original themes, still at 7:1 or more and italic.
+- The light themes' coloured terminal slots use the 4.5:1 terminal allowance so they stay vivid. Every code colour keeps 7:1 or more.
+
 ## [0.2.1] - 2026-10-19
 
 ### Fixed
