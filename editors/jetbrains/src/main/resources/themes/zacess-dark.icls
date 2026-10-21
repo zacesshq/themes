@@ -19,7 +19,7 @@
     <option name="WHITESPACES" value="7a7a7a" />
     <option name="METHOD_SEPARATORS_COLOR" value="7a7a7a" />
     <option name="TEARLINE_COLOR" value="7a7a7a" />
-    <option name="ADDED_LINES_COLOR" value="99da9b" />
+    <option name="ADDED_LINES_COLOR" value="01ea45" />
     <option name="MODIFIED_LINES_COLOR" value="c9e0ff" />
     <option name="DELETED_LINES_COLOR" value="f39992" />
     <option name="WHITESPACES_MODIFIED_LINES_COLOR" value="c9e0ff" />
@@ -29,10 +29,10 @@
     <option name="QUESTION_HINT" value="1a1a1a" />
     <option name="LOOKUP_COLOR" value="1a1a1a" />
     <option name="CONSOLE_BACKGROUND_KEY" value="121212" />
-    <option name="FILESTATUS_ADDED" value="99da9b" />
+    <option name="FILESTATUS_ADDED" value="01ea45" />
     <option name="FILESTATUS_MODIFIED" value="c9e0ff" />
     <option name="FILESTATUS_DELETED" value="f39992" />
-    <option name="FILESTATUS_UNKNOWN" value="99da9b" />
+    <option name="FILESTATUS_UNKNOWN" value="01ea45" />
     <option name="FILESTATUS_IDEA_FILESTATUS_IGNORED" value="c8c8c8" />
   </colors>
   <attributes>
@@ -112,22 +112,22 @@
     </option>
     <option name="DEFAULT_CLASS_NAME">
       <value>
-        <option name="FOREGROUND" value="5ddad9" />
+        <option name="FOREGROUND" value="03dedd" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_REFERENCE">
       <value>
-        <option name="FOREGROUND" value="5ddad9" />
+        <option name="FOREGROUND" value="03dedd" />
       </value>
     </option>
     <option name="DEFAULT_INTERFACE_NAME">
       <value>
-        <option name="FOREGROUND" value="5ddad9" />
+        <option name="FOREGROUND" value="03dedd" />
       </value>
     </option>
     <option name="DEFAULT_STRING">
       <value>
-        <option name="FOREGROUND" value="96d797" />
+        <option name="FOREGROUND" value="1ee646" />
       </value>
     </option>
     <option name="DEFAULT_VALID_STRING_ESCAPE">
@@ -159,31 +159,31 @@
     </option>
     <option name="DEFAULT_LINE_COMMENT">
       <value>
-        <option name="FOREGROUND" value="abb6c1" />
+        <option name="FOREGROUND" value="80c201" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_BLOCK_COMMENT">
       <value>
-        <option name="FOREGROUND" value="abb6c1" />
+        <option name="FOREGROUND" value="80c201" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="abb6c1" />
+        <option name="FOREGROUND" value="80c201" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT_TAG">
       <value>
-        <option name="FOREGROUND" value="abb6c1" />
+        <option name="FOREGROUND" value="80c201" />
         <option name="FONT_TYPE" value="3" />
       </value>
     </option>
     <option name="DEFAULT_DOC_MARKUP">
       <value>
-        <option name="FOREGROUND" value="abb6c1" />
+        <option name="FOREGROUND" value="80c201" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
@@ -276,7 +276,7 @@
     </option>
     <option name="TS.TYPE_PARAMETER">
       <value>
-        <option name="FOREGROUND" value="5ddad9" />
+        <option name="FOREGROUND" value="03dedd" />
       </value>
     </option>
     <option name="PY.KEYWORD">
@@ -287,7 +287,7 @@
     </option>
     <option name="PY.DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="96d797" />
+        <option name="FOREGROUND" value="1ee646" />
       </value>
     </option>
     <option name="PY.DECORATOR">
@@ -488,12 +488,12 @@
     </option>
     <option name="CONSOLE_GREEN_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="8dcd8e" />
+        <option name="FOREGROUND" value="1bdb41" />
       </value>
     </option>
     <option name="CONSOLE_YELLOW_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="deb967" />
+        <option name="FOREGROUND" value="f0b40b" />
       </value>
     </option>
     <option name="CONSOLE_BLUE_OUTPUT">
@@ -503,12 +503,12 @@
     </option>
     <option name="CONSOLE_MAGENTA_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="eba8e4" />
+        <option name="FOREGROUND" value="f7a0f1" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="52d0cf" />
+        <option name="FOREGROUND" value="37d2cf" />
       </value>
     </option>
     <option name="CONSOLE_GRAY_OUTPUT">
@@ -528,7 +528,7 @@
     </option>
     <option name="CONSOLE_GREEN_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="aceead" />
+        <option name="FOREGROUND" value="34ff57" />
       </value>
     </option>
     <option name="CONSOLE_YELLOW_BRIGHT_OUTPUT">
@@ -548,7 +548,7 @@
     </option>
     <option name="CONSOLE_CYAN_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="76f1f0" />
+        <option name="FOREGROUND" value="23f6f8" />
       </value>
     </option>
     <option name="CONSOLE_WHITE_OUTPUT">

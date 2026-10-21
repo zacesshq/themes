@@ -1,7 +1,7 @@
 # Zacess Themes
 
-Six high contrast code themes. Four match the [Zacess](https://zacess.com) reader, so a student sees
-the same page in the reader and in the editor. Two more give the highest contrast a screen can show.
+Eight high contrast code themes. Four match the [Zacess](https://zacess.com) reader, so a student sees
+the same page in the reader and in the editor. Four more give the highest contrast a screen can show.
 Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background, the selection
 and the current line, comments included.
 
@@ -13,6 +13,8 @@ and the current line, comments included.
 | Zacess Cream | Dyslexia friendly reading | `#000000` on `#fdf6e3` |
 | Zacess High Contrast Dark | The highest contrast on a dark screen | `#ffffff` on `#000000` |
 | Zacess High Contrast Light | The highest contrast on a light screen | `#000000` on `#ffffff` |
+| Zacess Deep Contrast Dark | Low vision: deep, fully saturated colours on black | `#ffffff` on `#000000` |
+| Zacess Deep Contrast Light | Low vision: vivid deep colours on white | `#000000` on `#ffffff` |
 
 ![Zacess Light: TypeScript, Python, Rust and HTML lines in dark colours on white, with keywords in bold and comments in italics](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-light.png)
 
@@ -25,6 +27,10 @@ and the current line, comments included.
 ![Zacess High Contrast Dark: the same code in white and bright colours on black, with a yellow accent](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-high-contrast-dark.png)
 
 ![Zacess High Contrast Light: the same code in black and deep colours on white](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-high-contrast-light.png)
+
+![Zacess Deep Contrast Dark: the same code in white and saturated blue, magenta, gold, teal and orange on black](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-deep-contrast-dark.png)
+
+![Zacess Deep Contrast Light: the same code in black and vivid blue, magenta, brown, teal and red on white](https://raw.githubusercontent.com/zacesshq/themes/main/previews/zacess-deep-contrast-light.png)
 
 ## Colour is never the only signal
 

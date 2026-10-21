@@ -1,7 +1,7 @@
 # Zacess Themes for JetBrains IDEs
 
 A theme plugin for IntelliJ IDEA, PyCharm, WebStorm, CLion, Rider and the other JetBrains IDEs
-built on the IntelliJ Platform 2025.3 or later. Each of the six themes pairs an interface theme
+built on the IntelliJ Platform 2025.3 or later. Each of the eight themes pairs an interface theme
 (`*.theme.json`) with a matching editor colour scheme (`*.icls`) that uses the same token colours and
 font styles as every other Zacess theme.
 

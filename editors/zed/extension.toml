@@ -4,5 +4,5 @@ name = "Zacess Themes"
 version = "0.2.1"
 schema_version = 1
 authors = ["Zacess <contact@zacess.com>"]
-description = "High contrast themes matching the Zacess reader: Light, Dark, Yellow on Black, Cream, High Contrast Dark and High Contrast Light, every text and syntax colour at 7:1 or more."
+description = "High contrast themes matching the Zacess reader: Light, Dark, Yellow on Black, Cream, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light, every text and syntax colour at 7:1 or more."
 repository = "https://github.com/zacesshq/themes"

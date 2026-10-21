@@ -6,8 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- Zacess Deep Contrast Dark: white on pure black with deep, fully saturated syntax colours, cyan frames and yellow focus outlines and find boxes, for low vision. Keywords, comments and numbers sit at 9:1 on the background and paired tokens step up in lightness from there.
+- Zacess Deep Contrast Light: black on pure white with vivid deep syntax colours, navy frames and red focus outlines and find boxes, for low vision. Syntax colours sit between 7.7:1 and 15:1 so they stay vivid, with a faint blue selection every token keeps 7:1 over.
+- Both Deep Contrast themes for every editor and terminal: VS Code, the JetBrains IDEs, Obsidian, Neovim, Zed, Sublime Text, Helix, Emacs, Eclipse, iTerm2, Alacritty, kitty, Ghostty and Windows Terminal.
+- Eclipse preference files in `editors/eclipse`, one `.epf` per theme, imported with File, Import, Preferences. Each sets the Java editor's syntax colours and font styles, Javadoc and task tags, Java semantic highlighting, the properties file editor and the shared text editor colours: background, text, selection, current line, line numbers, links, marked occurrences, search results, problem underlines and quick diff marks, plus the Terminal view's 16 colours, text, background and selection. Marked occurrences and search results are boxed in the find match border colour. Every key was confirmed against Eclipse 4.41.
+- `npm run check` parses the Eclipse files, proves every colour in them comes from the palette and refuses an export root line, which would clear a user's other preferences on import.
+
 ### Changed
 
+- The syntax and terminal colours of every theme are now fully saturated at unchanged contrast. Each coloured token, ANSI colour, link and error colour has its OKLab chroma raised to the edge of the sRGB gamut while its luminance and hue stay fixed, so every contrast ratio is exactly as before. Text and the black, white and grey terminal slots stay neutral. `scripts/saturate.mjs` applies the change to the palette and can be run again safely.
+- Comments have a real colour instead of grey in Zacess Light, Dark, Yellow on Black, Cream, High Contrast Dark and High Contrast Light: in each theme the hue furthest from every other syntax colour, in normal vision and under simulated protanopia, deuteranopia and tritanopia, fully saturated and still at 7:1 or more on every text surface. Comments stay italic.
+- The coloured terminal slots in the four light themes (ANSI 1 to 6 and 9 to 14) use the 4.5:1 terminal allowance so they stay vivid instead of reading as black, with each bright colour a step lighter than its normal form. Their black, white and grey slots keep 7:1 and every code colour keeps 7:1 or more.
+- Zacess Deep Contrast Light keeps its terminal green, yellow, bright green and bright yellow at 4.5:1, the documented `rules.ansiFloor` allowance, because at 7:1 they read as black on white. ACCESSIBILITY.md lists them.
 - The release workflow only builds, publishes to the stores and keeps the built files as a workflow artifact. A maintainer then runs `scripts/release.mjs`, which creates the GitHub release and updates zacesshq/obsidian-theme and zacesshq/zacess.nvim with signed commits, signed annotated tags and releases. CONTRIBUTING.md describes the steps.
 
 ## [0.2.1] - 2026-10-19

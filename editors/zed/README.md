@@ -1,7 +1,8 @@
 # Zacess for Zed
 
 A Zed theme extension with Zacess Light, Zacess Dark, Zacess Yellow on Black, Zacess Cream, Zacess
-High Contrast Dark and Zacess High Contrast Light in one theme family, in `themes/zacess.json`.
+High Contrast Dark, Zacess High Contrast Light, Zacess Deep Contrast Dark and Zacess Deep Contrast
+Light in one theme family, in `themes/zacess.json`.
 
 ## Install
 

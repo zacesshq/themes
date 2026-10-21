@@ -34,10 +34,10 @@
       "inactiveWarningFocusColor": "#ffd8ab"
     },
     "Link": {
-      "activeForeground": "#5ce1e6",
-      "hoverForeground": "#5ce1e6",
-      "pressedForeground": "#5ce1e6",
-      "visitedForeground": "#5ce1e6"
+      "activeForeground": "#1be4ed",
+      "hoverForeground": "#1be4ed",
+      "pressedForeground": "#1be4ed",
+      "visitedForeground": "#1be4ed"
     },
     "Button": {
       "startBackground": "#0d0d0d",
