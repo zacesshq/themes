@@ -1768,6 +1768,15 @@ function eclipsePrefs(theme) {
     ["SELECTION_BACKGROUND", rgb(t.selection)],
   ];
 
+  return [
+    ["org.eclipse.jdt.ui", jdt],
+    ["org.eclipse.ui.editors", editors],
+    ["org.eclipse.ui.workbench", workbench],
+    ["org.eclipse.terminal.control", terminal],
+  ];
+}
+
+function eclipseEpf(theme) {
   const lines = (node, entries) => entries.map(([k, v]) => `/instance/${node}/${k}=${v}`);
   return [
     `# ${theme.name} for Eclipse, ${HEADER}`,
@@ -1775,16 +1784,192 @@ function eclipsePrefs(theme) {
     // no export root line (\!/=) is written: on import it would first clear every preference
     // under the root, the user's own settings included
     "file_export_version=3.0",
-    ...lines("org.eclipse.jdt.ui", jdt),
-    ...lines("org.eclipse.ui.editors", editors),
-    ...lines("org.eclipse.ui.workbench", workbench),
-    ...lines("org.eclipse.terminal.control", terminal),
+    ...eclipsePrefs(theme).flatMap(([node, entries]) => lines(node, entries)),
     "",
   ].join("\n");
 }
 
+// the plugin registers each theme with the e4 theme engine, so it is picked under General >
+// Appearance like Eclipse's own; the window, views and toolbars come from Eclipse's Light or
+// Dark stylesheets and the editor colours from the same preferences the .epf files set, written
+// as CSS preference rules that the engine applies whenever the theme is chosen
+const ECLIPSE_PLUGIN = "com.zacess.themes.eclipse";
+// Maven needs the feature's artifact id to differ from the bundle's while Tycho needs each to match
+const ECLIPSE_FEATURE = `${ECLIPSE_PLUGIN}.feature`;
+const ECLIPSE_BASE = {
+  dark: { macosx: "e4-dark_mac.css", win32: "e4-dark_win.css", linux: "e4-dark_linux.css" },
+  light: { macosx: "e4_default_mac.css", win32: "e4_default_win.css", linux: "e4_default_gtk.css" },
+};
+// the engine reads a theme as dark when its id contains "dark", which tells the TextMate editors
+// and the operating system window frames which way to go, so the appearance leads every id
+const eclipseThemeId = (theme) => `${ECLIPSE_PLUGIN}.${theme.appearance}.${theme.id}`;
+
+function eclipseCss(theme) {
+  const u = theme.ui;
+  // Eclipse's Dark appearance colours the Console from a stylesheet bound to its own theme id
+  // only, so a Zacess theme sets the Console from the palette instead
+  const console = ["org.eclipse.debug.ui", [
+    ["org.eclipse.debug.ui.consoleBackground", rgb(u.background)],
+    ["org.eclipse.debug.ui.outColor", rgb(u.foreground)],
+    ["org.eclipse.debug.ui.errorColor", rgb(u.error)],
+    ["org.eclipse.debug.ui.inColor", rgb(theme.syntax.function)],
+  ]];
+  // the pseudo class names this plugin, so its rules sit beside every other plugin's rules for
+  // the same preference node instead of replacing them
+  const rule = ([node, entries]) => [
+    `IEclipsePreferences#${node.replaceAll(".", "-")}:${ECLIPSE_PLUGIN.replaceAll(".", "-")} {`,
+    "\tpreferences:",
+    ...entries.map(([k, v]) => `\t\t'${k}=${v}'`),
+    "}",
+    "",
+  ];
+  return [
+    `/* ${theme.name} for Eclipse, ${HEADER} */`,
+    "",
+    // Eclipse's own Dark preference stylesheet is not imported: its rules for the same keys would
+    // win over these, whatever their order
+    ...[...eclipsePrefs(theme), console].flatMap(rule),
+  ].join("\n");
+}
+
+function eclipsePluginXml() {
+  const themes = palette.themes.flatMap((theme) => Object.entries(ECLIPSE_BASE[theme.appearance]).map(([os, css]) =>
+    `    <theme id="${eclipseThemeId(theme)}" label="${theme.name}" os="${os}" basestylesheeturi="platform:/plugin/org.eclipse.ui.themes/css/${css}"/>`));
+  const sheets = palette.themes.map((theme) =>
+    `    <stylesheet uri="css/${slug(theme)}.css">\n      <themeid refid="${eclipseThemeId(theme)}"/>\n    </stylesheet>`);
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<?eclipse version="3.4"?>',
+    `<!-- ${HEADER} -->`,
+    "<plugin>",
+    '  <extension point="org.eclipse.e4.ui.css.swt.theme">',
+    ...themes,
+    ...sheets,
+    "  </extension>",
+    "</plugin>",
+    "",
+  ].join("\n");
+}
+
+// the feature, the update site and the Maven build that packs them; the bundle holds no code,
+// so it needs nothing from Eclipse to build and the version is the palette's, with no qualifier
+function eclipseBuildFiles() {
+  const v = palette.version;
+  const dir = "editors/eclipse";
+  const licence = readFileSync(join(ROOT, "LICENSE"), "utf8").trim();
+  const xml = (text) => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+  const pom = (artifactId, packaging, extra = "") => [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    `<!-- ${HEADER} -->`,
+    '<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">',
+    "  <modelVersion>4.0.0</modelVersion>",
+    "  <parent>",
+    "    <groupId>com.zacess.themes</groupId>",
+    "    <artifactId>eclipse-parent</artifactId>",
+    `    <version>${v}</version>`,
+    "  </parent>",
+    `  <artifactId>${artifactId}</artifactId>`,
+    `  <packaging>${packaging}</packaging>`,
+    ...(extra ? [extra] : []),
+    "</project>",
+    "",
+  ].join("\n");
+  return {
+    [`${dir}/pom.xml`]: [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      `<!-- ${HEADER} -->`,
+      '<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">',
+      "  <modelVersion>4.0.0</modelVersion>",
+      "  <groupId>com.zacess.themes</groupId>",
+      "  <artifactId>eclipse-parent</artifactId>",
+      `  <version>${v}</version>`,
+      "  <packaging>pom</packaging>",
+      "  <properties>",
+      "    <tycho.version>5.0.4</tycho.version>",
+      "    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>",
+      "  </properties>",
+      "  <modules>",
+      "    <module>plugin</module>",
+      "    <module>feature</module>",
+      "    <module>site</module>",
+      "  </modules>",
+      "  <build>",
+      "    <plugins>",
+      "      <plugin>",
+      "        <groupId>org.eclipse.tycho</groupId>",
+      "        <artifactId>tycho-maven-plugin</artifactId>",
+      "        <version>${tycho.version}</version>",
+      "        <extensions>true</extensions>",
+      "      </plugin>",
+      "    </plugins>",
+      "  </build>",
+      "</project>",
+      "",
+    ].join("\n"),
+    [`${dir}/plugin/pom.xml`]: pom(ECLIPSE_PLUGIN, "eclipse-plugin"),
+    [`${dir}/plugin/build.properties`]: `# ${HEADER}\nbin.includes = META-INF/,plugin.xml,css/\n`,
+    [`${dir}/plugin/META-INF/MANIFEST.MF`]: [
+      "Manifest-Version: 1.0",
+      "Bundle-ManifestVersion: 2",
+      "Bundle-Name: Zacess Themes",
+      "Bundle-Vendor: Zacess",
+      // singleton, as every bundle that contributes extensions must be
+      `Bundle-SymbolicName: ${ECLIPSE_PLUGIN};singleton:=true`,
+      `Bundle-Version: ${v}`,
+      "Bundle-License: MIT",
+      `Bundle-DocURL: ${REPO}`,
+      "Automatic-Module-Name: com.zacess.themes.eclipse",
+      "",
+    ].join("\n"),
+    [`${dir}/plugin/plugin.xml`]: eclipsePluginXml(),
+    [`${dir}/feature/pom.xml`]: pom(ECLIPSE_FEATURE, "eclipse-feature"),
+    [`${dir}/feature/build.properties`]: `# ${HEADER}\nbin.includes = feature.xml\n`,
+    [`${dir}/feature/feature.xml`]: [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      `<!-- ${HEADER} -->`,
+      `<feature id="${ECLIPSE_FEATURE}" label="Zacess Themes" version="${v}" provider-name="Zacess">`,
+      `  <description url="${REPO}">${xml(`High contrast colour themes with every text and syntax colour at 7:1 contrast or more: ${palette.themes.map((t) => t.name).join(", ").replace(/, ([^,]*)$/, " and $1")}. Choose one under General, Appearance.`)}</description>`,
+      `  <copyright url="${REPO}">Copyright (c) 2026 Zacess</copyright>`,
+      `  <license url="${REPO}/blob/main/LICENSE">${xml(licence)}</license>`,
+      `  <plugin id="${ECLIPSE_PLUGIN}" version="${v}"/>`,
+      "</feature>",
+      "",
+    ].join("\n"),
+    [`${dir}/site/pom.xml`]: pom("eclipse-site", "eclipse-repository", [
+      "  <build>",
+      "    <plugins>",
+      "      <plugin>",
+      "        <groupId>org.eclipse.tycho</groupId>",
+      "        <artifactId>tycho-p2-repository-plugin</artifactId>",
+      "        <version>${tycho.version}</version>",
+      "        <configuration>",
+      "          <repositoryName>Zacess Themes</repositoryName>",
+      "          <includeAllDependencies>false</includeAllDependencies>",
+      "        </configuration>",
+      "      </plugin>",
+      "    </plugins>",
+      "  </build>",
+    ].join("\n")),
+    [`${dir}/site/category.xml`]: [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      `<!-- ${HEADER} -->`,
+      "<site>",
+      `  <feature id="${ECLIPSE_FEATURE}" version="0.0.0">`,
+      '    <category name="zacess"/>',
+      "  </feature>",
+      '  <category-def name="zacess" label="Zacess Themes"/>',
+      "</site>",
+      "",
+    ].join("\n"),
+  };
+}
+
 function buildEclipse() {
-  for (const theme of palette.themes) write(`editors/eclipse/${theme.name}.epf`, eclipsePrefs(theme));
+  for (const theme of palette.themes) {
+    write(`editors/eclipse/${theme.name}.epf`, eclipseEpf(theme));
+    write(`editors/eclipse/plugin/css/${slug(theme)}.css`, eclipseCss(theme));
+  }
+  for (const [path, content] of Object.entries(eclipseBuildFiles())) write(path, content);
 }
 
 // ---------------------------------------------------------------- Xcode

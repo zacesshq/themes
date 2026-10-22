@@ -1,0 +1,55 @@
+name: Eclipse update site
+
+on:
+  push:
+    tags: ["v*"]
+  # run by hand to publish the site again, for example after a failed run
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eclipse-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build the update site
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Build the plugin, the feature and the p2 repository
+        working-directory: editors/eclipse
+        run: mvn -B -ntp clean verify
+      - name: Lay out the site
+        run: |
+          # the repository is served under eclipse/ so the rest of the Pages site stays free
+          mkdir -p _site
+          cp -R editors/eclipse/site/target/repository _site/eclipse
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+  deploy:
+    name: Publish to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}eclipse/
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

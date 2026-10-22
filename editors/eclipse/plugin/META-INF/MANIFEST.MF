@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Zacess Themes
+Bundle-Vendor: Zacess
+Bundle-SymbolicName: com.zacess.themes.eclipse;singleton:=true
+Bundle-Version: 0.3.0
+Bundle-License: MIT
+Bundle-DocURL: https://github.com/zacesshq/themes
+Automatic-Module-Name: com.zacess.themes.eclipse

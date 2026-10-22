@@ -12,7 +12,39 @@ also set the Terminal view's 16 colours, text, background and selection.
 Every key in the files was confirmed against Eclipse 4.41 (2026-09). An older or newer Eclipse
 ignores any key it does not know.
 
-## Install
+## Install from the update site
+
+The `com.zacess.themes.eclipse` plugin adds the eight themes to Eclipse's own theme list, so no file
+needs importing. Each Zacess theme brings the Eclipse Light or Dark window with it and the same
+editor and Terminal colours as its `.epf` file, plus Console colours from the palette.
+
+1. Open **Eclipse** and choose **Help**, **Install New Software...**.
+2. Select **Add...**, enter `Zacess Themes` as the name and this location, then select **Add**:
+
+   ```text
+   https://zacesshq.github.io/themes/eclipse/
+   ```
+
+3. Tick **Zacess Themes**, select **Next**, accept the MIT licence and select **Finish**.
+4. Eclipse asks whether to trust the plugin, which is not signed. Select **Trust Selected** to carry
+   on, then restart Eclipse when it asks.
+5. Open **Preferences...** on macOS (**Window**, **Preferences** on Windows and Linux), then
+   **General**, **Appearance**. Choose a Zacess theme under **Theme**, select **Apply and Close**
+   and restart Eclipse so every open editor picks up the colours.
+
+Choosing a Zacess theme replaces the colours it covers, those from an imported `.epf` file included.
+Choosing another theme afterwards, Zacess or Eclipse's own, puts that theme's colours back. To
+remove the plugin, open **Help**, **About Eclipse IDE**, **Installation Details**, select **Zacess
+Themes** and **Uninstall...**.
+
+![Zacess Yellow on Black in the Eclipse Java editor: keywords in bold white, names in yellow, strings in green and comments in green italics on black](../../assets/eclipse-yellow-on-black.png)
+
+The plugin was installed from the update site in Eclipse 4.41 (2026-09) on macOS, with Zacess Dark,
+Zacess Cream and Zacess Yellow on Black checked in the Java editor. It holds no code, only
+stylesheets for Eclipse's theme engine, so other Eclipse 4 releases and Windows and Linux should
+work but have not been tested.
+
+## Install a preference file by hand
 
 Eclipse draws its window, views and toolbars from its own appearance theme, so pick the one that
 matches the Zacess theme first:
@@ -55,7 +87,10 @@ page and on the **General**, **Editors**, **Text Editors** pages puts back Eclip
 - Eclipse does not switch editor colours when the operating system changes between light and dark.
   It picks Light or Dark from the system only when it starts with no theme chosen. That choice
   rewrites the editor colours as above. One Zacess theme is active at a time. To change, import
-  another file.
+  another file or, with the plugin, choose another theme under **General**, **Appearance**.
+- With the plugin, a dark Zacess theme does not take the extra dark colours that some plugins,
+  such as Git and Compare, give Eclipse's own Dark theme alone. Their views keep their light
+  colours. The `.epf` route on Eclipse's Dark theme keeps them.
 - The Java editor colours `return` on its own. Every other keyword, `if`, `for` and `while`
   included, takes the keyword colour, so control flow is told apart from declarations only where
   the keyword is `return`. Both are bold.
@@ -69,5 +104,7 @@ page and on the **General**, **Editors**, **Text Editors** pages puts back Eclip
 - Everything outside the editor, such as the Package Explorer, the Console and the toolbars, follows
   the Eclipse appearance theme rather than the Zacess palette.
 
-All eight files are generated from `palette/zacess.json` by `npm run build` at the root of the
-repository. Never edit them by hand.
+All eight files and everything under `plugin`, `feature` and `site` are generated from
+`palette/zacess.json` by `npm run build` at the root of the repository. Never edit them by hand.
+`mvn verify` in this folder, with Maven and Java 21 or later, builds the plugin and the update site
+in `site/target/repository`.

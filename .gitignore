@@ -9,6 +9,8 @@ notes.md
 .kotlin/
 .intellijPlatform/
 editors/jetbrains/build/
+# maven and tycho
+editors/eclipse/**/target/
 # os and editors
 .DS_Store
 .idea/
