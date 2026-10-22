@@ -4,6 +4,12 @@ All notable changes to the Zacess Themes extension are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-10-22
+
+### Changed
+
+- Released alongside new Xcode themes, an Eclipse plugin and a fix for the JetBrains editor colours. The VS Code themes are unchanged.
+
 ## [0.3.0] - 2026-10-21
 
 ### Added
@@ -79,6 +85,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Editor, workbench, terminal and semantic token colours, with every text and syntax colour at 7:1 contrast or more.
 - Bold keywords, italic comments and parameters and underlined invalid code, so colour is never the only signal.
 
+[0.4.0]: https://github.com/zacesshq/themes/releases/tag/v0.4.0
+[0.3.0]: https://github.com/zacesshq/themes/releases/tag/v0.3.0
 [0.2.0]: https://github.com/zacesshq/themes/releases/tag/v0.2.0
 [0.1.5]: https://github.com/zacesshq/themes/releases/tag/v0.1.5
 [0.1.4]: https://github.com/zacesshq/themes/releases/tag/v0.1.4
