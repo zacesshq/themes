@@ -16,6 +16,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Zacess Themes is listed on the Eclipse Marketplace (https://marketplace.eclipse.org/content/zacess-themes-0), linked from the README and the Eclipse guide.
 - A workflow that builds the update site with Maven and Tycho and publishes it to GitHub Pages on each release. A CI job builds it on every pull request.
 
+### Fixed
+
+- JetBrains IDEs now apply each theme's editor colours. In IntelliJ IDEA 2026.2 the editor kept the default scheme because the scheme files used an extension the IDE no longer loads. The schemes now ship as `.xml` files.
+
 ## [0.3.0] - 2026-10-21
 
 ### Added

@@ -126,6 +126,8 @@ for (const file of files) {
       if (name.endsWith(".theme.json")) {
         const scheme = join(ROOT, "editors/jetbrains/src/main/resources", data.editorScheme);
         if (!existsSync(scheme)) fail("jetbrains", name, `editorScheme ${data.editorScheme} does not exist`);
+        // IntelliJ 2026.2 ignores a scheme path that does not end in .xml and keeps the default scheme
+        if (!data.editorScheme.endsWith(".xml")) fail("jetbrains", name, `editorScheme ${data.editorScheme} must be an .xml file`);
       }
     } else if (file.endsWith(".sublime-color-scheme")) {
       checkSublime(JSON.parse(text), name);
@@ -138,7 +140,7 @@ for (const file of files) {
       checkEclipse(text, name);
     } else if (file.endsWith(".xccolortheme")) {
       checkXcode(text, name);
-    } else if (/\.(xml|icls|itermcolors|svg)$/.test(file)) {
+    } else if (/\.(xml|itermcolors|svg)$/.test(file)) {
       checkXml(text);
     } else if (file.endsWith(".lua")) {
       checkLua(text);

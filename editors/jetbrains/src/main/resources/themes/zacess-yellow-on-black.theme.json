@@ -2,7 +2,7 @@
   "name": "Zacess Yellow on Black",
   "dark": true,
   "author": "Zacess",
-  "editorScheme": "/themes/zacess-yellow-on-black.icls",
+  "editorScheme": "/themes/zacess-yellow-on-black.xml",
   "ui": {
     "*": {
       "background": "#000000",
