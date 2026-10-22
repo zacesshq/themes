@@ -11,7 +11,8 @@ Xcode, iTerm2, Alacritty, kitty, Ghostty and Windows Terminal.
 
 > [!NOTE]
 > Zacess Themes is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes),
-> [Open VSX](https://open-vsx.org/extension/zacess/zacess-themes) and the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/35082-zacess-themes).
+> [Open VSX](https://open-vsx.org/extension/zacess/zacess-themes), the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/35082-zacess-themes)
+> and the [Eclipse Marketplace](https://marketplace.eclipse.org/content/zacess-themes-0) (in review there, installable now from the [update site](https://zacesshq.github.io/themes/eclipse/)).
 > Zed lists it in the [Zed extension store](https://zed.dev/extensions?query=zacess). The Obsidian
 > theme is in the [Obsidian community directory](https://community.obsidian.md/themes/zacess)
 > and the Neovim schemes install from [zacesshq/zacess.nvim](https://github.com/zacesshq/zacess.nvim).

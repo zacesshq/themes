@@ -14,6 +14,8 @@ ignores any key it does not know.
 
 ## Install from the update site
 
+The themes are listed on the [Eclipse Marketplace](https://marketplace.eclipse.org/content/zacess-themes-0), where they are in review. Once approved, **Help**, **Eclipse Marketplace** finds them by searching for Zacess. Until then, install from the update site as below. It stays available as an alternative afterwards.
+
 The `com.zacess.themes.eclipse` plugin adds the eight themes to Eclipse's own theme list, so no file
 needs importing. Each Zacess theme brings the Eclipse Light or Dark window with it and the same
 editor and Terminal colours as its `.epf` file, plus Console colours from the palette.
