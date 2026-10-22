@@ -2,7 +2,7 @@
   "name": "Zacess High Contrast Dark",
   "dark": true,
   "author": "Zacess",
-  "editorScheme": "/themes/zacess-high-contrast-dark.icls",
+  "editorScheme": "/themes/zacess-high-contrast-dark.xml",
   "ui": {
     "*": {
       "background": "#000000",

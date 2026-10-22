@@ -2,7 +2,7 @@
   "name": "Zacess Cream",
   "dark": false,
   "author": "Zacess",
-  "editorScheme": "/themes/zacess-cream.icls",
+  "editorScheme": "/themes/zacess-cream.xml",
   "ui": {
     "*": {
       "background": "#f2efe9",

@@ -527,7 +527,9 @@ function jetbrainsTheme(theme) {
     name: theme.name,
     dark: theme.appearance === "dark",
     author: "Zacess",
-    editorScheme: `/themes/${slug(theme)}.icls`,
+    // IntelliJ 2026.2 no longer resolves an editorScheme path ending in .icls and falls back to the
+    // default scheme, so the scheme ships with an .xml extension like other theme plugins
+    editorScheme: `/themes/${slug(theme)}.xml`,
     ui: {
       "*": {
         background: u.surface,
@@ -618,7 +620,7 @@ function buildJetbrains() {
   const providers = [];
   for (const theme of palette.themes) {
     write(`${base}/themes/${slug(theme)}.theme.json`, json(jetbrainsTheme(theme)));
-    write(`${base}/themes/${slug(theme)}.icls`, icls(theme));
+    write(`${base}/themes/${slug(theme)}.xml`, icls(theme));
     providers.push(`    <themeProvider id="${slug(theme)}" path="/themes/${slug(theme)}.theme.json" />`);
   }
   const names = palette.themes.map((t) => t.name);

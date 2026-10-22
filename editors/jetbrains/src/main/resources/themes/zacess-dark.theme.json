@@ -2,7 +2,7 @@
   "name": "Zacess Dark",
   "dark": true,
   "author": "Zacess",
-  "editorScheme": "/themes/zacess-dark.icls",
+  "editorScheme": "/themes/zacess-dark.xml",
   "ui": {
     "*": {
       "background": "#1a1a1a",

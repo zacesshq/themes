@@ -2,7 +2,7 @@
   "name": "Zacess High Contrast Light",
   "dark": false,
   "author": "Zacess",
-  "editorScheme": "/themes/zacess-high-contrast-light.icls",
+  "editorScheme": "/themes/zacess-high-contrast-light.xml",
   "ui": {
     "*": {
       "background": "#f7f7f7",

@@ -2,7 +2,7 @@
   "name": "Zacess Deep Contrast Light",
   "dark": false,
   "author": "Zacess",
-  "editorScheme": "/themes/zacess-deep-contrast-light.icls",
+  "editorScheme": "/themes/zacess-deep-contrast-light.xml",
   "ui": {
     "*": {
       "background": "#ffffff",
