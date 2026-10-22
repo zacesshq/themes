@@ -35,6 +35,9 @@ jobs:
           # the repository is served under eclipse/ so the rest of the Pages site stays free
           mkdir -p _site
           cp -R editors/eclipse/site/target/repository _site/eclipse
+          # a browser visiting the update site gets a page explaining how to use it, not a 404
+          cp editors/eclipse/site/index.html _site/eclipse/index.html
+          printf '<!doctype html><meta charset="utf-8"><title>Zacess Themes</title><meta http-equiv="refresh" content="0; url=https://github.com/zacesshq/themes"><a href="https://github.com/zacesshq/themes">Zacess Themes on GitHub</a>\n' > _site/index.html
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: _site

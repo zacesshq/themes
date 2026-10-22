@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zacess Themes for Eclipse</title>
+<meta name="description" content="The Eclipse update site for Zacess Themes: eight accessible high contrast colour themes.">
+<style>
+  :root { --bg: #ffffff; --fg: #000000; --muted: #2b2b2b; --link: #0033a0; --rule: #000000; --code: #f2f2f2; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #000000; --fg: #ffffff; --muted: #e6e6e6; --link: #8cc8ff; --rule: #ffffff; --code: #1a1a1a; }
+  }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 18px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 42rem; margin: 0 auto; padding: 3rem 1rem; }
+  h1 { font-size: 1.8rem; margin: 0 0 0.5rem; }
+  h2 { font-size: 1.2rem; margin: 2rem 0 0.5rem; border-bottom: 2px solid var(--rule); }
+  p, li { color: var(--muted); }
+  a { color: var(--link); text-underline-offset: 3px; }
+  a:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  code { background: var(--code); padding: 0.1rem 0.35rem; border: 1px solid var(--rule); border-radius: 3px; font-size: 0.95em; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Zacess Themes for Eclipse</h1>
+  <p>This address is an Eclipse update site. Eclipse reads it directly, so there is nothing to download here in a browser.</p>
+  <h2>Install</h2>
+  <ol>
+    <li>In Eclipse, open <strong>Help</strong>, then <strong>Install New Software</strong>.</li>
+    <li>Paste this address into <strong>Work with</strong>: <code>https://zacesshq.github.io/themes/eclipse/</code></li>
+    <li>Tick <strong>Zacess Themes</strong>, finish the wizard and choose <strong>Trust Selected</strong> when Eclipse asks about unsigned content.</li>
+    <li>Restart Eclipse, then pick a Zacess theme under <strong>Preferences</strong>, <strong>General</strong>, <strong>Appearance</strong>.</li>
+  </ol>
+  <h2>More</h2>
+  <p>Eight themes, each with every text and syntax colour at 7:1 contrast or more. The same themes are available for VS Code, JetBrains IDEs, Neovim, Zed, Xcode and more.</p>
+  <ul>
+    <li><a href="https://github.com/zacesshq/themes/blob/main/editors/eclipse/README.md">Eclipse install guide</a></li>
+    <li><a href="https://github.com/zacesshq/themes">All Zacess Themes on GitHub</a></li>
+    <li><a href="https://github.com/zacesshq/themes/issues">Report a problem</a></li>
+  </ul>
+</main>
+</body>
+</html>
