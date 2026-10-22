@@ -16,6 +16,7 @@ body:
         - Helix
         - Emacs
         - Eclipse
+        - Xcode
         - iTerm2
         - Alacritty
         - kitty

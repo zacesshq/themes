@@ -136,3 +136,34 @@ export const VSCODE_NON_TEXT_PAIRS = [
   ["textSeparator.foreground", "editor.background"],
   ["menu.separatorBackground", "menu.background"],
 ];
+
+// the keys of an Xcode .xccolortheme, read from the themes Xcode 27.1 ships in DVTUserInterfaceKit
+// and SourceEditor; Xcode ignores a key it does not know, so the checks refuse any other to catch
+// a misspelling that would silently leave Xcode's own colour in place
+export const XCODE_SYNTAX_KEYS = [
+  "attribute", "character", "comment", "comment.doc", "comment.doc.keyword", "declaration.other",
+  "declaration.type", "identifier.class", "identifier.class.system", "identifier.constant",
+  "identifier.constant.system", "identifier.function", "identifier.function.system", "identifier.macro",
+  "identifier.macro.system", "identifier.type", "identifier.type.system", "identifier.variable",
+  "identifier.variable.system", "keyword", "mark", "markup.aside.kind", "markup.code", "number", "plain",
+  "preprocessor", "string", "url",
+].map((k) => `xcode.syntax.${k}`);
+
+export const XCODE_KEYS = [
+  "DVTConsoleDebuggerInputTextColor", "DVTConsoleDebuggerInputTextFont", "DVTConsoleDebuggerOutputTextColor",
+  "DVTConsoleDebuggerOutputTextFont", "DVTConsoleDebuggerPromptTextColor", "DVTConsoleDebuggerPromptTextFont",
+  // "Exectuable" is Xcode's own spelling of these keys
+  "DVTConsoleExectuableInputTextColor", "DVTConsoleExectuableInputTextFont", "DVTConsoleExectuableOutputTextColor",
+  "DVTConsoleExectuableOutputTextFont", "DVTConsoleTextBackgroundColor", "DVTConsoleTextInsertionPointColor",
+  "DVTConsoleTextSelectionColor", "DVTDebuggerInstructionPointerColor", "DVTFontAndColorVersion", "DVTLineSpacing",
+  "DVTMarkupTextBackgroundColor", "DVTMarkupTextBorderColor", "DVTMarkupTextCodeFont", "DVTMarkupTextEmphasisColor",
+  "DVTMarkupTextEmphasisFont", "DVTMarkupTextInlineCodeColor", "DVTMarkupTextLinkColor", "DVTMarkupTextLinkFont",
+  "DVTMarkupTextNormalColor", "DVTMarkupTextNormalFont", "DVTMarkupTextOtherHeadingColor", "DVTMarkupTextOtherHeadingFont",
+  "DVTMarkupTextPrimaryHeadingColor", "DVTMarkupTextPrimaryHeadingFont", "DVTMarkupTextSecondaryHeadingColor",
+  "DVTMarkupTextSecondaryHeadingFont", "DVTMarkupTextStrongColor", "DVTMarkupTextStrongFont",
+  "DVTScrollbarMarkerAnalyzerColor", "DVTScrollbarMarkerBreakpointColor", "DVTScrollbarMarkerDiffColor",
+  "DVTScrollbarMarkerDiffConflictColor", "DVTScrollbarMarkerErrorColor", "DVTScrollbarMarkerRuntimeIssueColor",
+  "DVTScrollbarMarkerWarningColor", "DVTSourceTextBackground", "DVTSourceTextBlockDimBackgroundColor",
+  "DVTSourceTextCurrentLineHighlightColor", "DVTSourceTextInsertionPointColor", "DVTSourceTextInvisiblesColor",
+  "DVTSourceTextSelectionColor", "DVTSourceTextSyntaxColors", "DVTSourceTextSyntaxFonts",
+];

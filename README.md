@@ -7,7 +7,7 @@ every colour. A small generator writes the files for each editor and the checks 
 syntax colour below 7:1 contrast (WCAG AAA).
 
 Built for VS Code, JetBrains IDEs, Obsidian, Neovim, Zed, Sublime Text, Helix, Emacs, Eclipse,
-iTerm2, Alacritty, kitty, Ghostty and Windows Terminal.
+Xcode, iTerm2, Alacritty, kitty, Ghostty and Windows Terminal.
 
 > [!NOTE]
 > Zacess Themes is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zacess.zacess-themes),
@@ -174,6 +174,18 @@ Set **General**, **Appearance**, **Theme** to Light or Dark to match the Zacess 
 Restart Eclipse. It covers the Java and properties file editors, the colours every text editor
 shares and the Terminal view. Details are in [editors/eclipse](editors/eclipse/README.md).
 
+### Xcode
+
+```sh
+mkdir -p ~/Library/Developer/Xcode/UserData/FontAndColorThemes
+cp editors/xcode/*.xccolortheme ~/Library/Developer/Xcode/UserData/FontAndColorThemes/
+```
+
+Then open **Xcode**, **Settings...**, **Themes**. Xcode 27 brings each file in with **Import Classic
+Theme**. Xcode 26 and earlier list them straight away. Xcode has no theme store, so the files come
+from this repository or the latest release. Details are in
+[editors/xcode](editors/xcode/README.md).
+
 ### Terminals
 
 Zacess Light, Zacess Dark, Zacess Yellow on Black and Zacess Cream are in the
@@ -191,7 +203,7 @@ flowchart LR
     Palette["palette/zacess.json"] --> Build["scripts/build.mjs"]
     Palette --> Check["scripts/check.mjs"]
     Palette --> Preview["scripts/preview.mjs"]
-    Build --> Editors["editors/: VS Code, JetBrains, Obsidian, Neovim, Zed, Sublime Text, Helix, Emacs, Eclipse, terminals"]
+    Build --> Editors["editors/: VS Code, JetBrains, Obsidian, Neovim, Zed, Sublime Text, Helix, Emacs, Eclipse, Xcode, terminals"]
     Build --> Tables["Contrast tables in README.md and ACCESSIBILITY.md"]
     Preview --> Previews["previews/: SVG images and themes.json"]
     Check --> CI["CI fails below a floor"]
@@ -242,6 +254,7 @@ such as strings and numbers or added and removed lines, must meet them whatever 
 | `editors/helix/` | The Helix themes |
 | `editors/emacs/` | The Emacs themes |
 | `editors/eclipse/` | The Eclipse preference files |
+| `editors/xcode/` | The Xcode themes |
 | `editors/terminals/` | iTerm2, Alacritty, kitty, Ghostty and Windows Terminal themes |
 | `previews/` | The preview images and the data for the website |
 | `assets/` | The Zacess mark the icons are made from |

@@ -56,12 +56,13 @@ jobs:
       - name: Zip the Obsidian theme
         working-directory: editors/obsidian
         run: zip "../../dist/zacess-obsidian-$VERSION.zip" manifest.json theme.css
-      - name: Zip the Sublime Text, Helix and Emacs themes
+      - name: Zip the Sublime Text, Helix, Emacs and Xcode themes
         working-directory: editors
         run: |
           (cd sublime && zip "../../dist/zacess-sublime-$VERSION.zip" ./*.sublime-color-scheme)
           (cd helix/themes && zip "../../../dist/zacess-helix-$VERSION.zip" ./*.toml)
           (cd emacs && zip "../../dist/zacess-emacs-$VERSION.zip" ./*.el)
+          (cd xcode && zip "../../dist/zacess-xcode-$VERSION.zip" ./*.xccolortheme)
       - name: Check the changelog has a section for this version
         run: |
           # scripts/release.mjs uses this section as the release notes, so a missing one stops the release before anything is published

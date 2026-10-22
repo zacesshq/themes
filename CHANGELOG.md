@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- Xcode themes in `editors/xcode`, one `.xccolortheme` per theme, copied into `~/Library/Developer/Xcode/UserData/FontAndColorThemes` and imported with Import Classic Theme under Settings, Themes in Xcode 27 or chosen there directly in Xcode 26 and earlier. Each sets the colour and font of every Xcode syntax type, the editor background, cursor, selection, current line, invisible characters and the debugger's current line, the console, rendered documentation and the scroll bar marks. Keywords are bold, comments italic and documentation tags bold italic. Every key was confirmed against the themes Xcode 27.1 ships.
+- `npm run check` parses the Xcode themes, refuses any key Xcode's own themes do not use and proves every colour in them comes from the palette.
+
 ## [0.3.0] - 2026-10-21
 
 ### Added

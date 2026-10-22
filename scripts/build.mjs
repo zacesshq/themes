@@ -1787,6 +1787,154 @@ function buildEclipse() {
   for (const theme of palette.themes) write(`editors/eclipse/${theme.name}.epf`, eclipsePrefs(theme));
 }
 
+// ---------------------------------------------------------------- Xcode
+
+// an Xcode theme is an XML property list in ~/Library/Developer/Xcode/UserData/FontAndColorThemes,
+// named after its file; Xcode 26 and earlier use it as it is and Xcode 27 imports it as a classic
+// theme; every key here appears in the themes Xcode 27.1 ships, listed in XCODE_KEYS and
+// XCODE_SYNTAX_KEYS
+const xcodeColour = (hex) => `${parseHex(hex).map((v) => Number((v / 255).toFixed(6))).join(" ")} 1`;
+
+// Xcode registers SF Mono in its Regular, Bold and italic cuts at launch, so these names resolve
+// on any Mac with Xcode installed; 12 points is Xcode's own default size
+const XCODE_SIZE = "12.0";
+const xcodeFont = (bold, italic) => `SFMono-${bold ? "Bold" : "Regular"}${italic ? "Italic" : ""} - ${XCODE_SIZE}`;
+
+// each Xcode syntax type with the palette token that colours it; Xcode has no type for operators,
+// parameters or invalid code, so those show in the plain text colour, which keeps 7:1
+const XCODE_SYNTAX = [
+  ["plain", "foreground"],
+  ["keyword", "keyword"],
+  ["preprocessor", "control"],
+  ["comment", "comment"],
+  ["comment.doc", "comment"],
+  ["comment.doc.keyword", "comment"],
+  ["mark", "control"],
+  ["string", "string"],
+  ["character", "string"],
+  ["number", "number"],
+  ["url", "function"],
+  ["attribute", "attribute"],
+  ["declaration.type", "type"],
+  ["declaration.other", "function"],
+  ["identifier.class", "type"],
+  ["identifier.class.system", "type"],
+  ["identifier.type", "type"],
+  ["identifier.type.system", "type"],
+  ["identifier.function", "function"],
+  ["identifier.function.system", "function"],
+  ["identifier.macro", "function"],
+  ["identifier.macro.system", "function"],
+  ["identifier.constant", "number"],
+  ["identifier.constant.system", "number"],
+  // Xcode colours instance variables and globals here and leaves locals plain, so these are properties
+  ["identifier.variable", "property"],
+  ["identifier.variable.system", "property"],
+  ["markup.aside.kind", "keyword"],
+  ["markup.code", "foreground"],
+];
+
+function xcodeTheme(theme) {
+  const u = theme.ui;
+  const s = theme.syntax;
+  const colours = {};
+  const fonts = {};
+  for (const [type, token] of XCODE_SYNTAX) {
+    const key = `xcode.syntax.${type}`;
+    colours[key] = xcodeColour(s[token]);
+    fonts[key] = xcodeFont(has(token, "bold"), has(token, "italic"));
+  }
+  // documentation tags such as - Parameter, aside kinds such as - Note and MARK: comments are bold
+  // italic, as the Javadoc tags and TODO markers are in the JetBrains scheme; Xcode fonts have no
+  // underline, so links are told apart by colour alone
+  for (const type of ["comment.doc.keyword", "markup.aside.kind", "mark"]) fonts[`xcode.syntax.${type}`] = xcodeFont(true, true);
+
+  const keys = {
+    DVTSourceTextBackground: xcodeColour(u.background),
+    DVTSourceTextCurrentLineHighlightColor: xcodeColour(u.lineHighlight),
+    DVTSourceTextInsertionPointColor: xcodeColour(u.cursor),
+    DVTSourceTextInvisiblesColor: xcodeColour(u.whitespace),
+    DVTSourceTextSelectionColor: xcodeColour(u.selection),
+    // the dimmed area around a focused block keeps text on it, so it is a surface every syntax
+    // colour keeps 7:1 over
+    DVTSourceTextBlockDimBackgroundColor: xcodeColour(u.surfaceAlt),
+    // the line the debugger is stopped on is filled, so it uses the added line background, which
+    // every syntax colour keeps 7:1 over
+    DVTDebuggerInstructionPointerColor: xcodeColour(u.diffAddedBackground),
+    // the console sets the program's output apart from the debugger's by weight and the muted colour
+    DVTConsoleTextBackgroundColor: xcodeColour(u.background),
+    DVTConsoleTextInsertionPointColor: xcodeColour(u.cursor),
+    DVTConsoleTextSelectionColor: xcodeColour(u.selection),
+    DVTConsoleExectuableOutputTextColor: xcodeColour(u.foreground),
+    DVTConsoleExectuableOutputTextFont: xcodeFont(false, false),
+    DVTConsoleExectuableInputTextColor: xcodeColour(u.foreground),
+    DVTConsoleExectuableInputTextFont: xcodeFont(true, false),
+    DVTConsoleDebuggerOutputTextColor: xcodeColour(u.muted),
+    DVTConsoleDebuggerOutputTextFont: xcodeFont(false, false),
+    DVTConsoleDebuggerInputTextColor: xcodeColour(u.foreground),
+    DVTConsoleDebuggerInputTextFont: xcodeFont(true, false),
+    DVTConsoleDebuggerPromptTextColor: xcodeColour(u.accent),
+    DVTConsoleDebuggerPromptTextFont: xcodeFont(true, false),
+    // rendered documentation sits on a panel, so its text uses the interface colours, which keep
+    // 7:1 on the panel surface; the fonts are the sizes Xcode's own themes use
+    DVTMarkupTextBackgroundColor: xcodeColour(u.surface),
+    DVTMarkupTextBorderColor: xcodeColour(u.border),
+    DVTMarkupTextNormalColor: xcodeColour(u.foreground),
+    DVTMarkupTextNormalFont: ".AppleSystemUIFont - 10.0",
+    DVTMarkupTextEmphasisColor: xcodeColour(u.foreground),
+    DVTMarkupTextEmphasisFont: ".AppleSystemUIFontItalic - 10.0",
+    DVTMarkupTextStrongColor: xcodeColour(u.foreground),
+    DVTMarkupTextStrongFont: ".AppleSystemUIFontBold - 10.0",
+    DVTMarkupTextLinkColor: xcodeColour(u.link),
+    DVTMarkupTextLinkFont: ".AppleSystemUIFont - 10.0",
+    DVTMarkupTextInlineCodeColor: xcodeColour(u.foreground),
+    DVTMarkupTextCodeFont: "SFMono-Regular - 10.0",
+    DVTMarkupTextPrimaryHeadingColor: xcodeColour(u.foreground),
+    DVTMarkupTextPrimaryHeadingFont: ".AppleSystemUIFont - 24.0",
+    DVTMarkupTextSecondaryHeadingColor: xcodeColour(u.foreground),
+    DVTMarkupTextSecondaryHeadingFont: ".AppleSystemUIFont - 18.0",
+    DVTMarkupTextOtherHeadingColor: xcodeColour(u.muted),
+    DVTMarkupTextOtherHeadingFont: ".AppleSystemUIFont - 14.0",
+    DVTScrollbarMarkerErrorColor: xcodeColour(u.error),
+    DVTScrollbarMarkerWarningColor: xcodeColour(u.warning),
+    DVTScrollbarMarkerAnalyzerColor: xcodeColour(u.info),
+    DVTScrollbarMarkerRuntimeIssueColor: xcodeColour(s.keyword),
+    DVTScrollbarMarkerBreakpointColor: xcodeColour(u.accent),
+    DVTScrollbarMarkerDiffColor: xcodeColour(s.changed),
+    DVTScrollbarMarkerDiffConflictColor: xcodeColour(u.error),
+  };
+
+  const entry = (key, value, indent) => [`${indent}<key>${key}</key>`, `${indent}<string>${value}</string>`];
+  const dict = (key, values) => [
+    `\t<key>${key}</key>`,
+    "\t<dict>",
+    ...Object.keys(values).sort().flatMap((k) => entry(k, values[k], "\t\t")),
+    "\t</dict>",
+  ];
+  const body = {
+    ...Object.fromEntries(Object.entries(keys).map(([k, v]) => [k, entry(k, v, "\t")])),
+    DVTFontAndColorVersion: ["\t<key>DVTFontAndColorVersion</key>", "\t<integer>1</integer>"],
+    DVTLineSpacing: ["\t<key>DVTLineSpacing</key>", "\t<real>1.1</real>"],
+    DVTSourceTextSyntaxColors: dict("DVTSourceTextSyntaxColors", colours),
+    DVTSourceTextSyntaxFonts: dict("DVTSourceTextSyntaxFonts", fonts),
+  };
+  return [
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+    "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">",
+    `<!-- ${theme.name} for Xcode, ${HEADER} -->`,
+    "<plist version=\"1.0\">",
+    "<dict>",
+    ...Object.keys(body).sort().flatMap((k) => body[k]),
+    "</dict>",
+    "</plist>",
+    "",
+  ].join("\n");
+}
+
+function buildXcode() {
+  for (const theme of palette.themes) write(`editors/xcode/${theme.name}.xccolortheme`, xcodeTheme(theme));
+}
+
 // ---------------------------------------------------------------- terminals
 
 function terminalColours(theme) {
@@ -1982,6 +2130,7 @@ buildSublime();
 buildHelix();
 buildEmacs();
 buildEclipse();
+buildXcode();
 buildTerminals();
 buildDocs();
 console.log(`wrote ${written.length} files from palette/zacess.json`);
