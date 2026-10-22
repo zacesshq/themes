@@ -87,7 +87,10 @@ GitHub release and updates the read-only copies, so every tag and release is sig
 
 3. The tag runs [`release.yml`](.github/workflows/release.yml). It checks and builds everything,
    publishes to the VS Code Marketplace, Open VSX and the JetBrains Marketplace and uploads the
-   built files as a workflow artifact named `zacess-themes-<version>`.
+   built files as a workflow artifact named `zacess-themes-<version>`. Its last step sends a
+   `themes-release` dispatch to zacesshq/website, which rebuilds [zacess.com](https://zacess.com/themes/)
+   with the new palette. Without the `SITE_DISPATCH_TOKEN` secret it skips that and the website's
+   daily deploy picks the release up instead.
 4. Once the workflow succeeds, with `gh` signed in to your own account and commit signing set up,
    run:
 
