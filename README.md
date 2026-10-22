@@ -169,10 +169,17 @@ Then add `(add-to-list 'custom-theme-load-path (expand-file-name "themes" user-e
 
 ### Eclipse
 
-Set **General**, **Appearance**, **Theme** to Light or Dark to match the Zacess theme, then choose
-**File**, **Import...**, **General**, **Preferences** and import a `.epf` file from `editors/eclipse`.
-Restart Eclipse. It covers the Java and properties file editors, the colours every text editor
-shares and the Terminal view. Details are in [editors/eclipse](editors/eclipse/README.md).
+Choose **Help**, **Install New Software...**, add the update site below and install **Zacess
+Themes**. Then pick a Zacess theme under **General**, **Appearance**, **Theme** and restart Eclipse.
+
+```text
+https://zacesshq.github.io/themes/eclipse/
+```
+
+Each theme also comes as a `.epf` preference file in `editors/eclipse` to import by hand with
+**File**, **Import...**, **General**, **Preferences**. Both cover the Java and properties file
+editors, the colours every text editor shares and the Terminal view. Details are in
+[editors/eclipse](editors/eclipse/README.md).
 
 ### Xcode
 
@@ -253,7 +260,7 @@ such as strings and numbers or added and removed lines, must meet them whatever 
 | `editors/sublime/` | The Sublime Text colour schemes |
 | `editors/helix/` | The Helix themes |
 | `editors/emacs/` | The Emacs themes |
-| `editors/eclipse/` | The Eclipse preference files |
+| `editors/eclipse/` | The Eclipse preference files, the Eclipse plugin and its Maven and Tycho build |
 | `editors/xcode/` | The Xcode themes |
 | `editors/terminals/` | iTerm2, Alacritty, kitty, Ghostty and Windows Terminal themes |
 | `previews/` | The preview images and the data for the website |
