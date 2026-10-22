@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - `npm run check` parses the Xcode themes, refuses any key Xcode's own themes do not use and proves every colour in them comes from the palette.
 - An Eclipse plugin, `com.zacess.themes.eclipse`, that adds the eight themes to **General**, **Appearance**, **Theme**, installed from the update site at https://zacesshq.github.io/themes/eclipse/. Each theme builds on Eclipse's Light or Dark window and sets the same editor and Terminal colours as its `.epf` file, plus the Console's background, output, error and input colours. `scripts/build.mjs` writes the plugin, the feature and the update site build from the palette.
 - The Eclipse update site shows a short install page to anyone opening its address in a browser. The Pages root forwards to the repository.
+- Zacess Themes is listed on the Eclipse Marketplace (https://marketplace.eclipse.org/content/zacess-themes-0), linked from the README and the Eclipse guide.
 - A workflow that builds the update site with Maven and Tycho and publishes it to GitHub Pages on each release. A CI job builds it on every pull request.
 
 ## [0.3.0] - 2026-10-21
