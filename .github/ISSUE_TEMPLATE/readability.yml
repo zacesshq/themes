@@ -35,6 +35,7 @@ body:
         - Helix
         - Emacs
         - Eclipse
+        - Xcode
         - A terminal
         - Other
     validations:

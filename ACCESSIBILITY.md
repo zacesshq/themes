@@ -13,7 +13,8 @@ cannot be merged.
   and the JetBrains IDEs the find match also carries a border. Eclipse draws search results and
   marked occurrences as a box in the find match border colour with no fill, so every token keeps its
   contrast on the background. Neovim, Zed, Obsidian, Sublime Text and Emacs draw the find match as a
-  background only. Helix shows search results as selections.
+  background only. Xcode draws it in its own colour, which the themes cannot set. Helix shows
+  search results as selections.
 - Interface text, including muted text, links, errors, warnings, information, line numbers and the
   text on buttons and badges, keeps 7:1 on every surface it is drawn on.
 - Borders, dividers, focus outlines, indent guides and whitespace markers keep at least 3:1, the WCAG
@@ -179,6 +180,9 @@ always checked.
   colour. Its window follows its own Light or Dark appearance rather than the palette. The Terminal
   view takes the theme's 16 terminal colours, text, background and selection, but its cursor is
   drawn by Eclipse.
+- Xcode has no syntax type for operators, parameters or invalid code, so those show in the text
+  colour, which keeps 7:1. Its fonts have no underline, so links in comments are told apart by
+  colour alone. The find match, the minimap and the window follow Xcode's own colours.
 - Language extensions can add their own scopes or semantic tokens. A token the themes do not name
   falls back to the text colour, which keeps 7:1.
 - In Zacess Light, Zacess Cream, Zacess High Contrast Light and Zacess Deep Contrast Light, ANSI white and bright white are dark so that white text stays

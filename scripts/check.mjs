@@ -3,7 +3,7 @@
 // every failure so CI shows exactly which colour or file to fix
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { ROOT, VSCODE_FALLBACK_KEYS, VSCODE_NON_TEXT_PAIRS, VSCODE_TEXT_PAIRS, loadPalette, loadSchema, styleOf } from "./lib/palette.mjs";
+import { ROOT, VSCODE_FALLBACK_KEYS, VSCODE_NON_TEXT_PAIRS, VSCODE_TEXT_PAIRS, XCODE_KEYS, XCODE_SYNTAX_KEYS, loadPalette, loadSchema, styleOf } from "./lib/palette.mjs";
 import { validate } from "./lib/schema.mjs";
 import { measureAll } from "./lib/measure.mjs";
 import { contrast, ratio } from "./lib/colour.mjs";
@@ -136,6 +136,8 @@ for (const file of files) {
       checkElisp(text, name);
     } else if (file.endsWith(".epf")) {
       checkEclipse(text, name);
+    } else if (file.endsWith(".xccolortheme")) {
+      checkXcode(text, name);
     } else if (/\.(xml|icls|itermcolors|svg)$/.test(file)) {
       checkXml(text);
     } else if (file.endsWith(".lua")) {
@@ -173,6 +175,7 @@ for (const theme of palette.themes) {
     `editors/helix/themes/zacess_${theme.id.replace(/-/g, "_")}.toml`,
     `editors/emacs/zacess-${theme.id}-theme.el`,
     `editors/eclipse/${theme.name}.epf`,
+    `editors/xcode/${theme.name}.xccolortheme`,
   ]) {
     if (!existsSync(join(ROOT, path))) fail("files", path, `missing for ${theme.name}`);
   }
@@ -186,6 +189,7 @@ function themeOf(name) {
     `zacess_${t.id.replace(/-/g, "_")}.toml`,
     `zacess-${t.id}-theme.el`,
     `${t.name}.epf`,
+    `${t.name}.xccolortheme`,
   ].includes(base));
   if (!theme) throw new Error("matches no theme in the palette");
   return theme;
@@ -317,6 +321,55 @@ function checkEclipse(text, name) {
   for (const key of values.keys()) {
     if (!/(AbstractTextEditor\.Color\.(Background|Foreground|SelectionBackground|SelectionForeground)|hyperlinkColor|sourceHoverBackgroundColor)$/.test(key)) continue;
     if (values.get(`${key}.SystemDefault`) !== "false") throw new Error(`${key} is set without ${key.split("/")[1]}.SystemDefault=false`);
+  }
+}
+
+function checkXcode(text, name) {
+  checkXml(text);
+  const colours = coloursOf(themeOf(name));
+  // the two syntax dictionaries are the only nested ones, so they are lifted out before the
+  // top level entries are read
+  const nested = {};
+  const top = text.replace(/\t<key>(DVTSourceTextSyntax(?:Colors|Fonts))<\/key>\n\t<dict>\n([\s\S]*?)\t<\/dict>\n/g, (_, key, inner) => {
+    nested[key] = inner;
+    return `\t<key>${key}</key>\n\t<dict/>\n`;
+  });
+  const entries = (body) => {
+    const out = new Map();
+    for (const [, key, type, value] of body.matchAll(/<key>([^<]+)<\/key>\s*<(string|integer|real|dict)(?:\/>|>([^<]*)<\/\2>)/g)) {
+      if (out.has(key)) throw new Error(`${key} is set twice`);
+      out.set(key, { type, value });
+    }
+    return out;
+  };
+  const colour = (key, value) => {
+    const m = /^([\d.]+) ([\d.]+) ([\d.]+) 1$/.exec(value);
+    if (!m) throw new Error(`${key} is ${value}, not an opaque "r g b 1" colour`);
+    const channels = m.slice(1).map(Number);
+    if (channels.some((v) => v > 1)) throw new Error(`${key} has a channel above 1`);
+    const hex = `#${channels.map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("")}`;
+    if (!colours.has(hex)) throw new Error(`${key} is ${value} (${hex}), which is not a palette colour`);
+  };
+  // the SF Mono cuts Xcode registers and the system fonts its own themes use for documentation
+  const font = (key, value) => {
+    if (!/^(SFMono-(Regular|Bold|RegularItalic|BoldItalic)|\.AppleSystemUIFont(Italic|Bold)?) - \d+\.0$/.test(value)) throw new Error(`${key} has an unknown font ${value}`);
+  };
+  const values = entries(top);
+  for (const key of XCODE_KEYS) if (!values.has(key)) throw new Error(`${key} is missing`);
+  for (const [key, { value }] of values) {
+    if (!XCODE_KEYS.includes(key)) throw new Error(`${key} is not a key in Xcode's own themes`);
+    if (key.endsWith("Font")) font(key, value);
+    else if (key === "DVTFontAndColorVersion") { if (value !== "1") throw new Error(`${key} is ${value}, not 1`); }
+    else if (key === "DVTLineSpacing") { if (!(Number(value) >= 1)) throw new Error(`${key} is ${value}`); }
+    else if (!key.startsWith("DVTSourceTextSyntax")) colour(key, value);
+  }
+  for (const [dict, check] of [["DVTSourceTextSyntaxColors", colour], ["DVTSourceTextSyntaxFonts", font]]) {
+    const syntax = entries(nested[dict] ?? "");
+    for (const key of XCODE_SYNTAX_KEYS) if (!syntax.has(key)) throw new Error(`${dict} has no ${key}`);
+    for (const [key, { value }] of syntax) {
+      if (!XCODE_SYNTAX_KEYS.includes(key)) throw new Error(`${dict} has ${key}, which is not a syntax type in Xcode's own themes`);
+      check(`${dict} ${key}`, value);
+    }
   }
 }
 
