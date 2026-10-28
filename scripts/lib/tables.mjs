@@ -1,4 +1,5 @@
 // the markdown tables build.mjs writes into README.md and ACCESSIBILITY.md
+import { contrast } from "./colour.mjs";
 import { measureAll } from "./measure.mjs";
 import { ANSI_NAMES, UI_NON_TEXT, UI_TEXT, styleOf } from "./palette.mjs";
 
@@ -9,19 +10,32 @@ const floor3 = (n) => (Math.floor(n * 1000) / 1000).toFixed(3);
 
 export function contrastTables(palette) {
   const all = measureAll(palette);
+  // the surfaces a lowest ratio was measured on, named as a reader sees them
+  const SURFACE_NAMES = {
+    listSelection: "a selected row",
+    lineHighlight: "the current line",
+    diffAddedBackground: "an added line",
+    diffRemovedBackground: "a removed line",
+    findMatch: "a find match",
+    background: "the background",
+  };
+  const name = (x) => x.item.replace("syntax.", "");
+  const find = (rows, item, on) => rows.find((x) => x.item === item && (!on || x.on === on));
   const summary = [
-    "| Theme | Text on background | Lowest syntax colour on background | Lowest syntax colour over the selection, current line or a diff |",
-    "| --- | --- | --- | --- |",
-    ...all.map(({ theme, contrastRows, lowestOnBackground, lowestText }) => {
-      const text = contrastRows.find((x) => x.item === "syntax.foreground" && x.on === "background");
-      const name = (x) => x.item.replace("syntax.", "");
-      return `| ${theme.name} | \`${theme.ui.foreground}\` on \`${theme.ui.background}\`, ${r1(text.ratio)} | ${r1(lowestOnBackground.ratio)} (${name(lowestOnBackground)}) | ${r1(lowestText.ratio)} (${name(lowestText)} on ${lowestText.on}) |`;
+    "| Theme | Text on background | Lowest syntax colour on background | Lowest syntax colour over the current line, a diff or a selected row | Selection |",
+    "| --- | --- | --- | --- | --- |",
+    ...all.map(({ theme, contrastRows, lowestOnBackground, lowestText, lowestOnSelection }) => {
+      const u = theme.ui;
+      const text = find(contrastRows, "syntax.foreground", "background");
+      const strong = find(contrastRows, "ui.selectionForeground");
+      const selection = `\`${u.selectionForeground}\` on \`${u.selectionStrong}\`, ${r1(strong.ratio)}; background only \`${u.selection}\`, syntax ${r1(lowestOnSelection.ratio)} (${name(lowestOnSelection)})`;
+      return `| ${theme.name} | \`${u.foreground}\` on \`${u.background}\`, ${r1(text.ratio)} | ${r1(lowestOnBackground.ratio)} (${name(lowestOnBackground)}) | ${r1(lowestText.ratio)} (${name(lowestText)} on ${SURFACE_NAMES[lowestText.on]}) | ${selection} |`;
     }),
   ].join("\n");
 
   const tokens = Object.keys(palette.themes[0].syntax);
   const detail = [
-    "Each cell gives the colour, its contrast on the background and its lowest contrast over the selection, the current line or a diff background.",
+    "Each cell gives the colour, its contrast on the background, its lowest contrast over the current line, a diff background or a selected row and its contrast over the background only selection.",
     "",
     `| Token | Style | ${all.map(({ theme }) => theme.name).join(" | ")} |`,
     `| --- | --- | ${all.map(() => "---").join(" | ")} |`,
@@ -30,11 +44,37 @@ export function contrastTables(palette) {
       const cells = all.map(({ contrastRows }) => {
         const rows = contrastRows.filter((x) => x.item === `syntax.${token}`);
         const bg = rows.find((x) => x.on === "background");
-        const overlays = ["selection", "lineHighlight", "diffAddedBackground", "diffRemovedBackground"];
+        const overlays = ["listSelection", "lineHighlight", "diffAddedBackground", "diffRemovedBackground"];
         const low = Math.min(...rows.filter((x) => overlays.includes(x.on)).map((x) => x.ratio));
-        return `\`${bg.colour}\` ${r1(bg.ratio)}, ${r1(low)}`;
+        const selected = rows.find((x) => x.on === "selection");
+        return `\`${bg.colour}\` ${r1(bg.ratio)}, ${r1(low)}, ${r1(selected.ratio)}`;
       });
       return `| ${token} | ${style || "regular"} | ${cells.join(" | ")} |`;
+    }),
+  ].join("\n");
+
+  // the selection in each kind of editor, with the floors the checks hold it to
+  const r = palette.rules;
+  const selectionRow = (label, floor, cell) => `| ${label} | ${floor} | ${all.map(cell).join(" | ")} |`;
+  const selection = [
+    `| Measure | Floor | ${all.map(({ theme }) => theme.name).join(" | ")} |`,
+    `| --- | --- | ${all.map(() => "---").join(" | ")} |`,
+    selectionRow("Selected text on the selection block", `${r.textContrast}:1`, ({ theme, contrastRows }) =>
+      `\`${theme.ui.selectionForeground}\` on \`${theme.ui.selectionStrong}\`, ${r1(find(contrastRows, "ui.selectionForeground").ratio)}`),
+    selectionRow("The block on the background", `${r.nonTextContrast}:1`, ({ contrastRows }) => r1(find(contrastRows, "ui.selectionStrong").ratio)),
+    selectionRow("Windows Terminal's own black or white text on the block", `${r.textContrast}:1`, ({ contrastRows }) => {
+      const x = find(contrastRows, "windowsTerminal.selectionText");
+      return `\`${x.colour}\` ${r1(x.ratio)}`;
+    }),
+    selectionRow("Background only selection on the background", "none, explained below", ({ theme }) =>
+      `\`${theme.ui.selection}\` ${r1(contrast(theme.ui.selection, theme.ui.background))}`),
+    selectionRow("Lowest syntax colour over it", `${r.selectionContrast}:1`, ({ lowestOnSelection }) => `${r1(lowestOnSelection.ratio)} (${name(lowestOnSelection)})`),
+    selectionRow("Plain text over it", `${r.textContrast}:1`, ({ contrastRows }) => r1(find(contrastRows, "syntax.foreground", "selection").ratio)),
+    selectionRow("Muted text and links over it", `${r.selectionContrast}:1`, ({ contrastRows }) =>
+      r1(Math.min(...contrastRows.filter((x) => x.item.startsWith("selectionText.")).map((x) => x.ratio)))),
+    selectionRow("Closest fill, least OKLab distance in normal vision and the three simulations", `${r.selectionDistance}`, ({ selectionRows }) => {
+      const x = selectionRows.reduce((m, y) => (y.distance < m.distance ? y : m));
+      return `${floor3(x.distance)} (${x.item === "selection" ? "background only selection" : "selection block"} and ${SURFACE_NAMES[x.on]})`;
     }),
   ].join("\n");
 
@@ -88,5 +128,5 @@ export function contrastTables(palette) {
     }),
   ].join("\n");
 
-  return { summary, detail, terminal, ui, vision };
+  return { summary, detail, selection, terminal, ui, vision };
 }

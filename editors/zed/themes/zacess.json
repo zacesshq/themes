@@ -120,7 +120,7 @@
           {
             "cursor": "#111111",
             "background": "#111111",
-            "selection": "#fff1a8"
+            "selection": "#9bc3ff"
           }
         ],
         "syntax": {
@@ -455,7 +455,7 @@
           {
             "cursor": "#ffd400",
             "background": "#ffd400",
-            "selection": "#1a2436"
+            "selection": "#004769"
           }
         ],
         "syntax": {
@@ -790,7 +790,7 @@
           {
             "cursor": "#ffffff",
             "background": "#ffffff",
-            "selection": "#0a2257"
+            "selection": "#024b4e"
           }
         ],
         "syntax": {
@@ -1125,7 +1125,7 @@
           {
             "cursor": "#000000",
             "background": "#000000",
-            "selection": "#f9e79a"
+            "selection": "#c8a9ff"
           }
         ],
         "syntax": {
@@ -1460,7 +1460,7 @@
           {
             "cursor": "#f5c400",
             "background": "#f5c400",
-            "selection": "#0a2552"
+            "selection": "#6501ae"
           }
         ],
         "syntax": {
@@ -1795,7 +1795,7 @@
           {
             "cursor": "#000000",
             "background": "#000000",
-            "selection": "#fff1a0"
+            "selection": "#00d3d0"
           }
         ],
         "syntax": {
@@ -2130,7 +2130,7 @@
           {
             "cursor": "#ffff00",
             "background": "#ffff00",
-            "selection": "#1c1c38"
+            "selection": "#720072"
           }
         ],
         "syntax": {
@@ -2465,7 +2465,7 @@
           {
             "cursor": "#000000",
             "background": "#000000",
-            "selection": "#f0f5ff"
+            "selection": "#ffbcfa"
           }
         ],
         "syntax": {

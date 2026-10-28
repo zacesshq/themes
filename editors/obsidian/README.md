@@ -3,7 +3,10 @@
 An Obsidian theme with Zacess Light for light mode and Zacess Dark for dark mode, plus the Yellow on
 Black, Cream, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light
 themes through the Style Settings plugin. Body text, muted text, links and code
-colours all keep at least 7:1 contrast. Links are underlined and every control shows a focus ring.
+colours all keep at least 7:1 contrast on the page. Obsidian keeps each character's colour inside a
+selection, so the selection is a fill in the theme's own hue with body text at 7:1 and code
+colours, muted text and links at 4.5:1 or more over it. Links are underlined and every control shows
+a focus ring.
 
 ## Install
 

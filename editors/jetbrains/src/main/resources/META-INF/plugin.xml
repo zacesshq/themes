@@ -15,7 +15,7 @@
 <li><b>Zacess Deep Contrast Dark</b>: White on black with deep, fully saturated colours, yellow focus outlines and cyan frames, for low vision.</li>
 <li><b>Zacess Deep Contrast Light</b>: Black on white with vivid deep colours, red focus outlines and navy frames, for low vision.</li>
 </ul>
-<p>Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background, the selection and the current line. Comments are never dimmed below it. Keywords are bold, comments italic and invalid code underlined, so colour is never the only signal.</p>
+<p>Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background and the current line. Comments are never dimmed below it. Selected text takes one colour at 7:1 or more on a bold selection block. Keywords are bold, comments italic and invalid code underlined, so colour is never the only signal.</p>
 <p>Source, contrast tables and issues: <a href="https://github.com/zacesshq/themes">https://github.com/zacesshq/themes</a></p>
 ]]></description>
   <depends>com.intellij.modules.platform</depends>

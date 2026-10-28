@@ -11,7 +11,8 @@
 
 ;; Yellow on black for low vision, the reader's Yellow on black theme.
 ;; Every text and syntax colour keeps at least 7:1 contrast on the
-;; background, the selection and the current line.
+;; background and the current line. Selected text takes one colour at
+;; 7:1 or more on a bold selection block.
 
 ;;; Code:
 
@@ -22,7 +23,7 @@
  'zacess-yellow-on-black
  '(default ((t (:foreground "#ffeb3b" :background "#000000"))))
  '(cursor ((t (:background "#ffffff"))))
- '(region ((t (:background "#0a2257" :extend t))))
+ '(region ((t (:foreground "#000000" :background "#09bcc4" :extend t))))
  '(secondary-selection ((t (:background "#141414" :extend t))))
  '(highlight ((t (:background "#141414"))))
  '(hl-line ((t (:background "#141414" :extend t))))

@@ -13,15 +13,17 @@
     "rules": {
       "type": "object",
       "description": "The floors the checks enforce.",
-      "required": ["textContrast", "findMatchContrast", "nonTextContrast", "ansiFloor", "toneStep", "deficiencyDistance"],
+      "required": ["textContrast", "findMatchContrast", "selectionContrast", "nonTextContrast", "ansiFloor", "toneStep", "deficiencyDistance", "selectionDistance"],
       "additionalProperties": false,
       "properties": {
         "textContrast": { "type": "number", "minimum": 7, "description": "WCAG contrast for every text and syntax colour on every surface text sits on." },
         "findMatchContrast": { "type": "number", "minimum": 4.5, "description": "WCAG contrast for syntax colours over a find match, which also carries a border." },
+        "selectionContrast": { "type": "number", "minimum": 4.5, "description": "WCAG contrast for syntax colours, muted text and links over ui.selection, the selection an editor draws under text that keeps its own colours. The plain text colour keeps textContrast over it." },
         "nonTextContrast": { "type": "number", "minimum": 3, "description": "WCAG contrast for borders, indent guides and whitespace markers." },
         "ansiFloor": { "type": "number", "minimum": 4.5, "description": "The lowest contrast any terminal colour may have when it is documented as dimmer than the text floor." },
         "toneStep": { "type": "number", "minimum": 0.05, "description": "The smallest tone difference, the cube root of relative luminance, between two paired tokens that share a style." },
-        "deficiencyDistance": { "type": "number", "minimum": 0.04, "description": "The smallest OKLab distance between two paired tokens under each simulated colour vision deficiency." }
+        "deficiencyDistance": { "type": "number", "minimum": 0.04, "description": "The smallest OKLab distance between two paired tokens under each simulated colour vision deficiency." },
+        "selectionDistance": { "type": "number", "minimum": 0.05, "description": "The smallest OKLab distance, in normal vision and under each simulated colour vision deficiency, between either selection colour and the background, the current line, a find match and both diff backgrounds, so a selection never passes for one of them." }
       }
     },
     "tokens": {
@@ -72,7 +74,13 @@
         "description": { "type": "string" },
         "ui": {
           "type": "object",
-          "required": ["background", "foreground", "surface", "surfaceAlt", "muted", "border", "borderActive", "accent", "accentForeground", "link", "selection", "lineHighlight", "cursor", "gutter", "lineNumber", "lineNumberActive", "findMatch", "findMatchBorder", "error", "warning", "info", "diffAddedBackground", "diffRemovedBackground", "indentGuide", "whitespace"],
+          "required": ["background", "foreground", "surface", "surfaceAlt", "muted", "border", "borderActive", "accent", "accentForeground", "link", "selection", "selectionStrong", "selectionForeground", "listSelection", "lineHighlight", "cursor", "gutter", "lineNumber", "lineNumberActive", "findMatch", "findMatchBorder", "error", "warning", "info", "diffAddedBackground", "diffRemovedBackground", "indentGuide", "whitespace"],
+          "properties": {
+            "selection": { "$ref": "#/$defs/colour", "description": "Selected text where the editor keeps each character's own colour, such as the VS Code editor in the non high contrast themes, Zed, Obsidian, Xcode and text fields. As far from the background as rules.selectionContrast allows." },
+            "selectionStrong": { "$ref": "#/$defs/colour", "description": "Selected text where the selected text colour can be set too: terminals, the VS Code high contrast themes and terminal, the JetBrains IDEs, Eclipse, Sublime Text, Helix, Neovim and Emacs. A bold block at rules.nonTextContrast or more on the background." },
+            "selectionForeground": { "$ref": "#/$defs/colour", "description": "The one colour every selected character takes on selectionStrong, at rules.textContrast or more." },
+            "listSelection": { "$ref": "#/$defs/colour", "description": "The selected row in lists, trees, menus and completion popups plus other calm fills under text, such as Neovim's changed text in a diff. Every text and syntax colour keeps rules.textContrast over it." }
+          },
           "additionalProperties": { "$ref": "#/$defs/colour" }
         },
         "syntax": {

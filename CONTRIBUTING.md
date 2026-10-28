@@ -53,7 +53,8 @@ README.
 ## Project conventions
 
 - **Contrast is a requirement.** Every text and syntax colour keeps 7:1 on every surface it is drawn
-  on. A change that lowers a ratio below a floor cannot merge.
+  on, apart from the floors the README lists for find matches and the background only selection. A
+  change that lowers a ratio below a floor cannot merge.
 - **Colour is never the only signal.** Keep keywords bold, comments and parameters italic and invalid
   code underlined. Two tokens that sit side by side must differ in tone or font style, not only in
   hue.

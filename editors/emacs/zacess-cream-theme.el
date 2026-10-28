@@ -11,7 +11,8 @@
 
 ;; Black on cream for dyslexia, the reader's Black on cream theme.
 ;; Every text and syntax colour keeps at least 7:1 contrast on the
-;; background, the selection and the current line.
+;; background and the current line. Selected text takes one colour at
+;; 7:1 or more on a bold selection block.
 
 ;;; Code:
 
@@ -22,7 +23,7 @@
  'zacess-cream
  '(default ((t (:foreground "#000000" :background "#fdf6e3"))))
  '(cursor ((t (:background "#000000"))))
- '(region ((t (:background "#f9e79a" :extend t))))
+ '(region ((t (:foreground "#fdf6e3" :background "#7401ca" :extend t))))
  '(secondary-selection ((t (:background "#f3ead2" :extend t))))
  '(highlight ((t (:background "#f3ead2"))))
  '(hl-line ((t (:background "#f3ead2" :extend t))))

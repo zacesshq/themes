@@ -11,7 +11,8 @@
 
 ;; Black on white with strong dark borders and focus outlines, for the highest contrast on a light screen.
 ;; Every text and syntax colour keeps at least 7:1 contrast on the
-;; background, the selection and the current line.
+;; background and the current line. Selected text takes one colour at
+;; 7:1 or more on a bold selection block.
 
 ;;; Code:
 
@@ -22,7 +23,7 @@
  'zacess-high-contrast-light
  '(default ((t (:foreground "#000000" :background "#ffffff"))))
  '(cursor ((t (:background "#000000"))))
- '(region ((t (:background "#fff1a0" :extend t))))
+ '(region ((t (:foreground "#ffffff" :background "#015f5e" :extend t))))
  '(secondary-selection ((t (:background "#f2f2f2" :extend t))))
  '(highlight ((t (:background "#f2f2f2"))))
  '(hl-line ((t (:background "#f2f2f2" :extend t))))

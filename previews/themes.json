@@ -5,10 +5,12 @@
   "rules": {
     "textContrast": 7,
     "findMatchContrast": 4.5,
+    "selectionContrast": 4.5,
     "nonTextContrast": 3,
     "ansiFloor": 4.5,
     "toneStep": 0.05,
-    "deficiencyDistance": 0.04
+    "deficiencyDistance": 0.04,
+    "selectionDistance": 0.08
   },
   "styles": {
     "keyword": [
@@ -577,7 +579,10 @@
         "accent": "#0049a3",
         "accentForeground": "#ffffff",
         "link": "#0049a3",
-        "selection": "#fff1a8",
+        "selection": "#9bc3ff",
+        "selectionStrong": "#0150b2",
+        "selectionForeground": "#ffffff",
+        "listSelection": "#fff1a8",
         "lineHighlight": "#f0f0f0",
         "cursor": "#111111",
         "gutter": "#ffffff",
@@ -620,7 +625,7 @@
           "colour": "#111111",
           "style": [],
           "background": 18.88,
-          "selection": 16.54,
+          "selection": 10.46,
           "lineHighlight": 16.56
         },
         {
@@ -630,7 +635,7 @@
             "bold"
           ],
           "background": 10.85,
-          "selection": 9.51,
+          "selection": 6.02,
           "lineHighlight": 9.52
         },
         {
@@ -640,7 +645,7 @@
             "bold"
           ],
           "background": 13.62,
-          "selection": 11.93,
+          "selection": 7.55,
           "lineHighlight": 11.95
         },
         {
@@ -648,7 +653,7 @@
           "colour": "#0049a3",
           "style": [],
           "background": 8.46,
-          "selection": 7.41,
+          "selection": 4.69,
           "lineHighlight": 7.42
         },
         {
@@ -656,7 +661,7 @@
           "colour": "#003737",
           "style": [],
           "background": 13.11,
-          "selection": 11.48,
+          "selection": 7.26,
           "lineHighlight": 11.5
         },
         {
@@ -664,7 +669,7 @@
           "colour": "#111111",
           "style": [],
           "background": 18.88,
-          "selection": 16.54,
+          "selection": 10.46,
           "lineHighlight": 16.56
         },
         {
@@ -674,7 +679,7 @@
             "italic"
           ],
           "background": 13.56,
-          "selection": 11.88,
+          "selection": 7.52,
           "lineHighlight": 11.9
         },
         {
@@ -682,7 +687,7 @@
           "colour": "#030075",
           "style": [],
           "background": 16.65,
-          "selection": 14.59,
+          "selection": 9.23,
           "lineHighlight": 14.61
         },
         {
@@ -690,7 +695,7 @@
           "colour": "#004a0e",
           "style": [],
           "background": 10.57,
-          "selection": 9.26,
+          "selection": 5.86,
           "lineHighlight": 9.27
         },
         {
@@ -698,7 +703,7 @@
           "colour": "#4c1b00",
           "style": [],
           "background": 14.34,
-          "selection": 12.56,
+          "selection": 7.95,
           "lineHighlight": 12.58
         },
         {
@@ -708,7 +713,7 @@
             "italic"
           ],
           "background": 8.29,
-          "selection": 7.26,
+          "selection": 4.59,
           "lineHighlight": 7.27
         },
         {
@@ -716,7 +721,7 @@
           "colour": "#111111",
           "style": [],
           "background": 18.88,
-          "selection": 16.54,
+          "selection": 10.46,
           "lineHighlight": 16.56
         },
         {
@@ -726,7 +731,7 @@
             "bold"
           ],
           "background": 10.85,
-          "selection": 9.51,
+          "selection": 6.02,
           "lineHighlight": 9.52
         },
         {
@@ -734,7 +739,7 @@
           "colour": "#412300",
           "style": [],
           "background": 14.33,
-          "selection": 12.55,
+          "selection": 7.94,
           "lineHighlight": 12.57
         },
         {
@@ -742,7 +747,7 @@
           "colour": "#5b0020",
           "style": [],
           "background": 14.32,
-          "selection": 12.55,
+          "selection": 7.94,
           "lineHighlight": 12.57
         },
         {
@@ -752,7 +757,7 @@
             "underline"
           ],
           "background": 14.32,
-          "selection": 12.54,
+          "selection": 7.94,
           "lineHighlight": 12.56
         },
         {
@@ -760,7 +765,7 @@
           "colour": "#005b14",
           "style": [],
           "background": 8.37,
-          "selection": 7.34,
+          "selection": 4.64,
           "lineHighlight": 7.35
         },
         {
@@ -768,7 +773,7 @@
           "colour": "#5d0002",
           "style": [],
           "background": 14.32,
-          "selection": 12.54,
+          "selection": 7.94,
           "lineHighlight": 12.56
         },
         {
@@ -776,7 +781,7 @@
           "colour": "#001940",
           "style": [],
           "background": 17.31,
-          "selection": 15.16,
+          "selection": 9.59,
           "lineHighlight": 15.19
         }
       ],
@@ -789,6 +794,18 @@
           "token": "comment",
           "on": "diffRemovedBackground",
           "ratio": 7.16
+        }
+      },
+      "selection": {
+        "block": "#0150b2",
+        "text": "#ffffff",
+        "textOnBlock": 7.52,
+        "blockOnBackground": 7.52,
+        "backgroundOnly": "#9bc3ff",
+        "backgroundOnlyOnBackground": 1.8,
+        "lowestSyntax": {
+          "token": "comment",
+          "ratio": 4.59
         }
       },
       "pairs": {
@@ -813,7 +830,10 @@
         "accent": "#8cbcff",
         "accentForeground": "#121212",
         "link": "#8cbcff",
-        "selection": "#1a2436",
+        "selection": "#004769",
+        "selectionStrong": "#4fbdff",
+        "selectionForeground": "#121212",
+        "listSelection": "#1a2436",
         "lineHighlight": "#1f1f1f",
         "cursor": "#ffd400",
         "gutter": "#121212",
@@ -856,7 +876,7 @@
           "colour": "#f5f5f5",
           "style": [],
           "background": 17.18,
-          "selection": 14.27,
+          "selection": 9.14,
           "lineHighlight": 15.11
         },
         {
@@ -866,7 +886,7 @@
             "bold"
           ],
           "background": 11.14,
-          "selection": 9.25,
+          "selection": 5.93,
           "lineHighlight": 9.8
         },
         {
@@ -876,7 +896,7 @@
             "bold"
           ],
           "background": 13.92,
-          "selection": 11.56,
+          "selection": 7.41,
           "lineHighlight": 12.25
         },
         {
@@ -884,7 +904,7 @@
           "colour": "#84b7fa",
           "style": [],
           "background": 9.04,
-          "selection": 7.5,
+          "selection": 4.81,
           "lineHighlight": 7.95
         },
         {
@@ -892,7 +912,7 @@
           "colour": "#03dedd",
           "style": [],
           "background": 11.14,
-          "selection": 9.25,
+          "selection": 5.93,
           "lineHighlight": 9.8
         },
         {
@@ -900,7 +920,7 @@
           "colour": "#f5f5f5",
           "style": [],
           "background": 17.18,
-          "selection": 14.27,
+          "selection": 9.14,
           "lineHighlight": 15.11
         },
         {
@@ -910,7 +930,7 @@
             "italic"
           ],
           "background": 11.14,
-          "selection": 9.26,
+          "selection": 5.93,
           "lineHighlight": 9.8
         },
         {
@@ -918,7 +938,7 @@
           "colour": "#c5e1ff",
           "style": [],
           "background": 13.9,
-          "selection": 11.55,
+          "selection": 7.4,
           "lineHighlight": 12.23
         },
         {
@@ -926,7 +946,7 @@
           "colour": "#1ee646",
           "style": [],
           "background": 11.11,
-          "selection": 9.23,
+          "selection": 5.91,
           "lineHighlight": 9.78
         },
         {
@@ -934,7 +954,7 @@
           "colour": "#ffd9ba",
           "style": [],
           "background": 14.17,
-          "selection": 11.77,
+          "selection": 7.54,
           "lineHighlight": 12.46
         },
         {
@@ -944,7 +964,7 @@
             "italic"
           ],
           "background": 8.59,
-          "selection": 7.13,
+          "selection": 4.57,
           "lineHighlight": 7.56
         },
         {
@@ -952,7 +972,7 @@
           "colour": "#f5f5f5",
           "style": [],
           "background": 17.18,
-          "selection": 14.27,
+          "selection": 9.14,
           "lineHighlight": 15.11
         },
         {
@@ -962,7 +982,7 @@
             "bold"
           ],
           "background": 11.14,
-          "selection": 9.25,
+          "selection": 5.93,
           "lineHighlight": 9.8
         },
         {
@@ -970,7 +990,7 @@
           "colour": "#ffdb9e",
           "style": [],
           "background": 14.16,
-          "selection": 11.76,
+          "selection": 7.54,
           "lineHighlight": 12.46
         },
         {
@@ -978,7 +998,7 @@
           "colour": "#f3989e",
           "style": [],
           "background": 8.73,
-          "selection": 7.25,
+          "selection": 4.65,
           "lineHighlight": 7.68
         },
         {
@@ -988,7 +1008,7 @@
             "underline"
           ],
           "background": 14.18,
-          "selection": 11.78,
+          "selection": 7.55,
           "lineHighlight": 12.48
         },
         {
@@ -996,7 +1016,7 @@
           "colour": "#01ea45",
           "style": [],
           "background": 11.46,
-          "selection": 9.52,
+          "selection": 6.1,
           "lineHighlight": 10.09
         },
         {
@@ -1004,7 +1024,7 @@
           "colour": "#f39992",
           "style": [],
           "background": 8.72,
-          "selection": 7.24,
+          "selection": 4.64,
           "lineHighlight": 7.67
         },
         {
@@ -1012,7 +1032,7 @@
           "colour": "#c9e0ff",
           "style": [],
           "background": 13.9,
-          "selection": 11.55,
+          "selection": 7.4,
           "lineHighlight": 12.23
         }
       ],
@@ -1025,6 +1045,18 @@
           "token": "comment",
           "on": "diffAddedBackground",
           "ratio": 7.06
+        }
+      },
+      "selection": {
+        "block": "#4fbdff",
+        "text": "#121212",
+        "textOnBlock": 8.97,
+        "blockOnBackground": 8.97,
+        "backgroundOnly": "#004769",
+        "backgroundOnlyOnBackground": 1.87,
+        "lowestSyntax": {
+          "token": "comment",
+          "ratio": 4.57
         }
       },
       "pairs": {
@@ -1049,7 +1081,10 @@
         "accent": "#ffeb3b",
         "accentForeground": "#000000",
         "link": "#1be4ed",
-        "selection": "#0a2257",
+        "selection": "#024b4e",
+        "selectionStrong": "#09bcc4",
+        "selectionForeground": "#000000",
+        "listSelection": "#0a2257",
         "lineHighlight": "#141414",
         "cursor": "#ffffff",
         "gutter": "#000000",
@@ -1093,7 +1128,7 @@
           "colour": "#ffeb3b",
           "style": [],
           "background": 17.19,
-          "selection": 12.46,
+          "selection": 8.11,
           "lineHighlight": 15.08
         },
         {
@@ -1103,7 +1138,7 @@
             "bold"
           ],
           "background": 21,
-          "selection": 15.22,
+          "selection": 9.91,
           "lineHighlight": 18.42
         },
         {
@@ -1113,7 +1148,7 @@
             "bold"
           ],
           "background": 14.46,
-          "selection": 10.48,
+          "selection": 6.82,
           "lineHighlight": 12.68
         },
         {
@@ -1121,7 +1156,7 @@
           "colour": "#88c3ff",
           "style": [],
           "background": 11.29,
-          "selection": 8.19,
+          "selection": 5.33,
           "lineHighlight": 9.91
         },
         {
@@ -1129,7 +1164,7 @@
           "colour": "#e5c7ff",
           "style": [],
           "background": 13.94,
-          "selection": 10.1,
+          "selection": 6.58,
           "lineHighlight": 12.23
         },
         {
@@ -1137,7 +1172,7 @@
           "colour": "#ffeb3b",
           "style": [],
           "background": 17.19,
-          "selection": 12.46,
+          "selection": 8.11,
           "lineHighlight": 15.08
         },
         {
@@ -1147,7 +1182,7 @@
             "italic"
           ],
           "background": 14.41,
-          "selection": 10.45,
+          "selection": 6.8,
           "lineHighlight": 12.64
         },
         {
@@ -1155,7 +1190,7 @@
           "colour": "#ffffff",
           "style": [],
           "background": 21,
-          "selection": 15.22,
+          "selection": 9.91,
           "lineHighlight": 18.42
         },
         {
@@ -1163,7 +1198,7 @@
           "colour": "#43f480",
           "style": [],
           "background": 14.49,
-          "selection": 10.5,
+          "selection": 6.83,
           "lineHighlight": 12.71
         },
         {
@@ -1171,7 +1206,7 @@
           "colour": "#ffa77e",
           "style": [],
           "background": 11.08,
-          "selection": 8.03,
+          "selection": 5.22,
           "lineHighlight": 9.72
         },
         {
@@ -1181,7 +1216,7 @@
             "italic"
           ],
           "background": 9.76,
-          "selection": 7.07,
+          "selection": 4.6,
           "lineHighlight": 8.56
         },
         {
@@ -1189,7 +1224,7 @@
           "colour": "#ffeb3b",
           "style": [],
           "background": 17.19,
-          "selection": 12.46,
+          "selection": 8.11,
           "lineHighlight": 15.08
         },
         {
@@ -1199,7 +1234,7 @@
             "bold"
           ],
           "background": 21,
-          "selection": 15.22,
+          "selection": 9.91,
           "lineHighlight": 18.42
         },
         {
@@ -1207,7 +1242,7 @@
           "colour": "#ffffff",
           "style": [],
           "background": 21,
-          "selection": 15.22,
+          "selection": 9.91,
           "lineHighlight": 18.42
         },
         {
@@ -1215,7 +1250,7 @@
           "colour": "#ffa1ce",
           "style": [],
           "background": 11.24,
-          "selection": 8.14,
+          "selection": 5.3,
           "lineHighlight": 9.86
         },
         {
@@ -1225,7 +1260,7 @@
             "underline"
           ],
           "background": 11.12,
-          "selection": 8.06,
+          "selection": 5.24,
           "lineHighlight": 9.75
         },
         {
@@ -1233,7 +1268,7 @@
           "colour": "#28f74f",
           "style": [],
           "background": 14.5,
-          "selection": 10.51,
+          "selection": 6.84,
           "lineHighlight": 12.72
         },
         {
@@ -1241,7 +1276,7 @@
           "colour": "#ffa59d",
           "style": [],
           "background": 11.12,
-          "selection": 8.06,
+          "selection": 5.24,
           "lineHighlight": 9.75
         },
         {
@@ -1249,7 +1284,7 @@
           "colour": "#ddedff",
           "style": [],
           "background": 17.63,
-          "selection": 12.78,
+          "selection": 8.32,
           "lineHighlight": 15.46
         }
       ],
@@ -1260,8 +1295,20 @@
         },
         "anySurface": {
           "token": "comment",
-          "on": "selection",
+          "on": "listSelection",
           "ratio": 7.07
+        }
+      },
+      "selection": {
+        "block": "#09bcc4",
+        "text": "#000000",
+        "textOnBlock": 9,
+        "blockOnBackground": 9,
+        "backgroundOnly": "#024b4e",
+        "backgroundOnlyOnBackground": 2.11,
+        "lowestSyntax": {
+          "token": "comment",
+          "ratio": 4.6
         }
       },
       "pairs": {
@@ -1286,7 +1333,10 @@
         "accent": "#004498",
         "accentForeground": "#ffffff",
         "link": "#004498",
-        "selection": "#f9e79a",
+        "selection": "#c8a9ff",
+        "selectionStrong": "#7401ca",
+        "selectionForeground": "#fdf6e3",
+        "listSelection": "#f9e79a",
         "lineHighlight": "#f3ead2",
         "cursor": "#000000",
         "gutter": "#fdf6e3",
@@ -1329,7 +1379,7 @@
           "colour": "#000000",
           "style": [],
           "background": 19.46,
-          "selection": 16.92,
+          "selection": 10.57,
           "lineHighlight": 17.51
         },
         {
@@ -1339,7 +1389,7 @@
             "bold"
           ],
           "background": 10.88,
-          "selection": 9.45,
+          "selection": 5.91,
           "lineHighlight": 9.78
         },
         {
@@ -1349,7 +1399,7 @@
             "bold"
           ],
           "background": 13.52,
-          "selection": 11.75,
+          "selection": 7.34,
           "lineHighlight": 12.16
         },
         {
@@ -1357,7 +1407,7 @@
           "colour": "#004498",
           "style": [],
           "background": 8.53,
-          "selection": 7.42,
+          "selection": 4.63,
           "lineHighlight": 7.67
         },
         {
@@ -1365,7 +1415,7 @@
           "colour": "#003232",
           "style": [],
           "background": 12.95,
-          "selection": 11.26,
+          "selection": 7.03,
           "lineHighlight": 11.65
         },
         {
@@ -1373,7 +1423,7 @@
           "colour": "#000000",
           "style": [],
           "background": 19.46,
-          "selection": 16.92,
+          "selection": 10.57,
           "lineHighlight": 17.51
         },
         {
@@ -1383,7 +1433,7 @@
             "italic"
           ],
           "background": 13.5,
-          "selection": 11.73,
+          "selection": 7.33,
           "lineHighlight": 12.14
         },
         {
@@ -1391,7 +1441,7 @@
           "colour": "#020068",
           "style": [],
           "background": 16.18,
-          "selection": 14.07,
+          "selection": 8.79,
           "lineHighlight": 14.56
         },
         {
@@ -1399,7 +1449,7 @@
           "colour": "#00440c",
           "style": [],
           "background": 10.62,
-          "selection": 9.23,
+          "selection": 5.77,
           "lineHighlight": 9.55
         },
         {
@@ -1407,7 +1457,7 @@
           "colour": "#451700",
           "style": [],
           "background": 14.15,
-          "selection": 12.3,
+          "selection": 7.68,
           "lineHighlight": 12.72
         },
         {
@@ -1417,7 +1467,7 @@
             "italic"
           ],
           "background": 8.54,
-          "selection": 7.42,
+          "selection": 4.64,
           "lineHighlight": 7.68
         },
         {
@@ -1425,7 +1475,7 @@
           "colour": "#000000",
           "style": [],
           "background": 19.46,
-          "selection": 16.92,
+          "selection": 10.57,
           "lineHighlight": 17.51
         },
         {
@@ -1435,7 +1485,7 @@
             "bold"
           ],
           "background": 10.88,
-          "selection": 9.45,
+          "selection": 5.91,
           "lineHighlight": 9.78
         },
         {
@@ -1443,7 +1493,7 @@
           "colour": "#3a1f00",
           "style": [],
           "background": 14.14,
-          "selection": 12.3,
+          "selection": 7.68,
           "lineHighlight": 12.72
         },
         {
@@ -1451,7 +1501,7 @@
           "colour": "#52001c",
           "style": [],
           "background": 14.15,
-          "selection": 12.3,
+          "selection": 7.68,
           "lineHighlight": 12.73
         },
         {
@@ -1461,7 +1511,7 @@
             "underline"
           ],
           "background": 14.12,
-          "selection": 12.28,
+          "selection": 7.67,
           "lineHighlight": 12.7
         },
         {
@@ -1469,7 +1519,7 @@
           "colour": "#005512",
           "style": [],
           "background": 8.43,
-          "selection": 7.33,
+          "selection": 4.58,
           "lineHighlight": 7.58
         },
         {
@@ -1477,7 +1527,7 @@
           "colour": "#540002",
           "style": [],
           "background": 14.12,
-          "selection": 12.28,
+          "selection": 7.67,
           "lineHighlight": 12.7
         },
         {
@@ -1485,7 +1535,7 @@
           "colour": "#001538",
           "style": [],
           "background": 16.71,
-          "selection": 14.53,
+          "selection": 9.08,
           "lineHighlight": 15.03
         }
       ],
@@ -1496,8 +1546,20 @@
         },
         "anySurface": {
           "token": "added",
-          "on": "selection",
+          "on": "listSelection",
           "ratio": 7.33
+        }
+      },
+      "selection": {
+        "block": "#7401ca",
+        "text": "#fdf6e3",
+        "textOnBlock": 7.48,
+        "blockOnBackground": 7.48,
+        "backgroundOnly": "#c8a9ff",
+        "backgroundOnlyOnBackground": 1.84,
+        "lowestSyntax": {
+          "token": "added",
+          "ratio": 4.58
         }
       },
       "pairs": {
@@ -1522,7 +1584,10 @@
         "accent": "#f5c400",
         "accentForeground": "#000000",
         "link": "#8fd0ff",
-        "selection": "#0a2552",
+        "selection": "#6501ae",
+        "selectionStrong": "#bf96ff",
+        "selectionForeground": "#000000",
+        "listSelection": "#0a2552",
         "lineHighlight": "#1a1a1a",
         "cursor": "#f5c400",
         "gutter": "#000000",
@@ -1565,7 +1630,7 @@
           "colour": "#ffffff",
           "style": [],
           "background": 21,
-          "selection": 15,
+          "selection": 9.68,
           "lineHighlight": 17.4
         },
         {
@@ -1575,7 +1640,7 @@
             "bold"
           ],
           "background": 12.77,
-          "selection": 9.13,
+          "selection": 5.89,
           "lineHighlight": 10.59
         },
         {
@@ -1585,7 +1650,7 @@
             "bold"
           ],
           "background": 15.24,
-          "selection": 10.89,
+          "selection": 7.02,
           "lineHighlight": 12.63
         },
         {
@@ -1593,7 +1658,7 @@
           "colour": "#8fd0ff",
           "style": [],
           "background": 12.63,
-          "selection": 9.02,
+          "selection": 5.82,
           "lineHighlight": 10.47
         },
         {
@@ -1601,7 +1666,7 @@
           "colour": "#00f4e0",
           "style": [],
           "background": 15.01,
-          "selection": 10.73,
+          "selection": 6.92,
           "lineHighlight": 12.44
         },
         {
@@ -1609,7 +1674,7 @@
           "colour": "#ffffff",
           "style": [],
           "background": 21,
-          "selection": 15,
+          "selection": 9.68,
           "lineHighlight": 17.4
         },
         {
@@ -1619,7 +1684,7 @@
             "italic"
           ],
           "background": 14.67,
-          "selection": 10.48,
+          "selection": 6.76,
           "lineHighlight": 12.15
         },
         {
@@ -1627,7 +1692,7 @@
           "colour": "#c9a8ff",
           "style": [],
           "background": 10.52,
-          "selection": 7.52,
+          "selection": 4.85,
           "lineHighlight": 8.72
         },
         {
@@ -1635,7 +1700,7 @@
           "colour": "#20fe34",
           "style": [],
           "background": 15.28,
-          "selection": 10.92,
+          "selection": 7.04,
           "lineHighlight": 12.67
         },
         {
@@ -1643,7 +1708,7 @@
           "colour": "#ffb27a",
           "style": [],
           "background": 11.9,
-          "selection": 8.5,
+          "selection": 5.48,
           "lineHighlight": 9.86
         },
         {
@@ -1653,7 +1718,7 @@
             "italic"
           ],
           "background": 9.95,
-          "selection": 7.11,
+          "selection": 4.59,
           "lineHighlight": 8.25
         },
         {
@@ -1661,7 +1726,7 @@
           "colour": "#ffffff",
           "style": [],
           "background": 21,
-          "selection": 15,
+          "selection": 9.68,
           "lineHighlight": 17.4
         },
         {
@@ -1671,7 +1736,7 @@
             "bold"
           ],
           "background": 12.77,
-          "selection": 9.13,
+          "selection": 5.89,
           "lineHighlight": 10.59
         },
         {
@@ -1679,7 +1744,7 @@
           "colour": "#fff0b8",
           "style": [],
           "background": 18.4,
-          "selection": 13.15,
+          "selection": 8.48,
           "lineHighlight": 15.25
         },
         {
@@ -1687,7 +1752,7 @@
           "colour": "#ffa6c9",
           "style": [],
           "background": 11.54,
-          "selection": 8.25,
+          "selection": 5.32,
           "lineHighlight": 9.57
         },
         {
@@ -1697,7 +1762,7 @@
             "underline"
           ],
           "background": 10.57,
-          "selection": 7.55,
+          "selection": 4.87,
           "lineHighlight": 8.76
         },
         {
@@ -1705,7 +1770,7 @@
           "colour": "#3bff59",
           "style": [],
           "background": 15.63,
-          "selection": 11.17,
+          "selection": 7.2,
           "lineHighlight": 12.95
         },
         {
@@ -1713,7 +1778,7 @@
           "colour": "#ffaba3",
           "style": [],
           "background": 11.6,
-          "selection": 8.29,
+          "selection": 5.35,
           "lineHighlight": 9.61
         },
         {
@@ -1721,7 +1786,7 @@
           "colour": "#e6f2ff",
           "style": [],
           "background": 18.5,
-          "selection": 13.22,
+          "selection": 8.53,
           "lineHighlight": 15.34
         }
       ],
@@ -1732,8 +1797,20 @@
         },
         "anySurface": {
           "token": "comment",
-          "on": "selection",
+          "on": "listSelection",
           "ratio": 7.11
+        }
+      },
+      "selection": {
+        "block": "#bf96ff",
+        "text": "#000000",
+        "textOnBlock": 9.02,
+        "blockOnBackground": 9.02,
+        "backgroundOnly": "#6501ae",
+        "backgroundOnlyOnBackground": 2.16,
+        "lowestSyntax": {
+          "token": "comment",
+          "ratio": 4.59
         }
       },
       "pairs": {
@@ -1758,7 +1835,10 @@
         "accent": "#003d99",
         "accentForeground": "#ffffff",
         "link": "#003d99",
-        "selection": "#fff1a0",
+        "selection": "#00d3d0",
+        "selectionStrong": "#015f5e",
+        "selectionForeground": "#ffffff",
+        "listSelection": "#fff1a0",
         "lineHighlight": "#f2f2f2",
         "cursor": "#000000",
         "gutter": "#ffffff",
@@ -1801,7 +1881,7 @@
           "colour": "#000000",
           "style": [],
           "background": 21,
-          "selection": 18.34,
+          "selection": 11.22,
           "lineHighlight": 18.75
         },
         {
@@ -1811,7 +1891,7 @@
             "bold"
           ],
           "background": 12.29,
-          "selection": 10.73,
+          "selection": 6.57,
           "lineHighlight": 10.98
         },
         {
@@ -1821,7 +1901,7 @@
             "bold"
           ],
           "background": 9.68,
-          "selection": 8.45,
+          "selection": 5.17,
           "lineHighlight": 8.64
         },
         {
@@ -1829,7 +1909,7 @@
           "colour": "#00347f",
           "style": [],
           "background": 11.68,
-          "selection": 10.2,
+          "selection": 6.24,
           "lineHighlight": 10.43
         },
         {
@@ -1837,7 +1917,7 @@
           "colour": "#004f4e",
           "style": [],
           "background": 9.42,
-          "selection": 8.23,
+          "selection": 5.03,
           "lineHighlight": 8.41
         },
         {
@@ -1845,7 +1925,7 @@
           "colour": "#000000",
           "style": [],
           "background": 21,
-          "selection": 18.34,
+          "selection": 11.22,
           "lineHighlight": 18.75
         },
         {
@@ -1855,7 +1935,7 @@
             "italic"
           ],
           "background": 10.17,
-          "selection": 8.88,
+          "selection": 5.43,
           "lineHighlight": 9.08
         },
         {
@@ -1863,7 +1943,7 @@
           "colour": "#1e0090",
           "style": [],
           "background": 14.4,
-          "selection": 12.58,
+          "selection": 7.7,
           "lineHighlight": 12.86
         },
         {
@@ -1871,7 +1951,7 @@
           "colour": "#005518",
           "style": [],
           "background": 9.08,
-          "selection": 7.93,
+          "selection": 4.85,
           "lineHighlight": 8.11
         },
         {
@@ -1879,7 +1959,7 @@
           "colour": "#521e00",
           "style": [],
           "background": 13.59,
-          "selection": 11.87,
+          "selection": 7.27,
           "lineHighlight": 12.14
         },
         {
@@ -1889,7 +1969,7 @@
             "italic"
           ],
           "background": 8.62,
-          "selection": 7.53,
+          "selection": 4.61,
           "lineHighlight": 7.7
         },
         {
@@ -1897,7 +1977,7 @@
           "colour": "#000000",
           "style": [],
           "background": 21,
-          "selection": 18.34,
+          "selection": 11.22,
           "lineHighlight": 18.75
         },
         {
@@ -1907,7 +1987,7 @@
             "bold"
           ],
           "background": 12.29,
-          "selection": 10.73,
+          "selection": 6.57,
           "lineHighlight": 10.98
         },
         {
@@ -1915,7 +1995,7 @@
           "colour": "#4f3200",
           "style": [],
           "background": 11.74,
-          "selection": 10.25,
+          "selection": 6.27,
           "lineHighlight": 10.48
         },
         {
@@ -1923,7 +2003,7 @@
           "colour": "#720030",
           "style": [],
           "background": 11.94,
-          "selection": 10.43,
+          "selection": 6.38,
           "lineHighlight": 10.66
         },
         {
@@ -1933,7 +2013,7 @@
             "underline"
           ],
           "background": 14.02,
-          "selection": 12.24,
+          "selection": 7.49,
           "lineHighlight": 12.52
         },
         {
@@ -1941,7 +2021,7 @@
           "colour": "#005518",
           "style": [],
           "background": 9.08,
-          "selection": 7.93,
+          "selection": 4.85,
           "lineHighlight": 8.11
         },
         {
@@ -1949,7 +2029,7 @@
           "colour": "#4a0000",
           "style": [],
           "background": 16.26,
-          "selection": 14.2,
+          "selection": 8.69,
           "lineHighlight": 14.52
         },
         {
@@ -1957,7 +2037,7 @@
           "colour": "#00307a",
           "style": [],
           "background": 12.32,
-          "selection": 10.76,
+          "selection": 6.59,
           "lineHighlight": 11
         }
       ],
@@ -1970,6 +2050,18 @@
           "token": "comment",
           "on": "diffRemovedBackground",
           "ratio": 7.14
+        }
+      },
+      "selection": {
+        "block": "#015f5e",
+        "text": "#ffffff",
+        "textOnBlock": 7.5,
+        "blockOnBackground": 7.5,
+        "backgroundOnly": "#00d3d0",
+        "backgroundOnlyOnBackground": 1.87,
+        "lowestSyntax": {
+          "token": "comment",
+          "ratio": 4.61
         }
       },
       "pairs": {
@@ -1994,7 +2086,10 @@
         "accent": "#00ffff",
         "accentForeground": "#000000",
         "link": "#1db4ff",
-        "selection": "#1c1c38",
+        "selection": "#720072",
+        "selectionStrong": "#ff70ff",
+        "selectionForeground": "#000000",
+        "listSelection": "#1c1c38",
         "lineHighlight": "#141414",
         "cursor": "#ffff00",
         "gutter": "#000000",
@@ -2037,7 +2132,7 @@
           "colour": "#ffffff",
           "style": [],
           "background": 21,
-          "selection": 16.5,
+          "selection": 10.72,
           "lineHighlight": 18.42
         },
         {
@@ -2047,7 +2142,7 @@
             "bold"
           ],
           "background": 9.07,
-          "selection": 7.13,
+          "selection": 4.63,
           "lineHighlight": 7.96
         },
         {
@@ -2057,7 +2152,7 @@
             "bold"
           ],
           "background": 12.49,
-          "selection": 9.81,
+          "selection": 6.38,
           "lineHighlight": 10.96
         },
         {
@@ -2065,7 +2160,7 @@
           "colour": "#ffdf5a",
           "style": [],
           "background": 15.95,
-          "selection": 12.53,
+          "selection": 8.14,
           "lineHighlight": 13.99
         },
         {
@@ -2073,7 +2168,7 @@
           "colour": "#00ebb1",
           "style": [],
           "background": 13.51,
-          "selection": 10.62,
+          "selection": 6.9,
           "lineHighlight": 11.85
         },
         {
@@ -2081,7 +2176,7 @@
           "colour": "#ffffff",
           "style": [],
           "background": 21,
-          "selection": 16.5,
+          "selection": 10.72,
           "lineHighlight": 18.42
         },
         {
@@ -2091,7 +2186,7 @@
             "italic"
           ],
           "background": 21,
-          "selection": 16.5,
+          "selection": 10.72,
           "lineHighlight": 18.42
         },
         {
@@ -2099,7 +2194,7 @@
           "colour": "#c195ff",
           "style": [],
           "background": 9.01,
-          "selection": 7.08,
+          "selection": 4.6,
           "lineHighlight": 7.9
         },
         {
@@ -2107,7 +2202,7 @@
           "colour": "#ffaa7c",
           "style": [],
           "background": 11.29,
-          "selection": 8.87,
+          "selection": 5.76,
           "lineHighlight": 9.9
         },
         {
@@ -2115,7 +2210,7 @@
           "colour": "#e19e00",
           "style": [],
           "background": 9.09,
-          "selection": 7.14,
+          "selection": 4.64,
           "lineHighlight": 7.97
         },
         {
@@ -2125,7 +2220,7 @@
             "italic"
           ],
           "background": 9.07,
-          "selection": 7.13,
+          "selection": 4.63,
           "lineHighlight": 7.96
         },
         {
@@ -2133,7 +2228,7 @@
           "colour": "#ffffff",
           "style": [],
           "background": 21,
-          "selection": 16.5,
+          "selection": 10.72,
           "lineHighlight": 18.42
         },
         {
@@ -2143,7 +2238,7 @@
             "bold"
           ],
           "background": 9.07,
-          "selection": 7.13,
+          "selection": 4.63,
           "lineHighlight": 7.96
         },
         {
@@ -2151,7 +2246,7 @@
           "colour": "#c195ff",
           "style": [],
           "background": 9.01,
-          "selection": 7.08,
+          "selection": 4.6,
           "lineHighlight": 7.9
         },
         {
@@ -2159,7 +2254,7 @@
           "colour": "#ff80c5",
           "style": [],
           "background": 9.14,
-          "selection": 7.18,
+          "selection": 4.66,
           "lineHighlight": 8.02
         },
         {
@@ -2169,7 +2264,7 @@
             "underline"
           ],
           "background": 9.14,
-          "selection": 7.18,
+          "selection": 4.66,
           "lineHighlight": 8.01
         },
         {
@@ -2177,7 +2272,7 @@
           "colour": "#00f000",
           "style": [],
           "background": 13.46,
-          "selection": 10.58,
+          "selection": 6.87,
           "lineHighlight": 11.81
         },
         {
@@ -2185,7 +2280,7 @@
           "colour": "#ffaa7c",
           "style": [],
           "background": 11.29,
-          "selection": 8.87,
+          "selection": 5.76,
           "lineHighlight": 9.9
         },
         {
@@ -2193,7 +2288,7 @@
           "colour": "#67aeff",
           "style": [],
           "background": 9.07,
-          "selection": 7.13,
+          "selection": 4.63,
           "lineHighlight": 7.96
         }
       ],
@@ -2204,8 +2299,20 @@
         },
         "anySurface": {
           "token": "property",
-          "on": "selection",
+          "on": "listSelection",
           "ratio": 7.08
+        }
+      },
+      "selection": {
+        "block": "#ff70ff",
+        "text": "#000000",
+        "textOnBlock": 9.01,
+        "blockOnBackground": 9.01,
+        "backgroundOnly": "#720072",
+        "backgroundOnlyOnBackground": 1.95,
+        "lowestSyntax": {
+          "token": "property",
+          "ratio": 4.6
         }
       },
       "pairs": {
@@ -2230,7 +2337,10 @@
         "accent": "#0f4a85",
         "accentForeground": "#ffffff",
         "link": "#003df6",
-        "selection": "#f0f5ff",
+        "selection": "#ffbcfa",
+        "selectionStrong": "#990098",
+        "selectionForeground": "#ffffff",
+        "listSelection": "#f0f5ff",
         "lineHighlight": "#f5f5f5",
         "cursor": "#000000",
         "gutter": "#ffffff",
@@ -2273,7 +2383,7 @@
           "colour": "#000000",
           "style": [],
           "background": 21,
-          "selection": 19.21,
+          "selection": 13.82,
           "lineHighlight": 19.26
         },
         {
@@ -2283,7 +2393,7 @@
             "bold"
           ],
           "background": 9.67,
-          "selection": 8.85,
+          "selection": 6.37,
           "lineHighlight": 8.87
         },
         {
@@ -2293,7 +2403,7 @@
             "bold"
           ],
           "background": 7.76,
-          "selection": 7.1,
+          "selection": 5.11,
           "lineHighlight": 7.11
         },
         {
@@ -2301,7 +2411,7 @@
           "colour": "#824100",
           "style": [],
           "background": 7.76,
-          "selection": 7.1,
+          "selection": 5.11,
           "lineHighlight": 7.12
         },
         {
@@ -2309,7 +2419,7 @@
           "colour": "#003a39",
           "style": [],
           "background": 12.61,
-          "selection": 11.54,
+          "selection": 8.3,
           "lineHighlight": 11.57
         },
         {
@@ -2317,7 +2427,7 @@
           "colour": "#000000",
           "style": [],
           "background": 21,
-          "selection": 19.21,
+          "selection": 13.82,
           "lineHighlight": 19.26
         },
         {
@@ -2327,7 +2437,7 @@
             "italic"
           ],
           "background": 21,
-          "selection": 19.21,
+          "selection": 13.82,
           "lineHighlight": 19.26
         },
         {
@@ -2335,7 +2445,7 @@
           "colour": "#2e0078",
           "style": [],
           "background": 15.13,
-          "selection": 13.84,
+          "selection": 9.96,
           "lineHighlight": 13.88
         },
         {
@@ -2343,7 +2453,7 @@
           "colour": "#870000",
           "style": [],
           "background": 10.34,
-          "selection": 9.46,
+          "selection": 6.81,
           "lineHighlight": 9.48
         },
         {
@@ -2351,7 +2461,7 @@
           "colour": "#a3005f",
           "style": [],
           "background": 7.71,
-          "selection": 7.05,
+          "selection": 5.07,
           "lineHighlight": 7.07
         },
         {
@@ -2361,7 +2471,7 @@
             "italic"
           ],
           "background": 7.73,
-          "selection": 7.07,
+          "selection": 5.09,
           "lineHighlight": 7.09
         },
         {
@@ -2369,7 +2479,7 @@
           "colour": "#000000",
           "style": [],
           "background": 21,
-          "selection": 19.21,
+          "selection": 13.82,
           "lineHighlight": 19.26
         },
         {
@@ -2379,7 +2489,7 @@
             "bold"
           ],
           "background": 9.67,
-          "selection": 8.85,
+          "selection": 6.37,
           "lineHighlight": 8.87
         },
         {
@@ -2387,7 +2497,7 @@
           "colour": "#2e0078",
           "style": [],
           "background": 15.13,
-          "selection": 13.84,
+          "selection": 9.96,
           "lineHighlight": 13.88
         },
         {
@@ -2395,7 +2505,7 @@
           "colour": "#a60049",
           "style": [],
           "background": 7.72,
-          "selection": 7.06,
+          "selection": 5.08,
           "lineHighlight": 7.08
         },
         {
@@ -2405,7 +2515,7 @@
             "underline"
           ],
           "background": 7.75,
-          "selection": 7.09,
+          "selection": 5.1,
           "lineHighlight": 7.1
         },
         {
@@ -2413,7 +2523,7 @@
           "colour": "#006108",
           "style": [],
           "background": 7.73,
-          "selection": 7.07,
+          "selection": 5.09,
           "lineHighlight": 7.09
         },
         {
@@ -2421,7 +2531,7 @@
           "colour": "#730000",
           "style": [],
           "background": 12.14,
-          "selection": 11.11,
+          "selection": 7.99,
           "lineHighlight": 11.14
         },
         {
@@ -2429,7 +2539,7 @@
           "colour": "#002ec2",
           "style": [],
           "background": 9.67,
-          "selection": 8.85,
+          "selection": 6.37,
           "lineHighlight": 8.87
         }
       ],
@@ -2440,8 +2550,20 @@
         },
         "anySurface": {
           "token": "number",
-          "on": "selection",
+          "on": "listSelection",
           "ratio": 7.05
+        }
+      },
+      "selection": {
+        "block": "#990098",
+        "text": "#ffffff",
+        "textOnBlock": 7.47,
+        "blockOnBackground": 7.47,
+        "backgroundOnly": "#ffbcfa",
+        "backgroundOnlyOnBackground": 1.51,
+        "lowestSyntax": {
+          "token": "number",
+          "ratio": 5.07
         }
       },
       "pairs": {

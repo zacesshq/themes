@@ -3,9 +3,9 @@
 // every failure so CI shows exactly which colour or file to fix
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { ROOT, VSCODE_FALLBACK_KEYS, VSCODE_NON_TEXT_PAIRS, VSCODE_TEXT_PAIRS, XCODE_KEYS, XCODE_SYNTAX_KEYS, loadPalette, loadSchema, styleOf } from "./lib/palette.mjs";
+import { ROOT, VSCODE_FALLBACK_KEYS, VSCODE_HC_TEXT_PAIRS, VSCODE_NON_TEXT_PAIRS, VSCODE_TEXT_PAIRS, XCODE_KEYS, XCODE_SYNTAX_KEYS, loadPalette, loadSchema, styleOf } from "./lib/palette.mjs";
 import { validate } from "./lib/schema.mjs";
-import { measureAll } from "./lib/measure.mjs";
+import { measureAll, windowsSelectionText } from "./lib/measure.mjs";
 import { contrast, ratio } from "./lib/colour.mjs";
 import { parseToml } from "./lib/toml.mjs";
 import { checkXml } from "./lib/xml.mjs";
@@ -32,9 +32,12 @@ report();
 
 // 3. contrast, terminal colours and the colour vision deficiency pairs
 const results = measureAll(palette);
-for (const { theme, contrastRows, terminalRows, terminalTextRows, pairRows } of results) {
+for (const { theme, contrastRows, terminalRows, terminalTextRows, pairRows, selectionRows } of results) {
   for (const x of contrastRows.filter((r) => !r.pass)) {
     fail("contrast", `${theme.id} ${x.item} on ${x.on}`, `${x.colour} on ${x.background} is ${x.ratio}:1, needs ${x.floor}:1`);
+  }
+  for (const x of selectionRows.filter((r) => !r.pass)) {
+    fail("selection", `${theme.id} ${x.item} and ${x.on}`, `${x.colour} and ${x.background} are ${x.distance.toFixed(3)} apart in OKLab at the closest, needs ${x.floor}`);
   }
   const dim = theme.terminal.dim ?? [];
   for (const x of terminalRows) {
@@ -88,7 +91,11 @@ for (const theme of palette.themes) {
       fail("vscode", `${theme.id} ${key}`, highContrast ? `unset on the ${theme.vscodeUiTheme} base, which would fall back to the built in high contrast colour` : "unset, so it would fall back to a VS Code default");
     }
   }
-  const pairs = [...VSCODE_TEXT_PAIRS.map((p) => [...p, palette.rules.textContrast]), ...VSCODE_NON_TEXT_PAIRS.map((p) => [...p, palette.rules.nonTextContrast])];
+  const pairs = [
+    ...VSCODE_TEXT_PAIRS.map((p) => [...p, palette.rules.textContrast]),
+    ...(highContrast ? VSCODE_HC_TEXT_PAIRS.map((p) => [...p, palette.rules.textContrast]) : []),
+    ...VSCODE_NON_TEXT_PAIRS.map((p) => [...p, palette.rules.nonTextContrast]),
+  ];
   for (const [fg, bg, floor] of pairs) {
     const a = colors[fg];
     const b = colors[bg];
@@ -155,6 +162,107 @@ for (const file of files) {
     fail("parse", name, error.message);
   }
 }
+
+// 6. every target reads its selection back out of the file it ships: a target that can set the
+// selected text colour holds that colour to the text floor on its selection, a target that cannot
+// must use the background only selection the palette measures, so no file drifts from the checks
+const read = (path) => readFileSync(join(ROOT, path), "utf8");
+const hexOf = (text, pattern, where) => {
+  const m = pattern.exec(text);
+  if (!m) throw new Error(`${where}: no selection colour found`);
+  return m[1].toLowerCase();
+};
+const fromRgb = (value) => `#${value.split(",").map((v) => Number(v).toString(16).padStart(2, "0")).join("")}`;
+const fromUnit = (r, g, b) => `#${[r, g, b].map((v) => Math.round(Number(v) * 255).toString(16).padStart(2, "0")).join("")}`;
+function shippedSelections(theme) {
+  const id = theme.id;
+  const snakeId = id.replace(/-/g, "_");
+  const pairs = [];
+  const keeps = [];
+  const kitty = read(`editors/terminals/kitty/zacess-${id}.conf`);
+  pairs.push(["kitty", hexOf(kitty, /^selection_foreground (#\w+)$/m, "kitty"), hexOf(kitty, /^selection_background (#\w+)$/m, "kitty")]);
+  const ghostty = read(`editors/terminals/ghostty/zacess-${id}`);
+  pairs.push(["Ghostty", hexOf(ghostty, /^selection-foreground = (#\w+)$/m, "Ghostty"), hexOf(ghostty, /^selection-background = (#\w+)$/m, "Ghostty")]);
+  const alacritty = parseToml(read(`editors/terminals/alacritty/zacess-${id}.toml`)).colors.selection;
+  pairs.push(["Alacritty", alacritty.text, alacritty.background]);
+  const iterm = read(`editors/terminals/iterm2/${theme.name}.itermcolors`);
+  const itermColour = (key) => {
+    const body = new RegExp(`<key>${key}</key>\\s*<dict>([\\s\\S]*?)</dict>`).exec(iterm)?.[1] ?? "";
+    const part = (c) => new RegExp(`<key>${c} Component</key>\\s*<real>([\\d.]+)</real>`).exec(body)?.[1];
+    return fromUnit(part("Red"), part("Green"), part("Blue"));
+  };
+  pairs.push(["iTerm2", itermColour("Selected Text Color"), itermColour("Selection Color")]);
+  const wt = JSON.parse(read("editors/terminals/windows-terminal/zacess.json")).schemes.find((x) => x.name === theme.name);
+  pairs.push(["Windows Terminal", windowsSelectionText(wt.selectionBackground), wt.selectionBackground]);
+  const vscodeColours = JSON.parse(read(`editors/vscode/themes/zacess-${id}-color-theme.json`)).colors;
+  pairs.push(["VS Code terminal", vscodeColours["terminal.selectionForeground"], vscodeColours["terminal.selectionBackground"]]);
+  if (theme.vscodeUiTheme.startsWith("hc")) pairs.push(["VS Code editor", vscodeColours["editor.selectionForeground"], vscodeColours["editor.selectionBackground"]]);
+  else keeps.push(["VS Code editor", vscodeColours["editor.selectionBackground"]], ["VS Code unfocused editor", vscodeColours["editor.inactiveSelectionBackground"]]);
+  keeps.push(["VS Code text fields", vscodeColours["selection.background"]]);
+  const scheme = read(`editors/jetbrains/src/main/resources/themes/zacess-${id}.xml`);
+  const option = (key) => `#${hexOf(scheme, new RegExp(`<option name="${key}" value="(\\w+)" />`), `JetBrains ${key}`)}`;
+  pairs.push(["JetBrains editor, console and terminal", option("SELECTION_FOREGROUND"), option("SELECTION_BACKGROUND")]);
+  pairs.push(["JetBrains unfocused editor", option("SELECTION_FOREGROUND"), option("SELECTION_BACKGROUND_INACTIVE")]);
+  const laf = JSON.parse(read(`editors/jetbrains/src/main/resources/themes/zacess-${id}.theme.json`)).ui;
+  for (const component of ["TextField", "TextArea", "TextPane", "EditorPane", "PasswordField", "FormattedTextField"]) {
+    pairs.push([`JetBrains ${component}`, laf[component].selectionForeground, laf[component].selectionBackground]);
+  }
+  const epf = read(`editors/eclipse/${theme.name}.epf`);
+  const pref = (key) => fromRgb(hexOf(epf, new RegExp(`/${key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}=([\\d,]+)$`, "m"), `Eclipse ${key}`));
+  pairs.push(["Eclipse editors", pref("org.eclipse.ui.editors/AbstractTextEditor.Color.SelectionForeground"), pref("org.eclipse.ui.editors/AbstractTextEditor.Color.SelectionBackground")]);
+  pairs.push(["Eclipse Terminal view", pref("org.eclipse.terminal.control/SELECTION_FOREGROUND"), pref("org.eclipse.terminal.control/SELECTION_BACKGROUND")]);
+  const css = read(`editors/eclipse/plugin/css/zacess-${id}.css`);
+  const cssPref = (key) => fromRgb(hexOf(css, new RegExp(`'${key}=([\\d,]+)'`), `Eclipse plugin ${key}`));
+  pairs.push(["Eclipse plugin editors", cssPref("AbstractTextEditor.Color.SelectionForeground"), cssPref("AbstractTextEditor.Color.SelectionBackground")]);
+  pairs.push(["Eclipse plugin Terminal view", cssPref("SELECTION_FOREGROUND"), cssPref("SELECTION_BACKGROUND")]);
+  const sublime = JSON.parse(read(`editors/sublime/${theme.name}.sublime-color-scheme`));
+  const sublimeVar = (key) => sublime.variables[/^var\((\w+)\)$/.exec(sublime.globals[key])[1]];
+  pairs.push(["Sublime Text", sublimeVar("selection_foreground"), sublimeVar("selection")]);
+  pairs.push(["Sublime Text unfocused", sublimeVar("inactive_selection_foreground"), sublimeVar("inactive_selection")]);
+  const helix = parseToml(read(`editors/helix/themes/zacess_${snakeId}.toml`));
+  for (const scope of ["ui.selection", "ui.selection.primary"]) {
+    pairs.push([`Helix ${scope}`, helix.palette[helix[scope].fg], helix.palette[helix[scope].bg]]);
+  }
+  const lua = read(`editors/neovim/colors/zacess-${id}.lua`);
+  for (const group of ["Visual", "VisualNOS"]) {
+    const line = hexOf(lua, new RegExp(`^(hl\\(0, "${group}", .*)$`, "m"), `Neovim ${group}`);
+    pairs.push([`Neovim ${group}`, /fg = "(#\w+)"/.exec(line)?.[1], /bg = "(#\w+)"/.exec(line)?.[1]]);
+  }
+  const el = read(`editors/emacs/zacess-${id}-theme.el`);
+  const region = hexOf(el, /^ '\(region \(\(t \((.*)\)\)\)\)$/m, "Emacs region");
+  pairs.push(["Emacs region", /:foreground "(#\w+)"/.exec(region)?.[1], /:background "(#\w+)"/.exec(region)?.[1]]);
+  const zed = JSON.parse(read("editors/zed/themes/zacess.json")).themes.find((x) => x.name === theme.name);
+  keeps.push(["Zed editor and terminal", zed.style.players[0].selection]);
+  const xcode = read(`editors/xcode/${theme.name}.xccolortheme`);
+  for (const key of ["DVTSourceTextSelectionColor", "DVTConsoleTextSelectionColor"]) {
+    const m = new RegExp(`<key>${key}</key>\\s*<string>([\\d.]+) ([\\d.]+) ([\\d.]+) 1</string>`).exec(xcode);
+    keeps.push([`Xcode ${key}`, m ? fromUnit(m[1], m[2], m[3]) : undefined]);
+  }
+  return { pairs, keeps };
+}
+const obsidian = read("editors/obsidian/theme.css");
+const obsidianSelections = [...obsidian.matchAll(/--text-selection: (#\w+);/g)].map((m) => m[1]);
+for (const theme of palette.themes) {
+  let shipped;
+  try {
+    shipped = shippedSelections(theme);
+  } catch (error) {
+    fail("selection", theme.id, error.message);
+    continue;
+  }
+  for (const [target, fg, bg] of shipped.pairs) {
+    if (!fg || !bg) { fail("selection", `${theme.id} ${target}`, "the selected text colour or the selection is missing"); continue; }
+    if (contrast(fg, bg) < palette.rules.textContrast) fail("selection", `${theme.id} ${target}`, `selected text ${fg} on ${bg} is ${ratio(fg, bg)}:1, needs ${palette.rules.textContrast}:1`);
+  }
+  for (const [target, colour] of shipped.keeps) {
+    if (colour?.toLowerCase() !== theme.ui.selection) fail("selection", `${theme.id} ${target}`, `${colour} is not the background only selection ${theme.ui.selection} the checks measure`);
+  }
+}
+// the Obsidian file has one block per theme, in the palette's order
+palette.themes.forEach((theme, i) => {
+  if (obsidianSelections[i] !== theme.ui.selection) fail("selection", `${theme.id} Obsidian`, `--text-selection is ${obsidianSelections[i]}, not ${theme.ui.selection}`);
+});
+report();
 
 const vscode = JSON.parse(readFileSync(join(ROOT, "editors/vscode/package.json"), "utf8"));
 for (const t of vscode.contributes.themes) {
@@ -425,10 +533,11 @@ function report() {
 
 report();
 
-const lines = results.map(({ theme, lowestOnBackground, lowestText, pairRows }) => {
+const lines = results.map(({ theme, contrastRows, lowestOnBackground, lowestText, lowestOnSelection, pairRows }) => {
   const minSim = Math.min(...pairRows.filter((p) => p.sameStyle || p.lightness).flatMap((p) => Object.values(p.simulated)));
   const minTone = Math.min(...pairRows.filter((p) => p.sameStyle || p.lightness).map((p) => p.toneDiff));
-  return `${theme.name.padEnd(24)} lowest syntax on background ${lowestOnBackground.ratio.toFixed(2)}:1, over any text surface ${lowestText.ratio.toFixed(2)}:1, closest pair tone ${minTone.toFixed(3)}, OKLab ${minSim.toFixed(3)}`;
+  const block = contrastRows.find((x) => x.item === "ui.selectionForeground");
+  return `${theme.name.padEnd(24)} lowest syntax on background ${lowestOnBackground.ratio.toFixed(2)}:1, over any text surface ${lowestText.ratio.toFixed(2)}:1, over the background only selection ${lowestOnSelection.ratio.toFixed(2)}:1, selected text on the selection block ${block.ratio.toFixed(2)}:1, closest pair tone ${minTone.toFixed(3)}, OKLab ${minSim.toFixed(3)}`;
 });
 console.log(lines.join("\n"));
 console.log(`all checks passed: ${files.length} generated and source files parse`);

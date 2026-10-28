@@ -255,9 +255,9 @@ IEclipsePreferences#org-eclipse-ui-editors:com-zacess-themes-eclipse {
 		'AbstractTextEditor.Color.Background.SystemDefault=false'
 		'AbstractTextEditor.Color.Foreground=255,255,255'
 		'AbstractTextEditor.Color.Foreground.SystemDefault=false'
-		'AbstractTextEditor.Color.SelectionBackground=28,28,56'
+		'AbstractTextEditor.Color.SelectionBackground=255,112,255'
 		'AbstractTextEditor.Color.SelectionBackground.SystemDefault=false'
-		'AbstractTextEditor.Color.SelectionForeground=255,255,255'
+		'AbstractTextEditor.Color.SelectionForeground=0,0,0'
 		'AbstractTextEditor.Color.SelectionForeground.SystemDefault=false'
 		'currentLineColor=20,20,20'
 		'lineNumberColor=255,255,255'
@@ -313,8 +313,8 @@ IEclipsePreferences#org-eclipse-terminal-control:com-zacess-themes-eclipse {
 		'BRIGHT_WHITE=255,255,255'
 		'FOREGROUND=255,255,255'
 		'BACKGROUND=0,0,0'
-		'SELECTION_FOREGROUND=255,255,255'
-		'SELECTION_BACKGROUND=28,28,56'
+		'SELECTION_FOREGROUND=0,0,0'
+		'SELECTION_BACKGROUND=255,112,255'
 }
 
 IEclipsePreferences#org-eclipse-debug-ui:com-zacess-themes-eclipse {
