@@ -11,7 +11,8 @@
 
 ;; Black on white with vivid deep colours, red focus outlines and navy frames, for low vision.
 ;; Every text and syntax colour keeps at least 7:1 contrast on the
-;; background, the selection and the current line.
+;; background and the current line. Selected text takes one colour at
+;; 7:1 or more on a bold selection block.
 
 ;;; Code:
 
@@ -22,7 +23,7 @@
  'zacess-deep-contrast-light
  '(default ((t (:foreground "#000000" :background "#ffffff"))))
  '(cursor ((t (:background "#000000"))))
- '(region ((t (:background "#f0f5ff" :extend t))))
+ '(region ((t (:foreground "#ffffff" :background "#990098" :extend t))))
  '(secondary-selection ((t (:background "#f5f5f5" :extend t))))
  '(highlight ((t (:background "#f5f5f5"))))
  '(hl-line ((t (:background "#f5f5f5" :extend t))))

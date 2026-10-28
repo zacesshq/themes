@@ -11,7 +11,8 @@
 
 ;; Ink on white, the reader's Dark on light theme.
 ;; Every text and syntax colour keeps at least 7:1 contrast on the
-;; background, the selection and the current line.
+;; background and the current line. Selected text takes one colour at
+;; 7:1 or more on a bold selection block.
 
 ;;; Code:
 
@@ -22,7 +23,7 @@
  'zacess-light
  '(default ((t (:foreground "#111111" :background "#ffffff"))))
  '(cursor ((t (:background "#111111"))))
- '(region ((t (:background "#fff1a8" :extend t))))
+ '(region ((t (:foreground "#ffffff" :background "#0150b2" :extend t))))
  '(secondary-selection ((t (:background "#f0f0f0" :extend t))))
  '(highlight ((t (:background "#f0f0f0"))))
  '(hl-line ((t (:background "#f0f0f0" :extend t))))

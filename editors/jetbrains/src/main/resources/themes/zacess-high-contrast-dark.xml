@@ -8,8 +8,9 @@
   <colors>
     <option name="CARET_COLOR" value="f5c400" />
     <option name="CARET_ROW_COLOR" value="1a1a1a" />
-    <option name="SELECTION_BACKGROUND" value="0a2552" />
-    <option name="SELECTION_FOREGROUND" value="ffffff" />
+    <option name="SELECTION_BACKGROUND" value="bf96ff" />
+    <option name="SELECTION_FOREGROUND" value="000000" />
+    <option name="SELECTION_BACKGROUND_INACTIVE" value="bf96ff" />
     <option name="GUTTER_BACKGROUND" value="000000" />
     <option name="LINE_NUMBERS_COLOR" value="e6e6e6" />
     <option name="LINE_NUMBER_ON_CARET_ROW_COLOR" value="f5c400" />

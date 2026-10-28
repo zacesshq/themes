@@ -63,7 +63,7 @@ settings:
   --text-accent-hover: #0049a3;
   --text-on-accent: #ffffff;
   --text-on-accent-inverted: #ffffff;
-  --text-selection: #fff1a8;
+  --text-selection: #9bc3ff;
   --text-highlight-bg: #ffd400;
   --interactive-normal: #ededed;
   --interactive-hover: #f0f0f0;
@@ -141,7 +141,7 @@ settings:
   --text-accent-hover: #8cbcff;
   --text-on-accent: #121212;
   --text-on-accent-inverted: #121212;
-  --text-selection: #1a2436;
+  --text-selection: #004769;
   --text-highlight-bg: #332a00;
   --interactive-normal: #232323;
   --interactive-hover: #1f1f1f;
@@ -221,7 +221,7 @@ body.zacess-yellow-on-black.theme-dark {
   --text-accent-hover: #ffeb3b;
   --text-on-accent: #000000;
   --text-on-accent-inverted: #000000;
-  --text-selection: #0a2257;
+  --text-selection: #024b4e;
   --text-highlight-bg: #3d3000;
   --interactive-normal: #0d0d0d;
   --interactive-hover: #141414;
@@ -300,7 +300,7 @@ body.zacess-cream.theme-dark {
   --text-accent-hover: #004498;
   --text-on-accent: #ffffff;
   --text-on-accent-inverted: #ffffff;
-  --text-selection: #f9e79a;
+  --text-selection: #c8a9ff;
   --text-highlight-bg: #ffd400;
   --interactive-normal: #e9e5dd;
   --interactive-hover: #f3ead2;
@@ -379,7 +379,7 @@ body.zacess-high-contrast-dark.theme-dark {
   --text-accent-hover: #f5c400;
   --text-on-accent: #000000;
   --text-on-accent-inverted: #000000;
-  --text-selection: #0a2552;
+  --text-selection: #6501ae;
   --text-highlight-bg: #403300;
   --interactive-normal: #0f0f0f;
   --interactive-hover: #1a1a1a;
@@ -458,7 +458,7 @@ body.zacess-high-contrast-light.theme-dark {
   --text-accent-hover: #003d99;
   --text-on-accent: #ffffff;
   --text-on-accent-inverted: #ffffff;
-  --text-selection: #fff1a0;
+  --text-selection: #00d3d0;
   --text-highlight-bg: #ffd400;
   --interactive-normal: #efefef;
   --interactive-hover: #f2f2f2;
@@ -537,7 +537,7 @@ body.zacess-deep-contrast-dark.theme-dark {
   --text-accent-hover: #00ffff;
   --text-on-accent: #000000;
   --text-on-accent-inverted: #000000;
-  --text-selection: #1c1c38;
+  --text-selection: #720072;
   --text-highlight-bg: #403300;
   --interactive-normal: #0a0a0a;
   --interactive-hover: #141414;
@@ -616,7 +616,7 @@ body.zacess-deep-contrast-light.theme-dark {
   --text-accent-hover: #0f4a85;
   --text-on-accent: #ffffff;
   --text-on-accent-inverted: #ffffff;
-  --text-selection: #f0f5ff;
+  --text-selection: #ffbcfa;
   --text-highlight-bg: #fff1a0;
   --interactive-normal: #ffffff;
   --interactive-hover: #f5f5f5;
@@ -656,6 +656,12 @@ body.zacess-deep-contrast-light.theme-dark {
   --zacess-focus: #b5200d;
   --zacess-added: #006108;
   --zacess-removed: #730000;
+}
+
+/* Obsidian fills search matches in the editor with the selection colour; they take the find
+   match colour instead, so a selection never passes for a search hit */
+.cm-s-obsidian span.cm-highlight.obsidian-search-match-highlight {
+  background-color: var(--text-highlight-bg);
 }
 
 /* links are underlined so colour is never the only signal */

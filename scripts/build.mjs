@@ -110,6 +110,7 @@ function vscodeColors(theme) {
     errorForeground: u.error,
     focusBorder: u.borderActive,
     "widget.border": u.border,
+    // text fields and the find widget keep their own text colour over a selection
     "selection.background": u.selection,
     "icon.foreground": u.foreground,
     "textLink.foreground": u.link,
@@ -126,12 +127,19 @@ function vscodeColors(theme) {
     "editorLineNumber.activeForeground": u.lineNumberActive,
     "editorCursor.foreground": u.cursor,
     "editorCursor.background": u.background,
-    "editor.selectionBackground": u.selection,
-    "editor.inactiveSelectionBackground": u.selection,
+    // VS Code draws editor.selectionForeground only in high contrast themes, so those take the
+    // selection block with one text colour; the others keep each token's colour over the
+    // background only selection. The unfocused selection matches the focused one, because the
+    // high contrast text colour is drawn on both
+    "editor.selectionBackground": highContrast ? u.selectionStrong : u.selection,
+    "editor.inactiveSelectionBackground": highContrast ? u.selectionStrong : u.selection,
     // these are drawn over the selection and the text, so they stay transparent and rely on a
     // border; an opaque colour would hide the selection and change the measured contrast
     "editor.selectionHighlightBackground": `${u.background}00`,
     "editor.selectionHighlightBorder": u.border,
+    "editorOverviewRuler.selectionHighlightForeground": u.border,
+    "minimap.selectionHighlight": u.selectionStrong,
+    "minimap.selectionOccurrenceHighlight": u.border,
     "editor.lineHighlightBackground": u.lineHighlight,
     "editor.lineHighlightBorder": u.lineHighlight,
     "editor.findMatchBackground": u.findMatch,
@@ -169,7 +177,7 @@ function vscodeColors(theme) {
     "editorSuggestWidget.background": u.surface,
     "editorSuggestWidget.foreground": u.foreground,
     "editorSuggestWidget.border": u.border,
-    "editorSuggestWidget.selectedBackground": u.selection,
+    "editorSuggestWidget.selectedBackground": u.listSelection,
     "editorSuggestWidget.selectedForeground": u.foreground,
     "editorSuggestWidget.highlightForeground": u.accent,
     "editorOverviewRuler.errorForeground": u.error,
@@ -232,7 +240,7 @@ function vscodeColors(theme) {
     "input.border": u.border,
     "input.placeholderForeground": u.muted,
     "inputOption.activeBorder": u.borderActive,
-    "inputOption.activeBackground": u.selection,
+    "inputOption.activeBackground": u.listSelection,
     "inputOption.activeForeground": u.foreground,
     "inputValidation.errorBorder": u.error,
     "inputValidation.warningBorder": u.warning,
@@ -253,13 +261,13 @@ function vscodeColors(theme) {
     "checkbox.background": u.background,
     "checkbox.border": u.border,
     "checkbox.foreground": u.foreground,
-    "list.activeSelectionBackground": u.selection,
+    "list.activeSelectionBackground": u.listSelection,
     "list.activeSelectionForeground": u.foreground,
     "list.inactiveSelectionBackground": u.lineHighlight,
     "list.inactiveSelectionForeground": u.foreground,
     "list.hoverBackground": u.lineHighlight,
     "list.hoverForeground": u.foreground,
-    "list.focusBackground": u.selection,
+    "list.focusBackground": u.listSelection,
     "list.focusForeground": u.foreground,
     "list.focusOutline": u.borderActive,
     "list.highlightForeground": u.accent,
@@ -267,10 +275,12 @@ function vscodeColors(theme) {
     "list.warningForeground": u.warning,
     "menu.background": u.surface,
     "menu.foreground": u.foreground,
-    "menu.selectionBackground": u.selection,
+    "menu.selectionBackground": u.listSelection,
     "menu.selectionForeground": u.foreground,
     "menu.border": u.border,
     "menu.separatorBackground": u.border,
+    "menubar.selectionBackground": u.listSelection,
+    "menubar.selectionForeground": u.foreground,
     "notifications.background": u.surface,
     "notifications.foreground": u.foreground,
     "notifications.border": u.border,
@@ -280,7 +290,7 @@ function vscodeColors(theme) {
     "quickInput.background": u.surface,
     "quickInput.foreground": u.foreground,
     "quickInputTitle.background": u.surfaceAlt,
-    "quickInputList.focusBackground": u.selection,
+    "quickInputList.focusBackground": u.listSelection,
     "quickInputList.focusForeground": u.foreground,
     "keybindingLabel.background": u.surface,
     "keybindingLabel.foreground": u.foreground,
@@ -294,7 +304,9 @@ function vscodeColors(theme) {
     "peekViewTitle.background": u.surfaceAlt,
     "peekViewEditor.matchHighlightBackground": `${u.background}00`,
     "peekViewEditor.matchHighlightBorder": u.findMatchBorder,
-    "peekViewResult.matchHighlightBackground": u.selection,
+    "peekViewResult.matchHighlightBackground": u.listSelection,
+    "peekViewResult.selectionBackground": u.listSelection,
+    "peekViewResult.selectionForeground": u.foreground,
     "gitDecoration.addedResourceForeground": s.added,
     "gitDecoration.untrackedResourceForeground": s.added,
     "gitDecoration.modifiedResourceForeground": s.changed,
@@ -307,7 +319,9 @@ function vscodeColors(theme) {
     "terminal.background": u.background,
     "terminal.foreground": terminalText(theme).foreground,
     "terminalCursor.foreground": terminalText(theme).cursor,
-    "terminal.selectionBackground": u.selection,
+    "terminal.selectionBackground": u.selectionStrong,
+    "terminal.selectionForeground": u.selectionForeground,
+    "terminal.inactiveSelectionBackground": u.selectionStrong,
   };
   ANSI_NAMES.forEach((name, i) => {
     colours[`terminal.ansi${name[0].toUpperCase()}${name.slice(1)}`] = a[i];
@@ -317,7 +331,7 @@ function vscodeColors(theme) {
     // border colour and only focus, through contrastActiveBorder, takes the strong one
     colours.contrastBorder = u.border;
     colours.contrastActiveBorder = u.borderActive;
-    colours["editor.selectionForeground"] = u.foreground;
+    colours["editor.selectionForeground"] = u.selectionForeground;
   }
   return colours;
 }
@@ -340,7 +354,7 @@ function buildVscode() {
   write("editors/vscode/package.json", json({
     name: "zacess-themes",
     displayName: "Zacess Themes",
-    description: "Eight high contrast code themes matching the Zacess reader: Light, Dark, Yellow on Black for low vision, Cream for dyslexia and four maximum contrast themes, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light. Every text and syntax colour keeps 7:1 contrast.",
+    description: "Eight high contrast code themes matching the Zacess reader: Light, Dark, Yellow on Black for low vision, Cream for dyslexia and four maximum contrast themes, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light. Every text and syntax colour keeps 7:1 contrast on the background and selections stand out in a colour of their own.",
     version: palette.version,
     publisher: "zacess",
     license: "MIT",
@@ -387,8 +401,10 @@ function icls(theme) {
   const colours = {
     CARET_COLOR: u.cursor,
     CARET_ROW_COLOR: u.lineHighlight,
-    SELECTION_BACKGROUND: u.selection,
-    SELECTION_FOREGROUND: u.foreground,
+    SELECTION_BACKGROUND: u.selectionStrong,
+    SELECTION_FOREGROUND: u.selectionForeground,
+    // the selected text colour is drawn on an unfocused selection too, so it keeps the same block
+    SELECTION_BACKGROUND_INACTIVE: u.selectionStrong,
     GUTTER_BACKGROUND: u.gutter,
     LINE_NUMBERS_COLOR: u.lineNumber,
     LINE_NUMBER_ON_CARET_ROW_COLOR: u.lineNumberActive,
@@ -523,6 +539,7 @@ function icls(theme) {
 
 function jetbrainsTheme(theme) {
   const u = theme.ui;
+  const selectedText = { selectionBackground: u.selectionStrong, selectionForeground: u.selectionForeground };
   return {
     name: theme.name,
     dark: theme.appearance === "dark",
@@ -537,7 +554,7 @@ function jetbrainsTheme(theme) {
         infoForeground: u.muted,
         disabledForeground: u.muted,
         inactiveForeground: u.muted,
-        selectionBackground: u.selection,
+        selectionBackground: u.listSelection,
         selectionForeground: u.foreground,
         selectionInactiveBackground: u.lineHighlight,
         selectionBackgroundInactive: u.lineHighlight,
@@ -581,10 +598,15 @@ function jetbrainsTheme(theme) {
         "default.focusColor": u.foreground,
         "default.focusedBorderColor": u.foreground,
       },
-      TextField: { background: u.background, foreground: u.foreground },
-      TextArea: { background: u.background, foreground: u.foreground },
+      // selected text in text fields takes the editor's selection block and one text colour,
+      // overriding the selected row colour that "*" gives every component
+      TextField: { background: u.background, foreground: u.foreground, ...selectedText },
+      TextArea: { background: u.background, foreground: u.foreground, ...selectedText },
+      TextPane: selectedText,
+      PasswordField: selectedText,
+      FormattedTextField: selectedText,
       ComboBox: { background: u.background, foreground: u.foreground, nonEditableBackground: u.background },
-      EditorPane: { background: u.background },
+      EditorPane: { background: u.background, ...selectedText },
       EditorTabs: {
         background: u.surface,
         underlinedTabBackground: u.background,
@@ -597,14 +619,14 @@ function jetbrainsTheme(theme) {
         "Header.background": u.surfaceAlt,
         "Header.inactiveBackground": u.surface,
         "HeaderTab.selectedInactiveBackground": u.lineHighlight,
-        "Button.selectedBackground": u.selection,
+        "Button.selectedBackground": u.listSelection,
         "Button.selectedForeground": u.foreground,
       },
       MainToolbar: { background: u.surfaceAlt, inactiveBackground: u.surface },
       StatusBar: { background: u.surfaceAlt, borderColor: u.border },
-      Tree: { background: u.surface, foreground: u.foreground, selectionBackground: u.selection, selectionForeground: u.foreground, selectionInactiveBackground: u.lineHighlight },
-      List: { background: u.surface, foreground: u.foreground, selectionBackground: u.selection, selectionForeground: u.foreground, selectionInactiveBackground: u.lineHighlight },
-      Table: { background: u.surface, foreground: u.foreground, selectionBackground: u.selection, selectionForeground: u.foreground },
+      Tree: { background: u.surface, foreground: u.foreground, selectionBackground: u.listSelection, selectionForeground: u.foreground, selectionInactiveBackground: u.lineHighlight },
+      List: { background: u.surface, foreground: u.foreground, selectionBackground: u.listSelection, selectionForeground: u.foreground, selectionInactiveBackground: u.lineHighlight },
+      Table: { background: u.surface, foreground: u.foreground, selectionBackground: u.listSelection, selectionForeground: u.foreground },
       Popup: { background: u.surface, borderColor: u.border },
       ToolTip: { background: u.surface, foreground: u.foreground, borderColor: u.border },
       Notification: { background: u.surface, foreground: u.foreground, borderColor: u.border },
@@ -635,7 +657,7 @@ function buildJetbrains() {
     "<ul>",
     ...palette.themes.map((t) => `<li><b>${t.name}</b>: ${t.description}</li>`),
     "</ul>",
-    "<p>Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background, the selection and the current line. Comments are never dimmed below it. Keywords are bold, comments italic and invalid code underlined, so colour is never the only signal.</p>",
+    "<p>Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background and the current line. Comments are never dimmed below it. Selected text takes one colour at 7:1 or more on a bold selection block. Keywords are bold, comments italic and invalid code underlined, so colour is never the only signal.</p>",
     `<p>Source, contrast tables and issues: <a href="${REPO}">${REPO}</a></p>`,
     "]]></description>",
     "  <depends>com.intellij.modules.platform</depends>",
@@ -776,6 +798,12 @@ function buildObsidian() {
     block("body.zacess-high-contrast-light.theme-light,\nbody.zacess-high-contrast-light.theme-dark", byId["high-contrast-light"]),
     block("body.zacess-deep-contrast-dark.theme-light,\nbody.zacess-deep-contrast-dark.theme-dark", byId["deep-contrast-dark"]),
     block("body.zacess-deep-contrast-light.theme-light,\nbody.zacess-deep-contrast-light.theme-dark", byId["deep-contrast-light"]),
+    "/* Obsidian fills search matches in the editor with the selection colour; they take the find",
+    "   match colour instead, so a selection never passes for a search hit */",
+    ".cm-s-obsidian span.cm-highlight.obsidian-search-match-highlight {",
+    "  background-color: var(--text-highlight-bg);",
+    "}",
+    "",
     "/* links are underlined so colour is never the only signal */",
     ".markdown-rendered a,",
     ".cm-s-obsidian span.cm-hmd-internal-link,",
@@ -867,8 +895,10 @@ function neovim(theme) {
     SignColumn: { fg: u.lineNumber, bg: u.gutter },
     FoldColumn: { fg: u.lineNumber, bg: u.gutter },
     Folded: { fg: u.muted, bg: u.surface, italic: true },
-    Visual: { bg: u.selection },
-    VisualNOS: { bg: u.selection },
+    // every selected character takes one colour on the selection block, in every buffer
+    // including terminal buffers
+    Visual: { fg: u.selectionForeground, bg: u.selectionStrong },
+    VisualNOS: { fg: u.selectionForeground, bg: u.selectionStrong },
     Search: { fg: u.foreground, bg: u.lineHighlight, underline: true, sp: u.findMatchBorder },
     CurSearch: { fg: u.foreground, bg: u.findMatch, bold: true },
     IncSearch: { fg: u.foreground, bg: u.findMatch, bold: true },
@@ -896,12 +926,12 @@ function neovim(theme) {
     WinBar: { fg: u.foreground, bg: u.background, bold: true },
     WinBarNC: { fg: u.muted, bg: u.background },
     Pmenu: { fg: u.foreground, bg: u.surface },
-    PmenuSel: { fg: u.foreground, bg: u.selection, bold: true },
+    PmenuSel: { fg: u.foreground, bg: u.listSelection, bold: true },
     PmenuSbar: { bg: u.surfaceAlt },
     PmenuThumb: { bg: u.indentGuide },
     PmenuMatch: { fg: u.accent, bold: true },
-    WildMenu: { fg: u.foreground, bg: u.selection },
-    QuickFixLine: { bg: u.selection },
+    WildMenu: { fg: u.foreground, bg: u.listSelection },
+    QuickFixLine: { bg: u.listSelection },
     SpellBad: { undercurl: true, sp: u.error },
     SpellCap: { undercurl: true, sp: u.warning },
     SpellLocal: { undercurl: true, sp: u.info },
@@ -909,7 +939,7 @@ function neovim(theme) {
     DiffAdd: { bg: u.diffAddedBackground },
     DiffDelete: { fg: s.removed, bg: u.diffRemovedBackground },
     DiffChange: { bg: u.lineHighlight },
-    DiffText: { bg: u.selection, bold: true },
+    DiffText: { bg: u.listSelection, bold: true },
     Added: spec("added"),
     Removed: spec("removed"),
     Changed: spec("changed"),
@@ -1102,14 +1132,14 @@ function zedTheme(theme) {
     "surface.background": u.surface,
     "element.background": u.surfaceAlt,
     "element.hover": u.lineHighlight,
-    "element.active": u.selection,
-    "element.selected": u.selection,
+    "element.active": u.listSelection,
+    "element.selected": u.listSelection,
     "element.disabled": u.surface,
-    "drop_target.background": u.selection,
+    "drop_target.background": u.listSelection,
     "ghost_element.background": `${u.surface}00`,
     "ghost_element.hover": u.lineHighlight,
-    "ghost_element.active": u.selection,
-    "ghost_element.selected": u.selection,
+    "ghost_element.active": u.listSelection,
+    "ghost_element.selected": u.listSelection,
     "ghost_element.disabled": `${u.surface}00`,
     text: u.foreground,
     "text.muted": u.muted,
@@ -1200,6 +1230,8 @@ function zedTheme(theme) {
     warning: u.warning,
     "warning.background": u.surface,
     "warning.border": u.warning,
+    // Zed has no selected text colour, so the local player's selection, which the editor and the
+    // terminal both draw, is the background only selection
     players: [{ cursor: u.cursor, background: u.cursor, selection: u.selection }],
     syntax: {
       attribute: syn("attribute"),
@@ -1264,7 +1296,7 @@ function buildZed() {
     `version = "${palette.version}"`,
     "schema_version = 1",
     "authors = [\"Zacess <contact@zacess.com>\"]",
-    "description = \"High contrast themes matching the Zacess reader: Light, Dark, Yellow on Black, Cream, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light, every text and syntax colour at 7:1 or more.\"",
+    "description = \"High contrast themes matching the Zacess reader: Light, Dark, Yellow on Black, Cream, High Contrast Dark, High Contrast Light, Deep Contrast Dark and Deep Contrast Light, every text and syntax colour at 7:1 or more on the background.\"",
     `repository = "${REPO}"`,
     "",
   ].join("\n"));
@@ -1316,8 +1348,10 @@ function sublimeScheme(theme) {
       foreground: v("foreground"),
       caret: v("cursor"),
       line_highlight: v("line_highlight"),
-      selection: v("selection"),
-      inactive_selection: v("selection"),
+      selection: v("selection_strong"),
+      selection_foreground: v("selection_foreground"),
+      inactive_selection: v("selection_strong"),
+      inactive_selection_foreground: v("selection_foreground"),
       gutter: v("gutter"),
       gutter_foreground: v("line_number"),
       gutter_foreground_highlight: v("line_number_active"),
@@ -1380,8 +1414,9 @@ function helix(theme) {
     "ui.gutter": ui(null, "gutter"),
     "ui.linenr": ui("line_number"),
     "ui.linenr.selected": ui("line_number_active", null, bold),
-    "ui.selection": ui(null, "selection"),
-    "ui.selection.primary": ui(null, "selection"),
+    // search results show as selections too, so they take the same block and text colour
+    "ui.selection": ui("selection_foreground", "selection_strong"),
+    "ui.selection.primary": ui("selection_foreground", "selection_strong"),
     "ui.highlight": ui(null, "line_highlight"),
     "ui.statusline": ui("foreground", "surface_alt"),
     "ui.statusline.inactive": ui("muted", "surface"),
@@ -1396,7 +1431,7 @@ function helix(theme) {
     "ui.popup": ui("foreground", "surface"),
     "ui.popup.info": ui("foreground", "surface"),
     "ui.menu": ui("foreground", "surface"),
-    "ui.menu.selected": ui("foreground", "selection", bold),
+    "ui.menu.selected": ui("foreground", "list_selection", bold),
     "ui.menu.scroll": ui("indent_guide", "surface_alt"),
     "ui.picker.header": ui("foreground", "surface_alt", bold),
     "ui.virtual.whitespace": ui("whitespace"),
@@ -1498,7 +1533,7 @@ function emacs(theme) {
   const faces = {
     default: { foreground: u.foreground, background: u.background },
     cursor: { background: u.cursor },
-    region: { background: u.selection, extend: true },
+    region: { foreground: u.selectionForeground, background: u.selectionStrong, extend: true },
     "secondary-selection": { background: u.lineHighlight, extend: true },
     highlight: { background: u.lineHighlight },
     "hl-line": { background: u.lineHighlight, extend: true },
@@ -1591,7 +1626,8 @@ function emacs(theme) {
     "",
     `;; ${theme.description}`,
     ";; Every text and syntax colour keeps at least 7:1 contrast on the",
-    ";; background, the selection and the current line.",
+    ";; background and the current line. Selected text takes one colour at",
+    ";; 7:1 or more on a bold selection block.",
     "",
     ";;; Code:",
     "",
@@ -1711,7 +1747,7 @@ function eclipsePrefs(theme) {
     ["content_assist_proposals_foreground", rgb(u.foreground)],
     ["content_assist_parameters_background", rgb(u.surface)],
     ["content_assist_parameters_foreground", rgb(u.foreground)],
-    ["content_assist_completion_replacement_background", rgb(u.selection)],
+    ["content_assist_completion_replacement_background", rgb(u.listSelection)],
     ["content_assist_completion_replacement_foreground", rgb(u.foreground)],
   );
 
@@ -1722,9 +1758,9 @@ function eclipsePrefs(theme) {
     ["AbstractTextEditor.Color.Background.SystemDefault", false],
     ["AbstractTextEditor.Color.Foreground", rgb(u.foreground)],
     ["AbstractTextEditor.Color.Foreground.SystemDefault", false],
-    ["AbstractTextEditor.Color.SelectionBackground", rgb(u.selection)],
+    ["AbstractTextEditor.Color.SelectionBackground", rgb(u.selectionStrong)],
     ["AbstractTextEditor.Color.SelectionBackground.SystemDefault", false],
-    ["AbstractTextEditor.Color.SelectionForeground", rgb(u.foreground)],
+    ["AbstractTextEditor.Color.SelectionForeground", rgb(u.selectionForeground)],
     ["AbstractTextEditor.Color.SelectionForeground.SystemDefault", false],
     ["currentLineColor", rgb(u.lineHighlight)],
     ["lineNumberColor", rgb(u.lineNumber)],
@@ -1752,9 +1788,9 @@ function eclipsePrefs(theme) {
   annotation("change", s.changed);
   annotation("addition", s.added);
   annotation("deletion", s.removed);
-  // linked mode fills the other copies of a renamed name, so it uses the selection, which every
-  // syntax colour keeps 7:1 over
-  editors.push(["linked.slave.color", rgb(u.selection)], ["jdt.linked.slave.color", rgb(u.selection)]);
+  // linked mode fills the other copies of a renamed name behind their own colours, so it uses the
+  // selected row colour, which every syntax colour keeps 7:1 over
+  editors.push(["linked.slave.color", rgb(u.listSelection)], ["jdt.linked.slave.color", rgb(u.listSelection)]);
 
   // code minings and other inline annotations take a workbench colour rather than an editor one
   workbench.push(["org.eclipse.ui.editors.inlineAnnotationColor", rgb(u.muted)]);
@@ -2041,6 +2077,7 @@ function xcodeTheme(theme) {
     DVTSourceTextCurrentLineHighlightColor: xcodeColour(u.lineHighlight),
     DVTSourceTextInsertionPointColor: xcodeColour(u.cursor),
     DVTSourceTextInvisiblesColor: xcodeColour(u.whitespace),
+    // Xcode has no selected text colour, so its selections keep each token's own colour
     DVTSourceTextSelectionColor: xcodeColour(u.selection),
     // the dimmed area around a focused block keeps text on it, so it is a surface every syntax
     // colour keeps 7:1 over
@@ -2130,8 +2167,8 @@ function terminalColours(theme) {
     background: u.background,
     ...terminalText(theme),
     cursorText: u.background,
-    selection: u.selection,
-    selectionText: u.foreground,
+    selection: u.selectionStrong,
+    selectionText: u.selectionForeground,
     ansi: theme.terminal.ansi,
   };
 }
@@ -2303,6 +2340,7 @@ function buildDocs() {
   const tables = contrastTables(palette);
   replaceBetween("README.md", "contrast summary", tables.summary);
   replaceBetween("ACCESSIBILITY.md", "contrast detail", tables.detail);
+  replaceBetween("ACCESSIBILITY.md", "selection detail", tables.selection);
   replaceBetween("ACCESSIBILITY.md", "interface detail", tables.ui);
   replaceBetween("ACCESSIBILITY.md", "terminal detail", tables.terminal);
   replaceBetween("ACCESSIBILITY.md", "colour vision detail", tables.vision);

@@ -14,8 +14,8 @@
 "ui.gutter" = { bg = "gutter" }
 "ui.linenr" = { fg = "line_number" }
 "ui.linenr.selected" = { fg = "line_number_active", modifiers = ["bold"] }
-"ui.selection" = { bg = "selection" }
-"ui.selection.primary" = { bg = "selection" }
+"ui.selection" = { fg = "selection_foreground", bg = "selection_strong" }
+"ui.selection.primary" = { fg = "selection_foreground", bg = "selection_strong" }
 "ui.highlight" = { bg = "line_highlight" }
 "ui.statusline" = { fg = "foreground", bg = "surface_alt" }
 "ui.statusline.inactive" = { fg = "muted", bg = "surface" }
@@ -30,7 +30,7 @@
 "ui.popup" = { fg = "foreground", bg = "surface" }
 "ui.popup.info" = { fg = "foreground", bg = "surface" }
 "ui.menu" = { fg = "foreground", bg = "surface" }
-"ui.menu.selected" = { fg = "foreground", bg = "selection", modifiers = ["bold"] }
+"ui.menu.selected" = { fg = "foreground", bg = "list_selection", modifiers = ["bold"] }
 "ui.menu.scroll" = { fg = "indent_guide", bg = "surface_alt" }
 "ui.picker.header" = { fg = "foreground", bg = "surface_alt", modifiers = ["bold"] }
 "ui.virtual.whitespace" = { fg = "whitespace" }
@@ -104,7 +104,10 @@ border_active = "#004498"
 accent = "#004498"
 accent_foreground = "#ffffff"
 link = "#004498"
-selection = "#f9e79a"
+selection = "#c8a9ff"
+selection_strong = "#7401ca"
+selection_foreground = "#fdf6e3"
+list_selection = "#f9e79a"
 line_highlight = "#f3ead2"
 cursor = "#000000"
 gutter = "#fdf6e3"

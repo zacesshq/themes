@@ -320,26 +320,26 @@
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.960784</real>
+		<real>0.070588</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.960784</real>
+		<real>0.070588</real>
 		<key>Red Component</key>
-		<real>0.960784</real>
+		<real>0.070588</real>
 	</dict>
 	<key>Selection Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.211765</real>
+		<real>1.000000</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.141176</real>
+		<real>0.741176</real>
 		<key>Red Component</key>
-		<real>0.101961</real>
+		<real>0.309804</real>
 	</dict>
 </dict>
 </plist>

@@ -15,14 +15,23 @@ export function loadSchema() {
   return JSON.parse(readFileSync(join(ROOT, "palette", "schema.json"), "utf8"));
 }
 
-// the surfaces syntax colours are drawn on, each held to the text contrast floor
-export const TEXT_SURFACES = ["background", "surface", "surfaceAlt", "selection", "lineHighlight", "diffAddedBackground", "diffRemovedBackground"];
+// the surfaces syntax colours are drawn on, each held to the text contrast floor; the selection
+// is measured on its own floor, rules.selectionContrast, because a fill bright enough to stand out
+// from the background cannot also keep every syntax colour at 7:1
+export const TEXT_SURFACES = ["background", "surface", "surfaceAlt", "listSelection", "lineHighlight", "diffAddedBackground", "diffRemovedBackground"];
+
+// interface text that can sit inside a background only selection (links and muted text in
+// Obsidian, the Xcode console), held to rules.selectionContrast like the syntax colours
+export const SELECTION_TEXT = ["muted", "link"];
+
+// the fills a selection must never be mistaken for, measured by OKLab distance
+export const SELECTION_NEIGHBOURS = ["background", "lineHighlight", "findMatch", "diffAddedBackground", "diffRemovedBackground"];
 
 // interface text and the surfaces it sits on in the editors, held to the text contrast floor
 export const UI_TEXT = [
-  ["foreground", ["background", "surface", "surfaceAlt", "selection", "lineHighlight"]],
+  ["foreground", ["background", "surface", "surfaceAlt", "selection", "listSelection", "lineHighlight"]],
   ["muted", ["background", "surface", "surfaceAlt"]],
-  ["accent", ["background", "surface", "surfaceAlt", "selection"]],
+  ["accent", ["background", "surface", "surfaceAlt", "listSelection"]],
   ["link", ["background", "surface", "surfaceAlt"]],
   ["error", ["background", "surface", "surfaceAlt"]],
   ["warning", ["background", "surface", "surfaceAlt"]],
@@ -30,6 +39,7 @@ export const UI_TEXT = [
   ["lineNumber", ["gutter", "lineHighlight"]],
   ["lineNumberActive", ["gutter", "lineHighlight"]],
   ["accentForeground", ["accent"]],
+  ["selectionForeground", ["selectionStrong"]],
   ["cursor", ["background", "lineHighlight"]],
 ];
 
@@ -43,6 +53,7 @@ export const UI_NON_TEXT = [
   ["borderActive", "surface"],
   ["borderActive", "surfaceAlt"],
   ["findMatchBorder", "background"],
+  ["selectionStrong", "background"],
   ["indentGuide", "background"],
   ["whitespace", "background"],
 ];
@@ -129,6 +140,15 @@ export const VSCODE_TEXT_PAIRS = [
   ["tab.inactiveForeground", "tab.inactiveBackground"],
   ["panelTitle.activeForeground", "panel.background"],
   ["terminal.foreground", "terminal.background"],
+  ["terminal.selectionForeground", "terminal.selectionBackground"],
+  ["terminal.selectionForeground", "terminal.inactiveSelectionBackground"],
+];
+
+// the selected text colour VS Code only draws in high contrast themes, held to the text floor on
+// both the focused and the unfocused selection, since it is drawn on either
+export const VSCODE_HC_TEXT_PAIRS = [
+  ["editor.selectionForeground", "editor.selectionBackground"],
+  ["editor.selectionForeground", "editor.inactiveSelectionBackground"],
 ];
 
 // non-text marks that are not named as borders, held to the non-text floor

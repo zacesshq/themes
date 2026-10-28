@@ -10,8 +10,8 @@ cursor = "#ffff00"
 text = "#000000"
 
 [colors.selection]
-background = "#1c1c38"
-text = "#ffffff"
+background = "#ff70ff"
+text = "#000000"
 
 [colors.normal]
 black = "#000000"

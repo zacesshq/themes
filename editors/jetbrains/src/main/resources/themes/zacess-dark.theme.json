@@ -56,11 +56,27 @@
     },
     "TextField": {
       "background": "#121212",
-      "foreground": "#f5f5f5"
+      "foreground": "#f5f5f5",
+      "selectionBackground": "#4fbdff",
+      "selectionForeground": "#121212"
     },
     "TextArea": {
       "background": "#121212",
-      "foreground": "#f5f5f5"
+      "foreground": "#f5f5f5",
+      "selectionBackground": "#4fbdff",
+      "selectionForeground": "#121212"
+    },
+    "TextPane": {
+      "selectionBackground": "#4fbdff",
+      "selectionForeground": "#121212"
+    },
+    "PasswordField": {
+      "selectionBackground": "#4fbdff",
+      "selectionForeground": "#121212"
+    },
+    "FormattedTextField": {
+      "selectionBackground": "#4fbdff",
+      "selectionForeground": "#121212"
     },
     "ComboBox": {
       "background": "#121212",
@@ -68,7 +84,9 @@
       "nonEditableBackground": "#121212"
     },
     "EditorPane": {
-      "background": "#121212"
+      "background": "#121212",
+      "selectionBackground": "#4fbdff",
+      "selectionForeground": "#121212"
     },
     "EditorTabs": {
       "background": "#1a1a1a",

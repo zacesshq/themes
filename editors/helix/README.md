@@ -33,5 +33,5 @@ Or try one in a running editor with `:theme zacess_dark`.
 
 > [!NOTE]
 > Helix has no scope for invalid code, so invalid code is marked by the error diagnostic's curly
-> underline instead of its own colour. Search results show as selections, which keep 7:1 for every
-> syntax colour.
+> underline instead of its own colour. Search results show as selections: a bold block with every
+> selected character in one colour at 7:1 or more.

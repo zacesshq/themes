@@ -7,6 +7,7 @@ import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 import { ROOT, REPO, loadPalette, styleOf } from "./lib/palette.mjs";
 import { measureAll } from "./lib/measure.mjs";
+import { ratio } from "./lib/colour.mjs";
 import { SAMPLE, lineTokens } from "./lib/sample.mjs";
 
 const palette = loadPalette();
@@ -77,7 +78,7 @@ const data = {
   rules: palette.rules,
   styles: Object.fromEntries(Object.entries(palette.tokens).map(([k, v]) => [k, v.style])),
   sample: SAMPLE.map((line) => ({ lang: line.lang, highlight: Boolean(line.highlight), tokens: lineTokens(line) })),
-  themes: results.map(({ theme, contrastRows, pairRows, lowestOnBackground, lowestText }) => {
+  themes: results.map(({ theme, contrastRows, pairRows, lowestOnBackground, lowestText, lowestOnSelection }) => {
     const ratioOf = (token, on) => contrastRows.find((x) => x.item === `syntax.${token}` && x.on === on).ratio;
     const shared = pairRows.filter((p) => p.sameStyle || p.lightness);
     return {
@@ -99,6 +100,17 @@ const data = {
       lowest: {
         background: { token: lowestOnBackground.item.replace("syntax.", ""), ratio: lowestOnBackground.ratio },
         anySurface: { token: lowestText.item.replace("syntax.", ""), on: lowestText.on, ratio: lowestText.ratio },
+      },
+      // the selection block where an editor can set the selected text colour and the background
+      // only selection where it cannot
+      selection: {
+        block: theme.ui.selectionStrong,
+        text: theme.ui.selectionForeground,
+        textOnBlock: ratio(theme.ui.selectionForeground, theme.ui.selectionStrong),
+        blockOnBackground: ratio(theme.ui.selectionStrong, theme.ui.background),
+        backgroundOnly: theme.ui.selection,
+        backgroundOnlyOnBackground: ratio(theme.ui.selection, theme.ui.background),
+        lowestSyntax: { token: lowestOnSelection.item.replace("syntax.", ""), ratio: lowestOnSelection.ratio },
       },
       pairs: {
         closestTone: Math.floor(Math.min(...shared.map((p) => p.toneDiff)) * 1000) / 1000,

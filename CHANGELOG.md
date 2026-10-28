@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- Selected text is now easy to find in all eight themes. In the dark themes the old selection sat at only 1.2:1 to 1.4:1 on the background and in the light themes at about 1.1:1, so a selection could pass for the background. Each theme now has a selection block in a colour from its own palette with every selected character in one text colour, the way a terminal draws a selection: Zacess Light `#ffffff` on blue `#0150b2`, Dark `#121212` on sky blue `#4fbdff`, Yellow on Black `#000000` on cyan `#09bcc4`, Cream `#fdf6e3` on purple `#7401ca`, High Contrast Dark `#000000` on violet `#bf96ff`, High Contrast Light `#ffffff` on teal `#015f5e`, Deep Contrast Dark `#000000` on magenta `#ff70ff` and Deep Contrast Light `#ffffff` on magenta `#990098`. The text keeps 7.4:1 to 9:1 on the block and the block sits at 7.4:1 to 9:1 on the background.
+- The block is used wherever a theme can set the colour of selected text: iTerm2, Ghostty, kitty, Alacritty, Windows Terminal, the VS Code terminal, the VS Code editor in the five high contrast themes, the JetBrains editor, console, terminal and text fields, the Eclipse editors and Terminal view, Sublime Text, Helix, Neovim in every buffer and Emacs.
+- Where selected text keeps its own colour (the VS Code editor in Zacess Light, Dark and Cream, text fields in VS Code, Zed, Obsidian and Xcode) the selection is a fill in the same hue, as strong as the floors allow: 1.5:1 to 2.1:1 on the background with every syntax colour, muted text and link at 4.5:1 or more over it and plain text at 7:1.
+- Selected rows in lists, trees, menus and completion popups keep their colours, now named `ui.listSelection` in the palette.
+
+### Added
+
+- `ui.selectionStrong`, `ui.selectionForeground` and `ui.listSelection` in the palette, with `rules.selectionContrast` (4.5:1) and `rules.selectionDistance` (0.08). `npm run check` measures both selections, the black or white text Windows Terminal draws on a selection and each selection's OKLab distance from the background, the current line, a find match and both diff backgrounds. It also reads the selection back out of every generated file. ACCESSIBILITY.md has a new Selection section with every measurement.
+- Selection keys the themes did not set before: `terminal.selectionForeground`, `terminal.inactiveSelectionBackground`, `minimap.selectionHighlight`, `minimap.selectionOccurrenceHighlight` and `editorOverviewRuler.selectionHighlightForeground` in VS Code, `SELECTION_BACKGROUND_INACTIVE` and the text field selection colours in the JetBrains IDEs and `selection_foreground` with `inactive_selection_foreground` in Sublime Text.
+
 ## [0.4.0] - 2026-10-22
 
 ### Added
