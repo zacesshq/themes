@@ -32,3 +32,14 @@ blue = "#0069e3"
 magenta = "#c500bf"
 cyan = "#027b7b"
 white = "#000000"
+
+# dim text keeps the normal colours, so it never drops below their floor
+[colors.dim]
+black = "#000000"
+red = "#c1000a"
+green = "#016f1b"
+yellow = "#815601"
+blue = "#015ac2"
+magenta = "#a901a6"
+cyan = "#016969"
+white = "#434343"

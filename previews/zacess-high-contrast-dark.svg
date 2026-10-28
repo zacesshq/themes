@@ -9,7 +9,7 @@
   <text x="56" y="64" xml:space="preserve"><tspan fill="#c7b404" font-style="italic">// read the page aloud at the reader's pace</tspan></text>
   <text x="40" y="90" fill="#e6e6e6" text-anchor="end">2</text>
   <text x="56" y="90" xml:space="preserve"><tspan fill="#f5c400" font-weight="700">export</tspan><tspan fill="#ffffff"> </tspan><tspan fill="#f5c400" font-weight="700">function</tspan><tspan fill="#ffffff"> </tspan><tspan fill="#8fd0ff">speak</tspan><tspan fill="#ffffff">(</tspan><tspan fill="#ffcf9e" font-style="italic">page</tspan><tspan fill="#ffffff">: </tspan><tspan fill="#00f4e0">Page</tspan><tspan fill="#ffffff">, </tspan><tspan fill="#ffcf9e" font-style="italic">rate</tspan><tspan fill="#ffffff"> = </tspan><tspan fill="#ffb27a">1.25</tspan><tspan fill="#ffffff">): </tspan><tspan fill="#00f4e0">string</tspan><tspan fill="#ffffff"> {</tspan></text>
-  <rect x="0" y="98" width="720" height="26" fill="#1a1a1a"/>
+  <rect x="0" y="98" width="720" height="26" fill="#262626"/>
   <text x="40" y="116" fill="#f5c400" text-anchor="end">3</text>
   <text x="56" y="116" xml:space="preserve"><tspan fill="#ffffff">  </tspan><tspan fill="#ffcdf0" font-weight="700">if</tspan><tspan fill="#ffffff"> (!</tspan><tspan fill="#ffffff">page</tspan><tspan fill="#ffffff">.</tspan><tspan fill="#c9a8ff">text</tspan><tspan fill="#ffffff">) </tspan><tspan fill="#ffcdf0" font-weight="700">return</tspan><tspan fill="#ffffff"> </tspan><tspan fill="#20fe34">&quot;&quot;</tspan><tspan fill="#ffffff">;</tspan></text>
   <text x="40" y="142" fill="#e6e6e6" text-anchor="end">4</text>

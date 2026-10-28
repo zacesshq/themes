@@ -7,8 +7,9 @@ cannot be merged.
 ## The rules
 
 - Every text and syntax colour keeps at least **7:1** contrast (WCAG AAA) on the background, on
-  panels, over a selected row, over the current line and over both diff backgrounds. Comments are
-  held to the same floor and are never dimmed below it.
+  panels, over a selected row and over both diff backgrounds. Comments are held to the same floor
+  and are never dimmed below it. The current line is a visible band, so over it plain text keeps
+  7:1 and syntax colours keep 4.5:1. [Where you are](#where-you-are) has the detail.
 - Selected text is a bold block wherever a theme can set the colour of selected text. Every selected
   character takes one colour at 7:1 or more on the block and the block keeps at least 3:1 on the
   background. Where a selection must keep each character's own colour, every syntax colour, muted
@@ -16,12 +17,10 @@ cannot be merged.
   stays at least 0.08 apart in OKLab from the background, the current line, a find match and both
   diff backgrounds, in normal vision and under each simulation. [Selection](#selection) has the
   detail.
-- The text colour keeps 7:1 over a find match. Syntax colours keep at least 4.5:1 over it. In VS Code
-  and the JetBrains IDEs the find match also carries a border. Eclipse draws search results and
-  marked occurrences as a box in the find match border colour with no fill, so every token keeps its
-  contrast on the background. Neovim, Zed, Obsidian, Sublime Text and Emacs draw the find match as a
-  background only. Xcode draws it in its own colour, which the themes cannot set. Helix shows
-  search results as selections.
+- The text colour keeps 7:1 over a find match and syntax colours keep at least 4.5:1 over it. The
+  current match and the other matches look different from each other and from a selection, with
+  an outline or underline wherever the editor can draw one. [Where you are](#where-you-are) lists
+  what each editor draws.
 - Interface text, including muted text, links, errors, warnings, information, line numbers and the
   text on buttons and badges, keeps 7:1 on every surface it is drawn on.
 - Borders, dividers, focus outlines, indent guides and whitespace markers keep at least 3:1, the WCAG
@@ -39,8 +38,9 @@ cannot be merged.
   terminal's default text by at least 0.05 in tone or by at least 0.04 in OKLab both in normal
   vision and under simulated protanopia, deuteranopia and tritanopia. The slots that stand for the
   default text by convention, such as bright white on a dark theme, are listed in
-  `terminal.textRole` and skipped. Zacess Yellow on Black draws terminal text in white for this
-  reason, with a yellow cursor.
+  `terminal.textRole` and skipped. Zacess Yellow on Black draws terminal text in the same yellow as
+  its editor text, so four of its pale bright slots sit close to it in tone: they are listed in
+  `terminal.nearText` and named under [Terminal colours](#terminal-colours).
 - Every VS Code colour key that would otherwise fall back to a VS Code default, such as inline code,
   quotes, menus, hovers, notifications and buttons, is set by the theme. The text on each keeps
   7:1.
@@ -94,7 +94,7 @@ selection's lightness, so the checks work out which one it draws and hold that t
 | Lowest syntax colour over it | 4.5:1 | 4.5:1 (comment) | 4.5:1 (comment) | 4.6:1 (comment) | 4.5:1 (added) | 4.5:1 (comment) | 4.6:1 (comment) | 4.6:1 (property) | 5.0:1 (number) |
 | Plain text over it | 7:1 | 10.4:1 | 9.1:1 | 8.1:1 | 10.5:1 | 9.6:1 | 11.2:1 | 10.7:1 | 13.8:1 |
 | Muted text and links over it | 4.5:1 | 4.6:1 | 5.1:1 | 6.3:1 | 4.6:1 | 5.8:1 | 5.2:1 | 4.6:1 | 4.6:1 |
-| Closest fill, least OKLab distance in normal vision and the three simulations | 0.08 | 0.144 (background only selection and a removed line) | 0.139 (background only selection and an added line) | 0.104 (background only selection and a find match) | 0.106 (background only selection and a find match) | 0.106 (background only selection and a find match) | 0.096 (background only selection and a removed line) | 0.112 (background only selection and a find match) | 0.089 (background only selection and a find match) |
+| Closest fill, least OKLab distance in normal vision and the three simulations | 0.08 | 0.092 (selection block and a find match) | 0.080 (selection block and a find match) | 0.096 (selection block and undefined) | 0.095 (background only selection and the current line) | 0.089 (background only selection and a find match) | 0.091 (background only selection and the current line) | 0.087 (selection block and a find match) | 0.082 (selection block and a find match) |
 <!-- selection detail end -->
 
 > [!NOTE]
@@ -110,32 +110,105 @@ Selected rows in lists, trees, menus and completion popups use a calmer colour o
 (`ui.listSelection`) with every text and syntax colour at 7:1 over it. In VS Code the focused row
 also carries a focus outline.
 
+## Where you are
+
+The cursor, the current line, find matches, the word under the cursor, a matched bracket and changed
+lines tell the reader where they are. Each one is measured on the palette and read back out of
+every file that ships it, so no editor can draw a colour the checks did not measure.
+
+- **The cursor** keeps 7:1 on the background and the current line and stays at least 0.08 apart in
+  OKLab from both selections, the current line and a find match. Where a block cursor draws the
+  character under it (VS Code, Neovim, Helix, kitty, Ghostty, Alacritty, iTerm2 and WezTerm) that
+  character takes the background colour at 7:1 or more on the cursor. The terminal cursor keeps the
+  same floors.
+- **The current line** is a band at 1.3:1 or more on the background in a neutral or calm tint of
+  the theme's own palette, with plain text, the active line number and the cursor at 7:1 over it and
+  every syntax colour at 4.5:1. It stays at least 0.08 apart in OKLab from the find match and, through
+  the selection rule, from both selections. Every editor that has a current line uses it: VS Code,
+  the JetBrains IDEs, Obsidian in editing view, Neovim, Zed, Sublime Text, Helix, Emacs, Eclipse
+  and Xcode.
+- **Find matches.** The current match is filled in the find match colour, with an outline wherever
+  the editor can draw one. The other matches are outlined or underlined with no fill, so the two
+  never look alike and a match never passes for a selection.
+  - VS Code fills and outlines the current match and outlines the other matches.
+  - Sublime Text fills the current match and outlines the others.
+  - Neovim fills the current match (`CurSearch`, `IncSearch`) in bold and underlines the others
+    (`Search`). Emacs does the same with `isearch` and `lazy-highlight`.
+  - The JetBrains IDEs fill and box every match. The match you move to is also selected, so it
+    shows as the selection block.
+  - Eclipse boxes search results and marked occurrences in the find match border colour with no fill.
+  - Obsidian fills every match in the find match colour and, in editing view, outlines the current one.
+  - Zed fills every match in the find match colour. Its theme format has no outline for a match and
+    no colour for the current one.
+  - Helix shows search results as selections, so they take the selection block.
+  - Xcode draws matches in its own colour, which a theme cannot set.
+- **The word under the cursor and a matched bracket** are never a solid fill that could hide the
+  character. VS Code outlines them: the word in the border colour, a written word and a bracket in
+  the accent. Zacess High Contrast Dark's accent is also its find match outline, so it draws these
+  in its own `ui.matchOutline` instead. Both outlines stay at least 0.08 apart in OKLab from the
+  find match outline. The JetBrains IDEs box them in the same colours. Neovim and Emacs underline them and
+  draw the bracket in bold. Helix underlines a matched bracket in bold. Sublime Text underlines
+  brackets and tags in the accent. Obsidian outlines a matched bracket. Each outline keeps 3:1 on the
+  background and the current line. Zed has no outline for these, so it fills them with the calm
+  selected row colour, which every text and syntax colour keeps 7:1 over.
+- **Diffs carry a mark, not colour alone.** Added and removed lines keep their fills and gain a mark
+  in the added, changed or removed colour wherever the editor can draw one: the gutter and the
+  diff borders in VS Code, the gutter stripes in the JetBrains IDEs, Sublime Text, Zed and
+  Eclipse, the sign column for gitsigns, mini.diff and vim-signify in Neovim, the fringe and the
+  `diff-hl` faces in Emacs and the `diff.plus`, `diff.minus` and `diff.delta` gutter marks in Helix.
+  Each mark keeps 3:1 or more on the gutter. A changed line takes the calm selected row colour.
+- **Bold and dim terminal text.** Every ANSI colour keeps 4.5:1 or more on the terminal background,
+  so bold text that a terminal draws in the bright colour stays readable. iTerm2 draws bold text in
+  the text colour and Terminal.app keeps each colour when bold. Alacritty's dim colours are the
+  normal colours. kitty, Ghostty, WezTerm, Warp and Windows Terminal draw dim text by fading the
+  colour themselves, which a theme cannot set.
+
+<!-- signals detail start: generated by scripts/build.mjs -->
+| Measure | Floor | Zacess Light | Zacess Dark | Zacess Yellow on Black | Zacess Cream | Zacess High Contrast Dark | Zacess High Contrast Light | Zacess Deep Contrast Dark | Zacess Deep Contrast Light |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Cursor on the background and the current line | 7:1 | `#111111` 13.8:1 | `#ffd400` 9.3:1 | `#ffffff` 15.1:1 | `#000000` 14.5:1 | `#f5c400` 9.2:1 | `#000000` 15.9:1 | `#ffff00` 14.0:1 | `#000000` 14.6:1 |
+| Character under a block cursor, in the background colour | 7:1 | 18.8:1 | 13.0:1 | 21.0:1 | 19.4:1 | 12.7:1 | 21.0:1 | 19.5:1 | 21.0:1 |
+| Cursor and its closest fill, least OKLab distance | 0.08 | 0.312 (the selection block) | 0.223 (the selection block) | 0.233 (the selection block) | 0.460 (the selection block) | 0.125 (the selection block) | 0.436 (the selection block) | 0.251 (the selection block) | 0.446 (the selection block) |
+| Terminal cursor and the character under it | 7:1 | `#111111` 18.8:1, text 18.8:1 | `#ffd400` 13.0:1, text 13.0:1 | `#ffeb3b` 17.1:1, text 17.1:1 | `#000000` 19.4:1, text 19.4:1 | `#f5c400` 12.7:1, text 12.7:1 | `#000000` 21.0:1, text 21.0:1 | `#ffff00` 19.5:1, text 19.5:1 | `#000000` 21.0:1, text 21.0:1 |
+| Terminal cursor and its closest fill, least OKLab distance | 0.08 | 0.312 (the selection block) | 0.223 (the selection block) | 0.242 (the selection block) | 0.460 (the selection block) | 0.125 (the selection block) | 0.436 (the selection block) | 0.251 (the selection block) | 0.446 (the selection block) |
+| Current line on the background | 1.3:1 | `#d6dde8` 1.3:1 | `#2f2f2f` 1.3:1 | `#262626` 1.3:1 | `#c8dadd` 1.3:1 | `#262626` 1.3:1 | `#c3e5fe` 1.3:1 | `#262626` 1.3:1 | `#c8debd` 1.4:1 |
+| Lowest syntax colour over the current line | 4.5:1 | 6.0:1 (comment) | 6.1:1 (comment) | 7.0:1 (comment) | 6.2:1 (added) | 7.1:1 (comment) | 6.5:1 (comment) | 6.4:1 (property) | 5.3:1 (number) |
+| Plain text over the current line | 7:1 | 13.8:1 | 12.2:1 | 12.3:1 | 14.5:1 | 15.1:1 | 15.9:1 | 15.1:1 | 14.6:1 |
+| Current line and the find match, least OKLab distance | 0.08 | 0.092 | 0.080 | 0.101 | 0.101 | 0.096 | 0.136 | 0.087 | 0.082 |
+| Find match on the background | none, it carries a border | `#ffd400` 1.4:1 | `#4d4000` 1.8:1 | `#4b3a00` 1.9:1 | `#ffd400` 1.3:1 | `#493900` 1.8:1 | `#ffd400` 1.4:1 | `#453800` 1.8:1 | `#fff1a0` 1.1:1 |
+| Plain text over the find match | 7:1 | 13.1:1 | 9.4:1 | 9.0:1 | 14.6:1 | 11.2:1 | 14.6:1 | 11.5:1 | 18.3:1 |
+| Lowest syntax colour over the find match | 4.5:1 | 5.7:1 (comment) | 4.7:1 (comment) | 5.1:1 (comment) | 6.3:1 (added) | 5.3:1 (comment) | 6.0:1 (comment) | 4.9:1 (property) | 6.7:1 (number) |
+| Find match border on the match, the background and the current line | 3:1 | `#111111` 13.1:1 | `#ffd400` 7.1:1 | `#ffffff` 11.0:1 | `#000000` 14.5:1 | `#f5c400` 6.8:1 | `#000000` 14.6:1 | `#ffff00` 10.7:1 | `#b5200d` 4.6:1 |
+| Word and bracket outlines on the background and the current line | 3:1 | `#707070` and `#0049a3`, 3.6:1 | `#7a7a7a` and `#8cbcff`, 3.1:1 | `#7a7a7a` and `#ffeb3b`, 3.5:1 | `#6e6555` and `#004498`, 3.9:1 | `#a6a6a6` and `#8fd0ff`, 6.2:1 | `#262626` and `#003d99`, 7.5:1 | `#00ffff` and `#00ffff`, 12.0:1 | `#0f4a85` and `#0f4a85`, 6.2:1 |
+| Word and bracket outlines and the find match outline, least OKLab distance | 0.08 | 0.282 | 0.191 | 0.096 | 0.426 | 0.141 | 0.268 | 0.181 | 0.181 |
+<!-- signals detail end -->
+
 ## Syntax colours
 
 <!-- contrast detail start: generated by scripts/build.mjs -->
-Each cell gives the colour, its contrast on the background, its lowest contrast over the current line, a diff background or a selected row and its contrast over the background only selection.
+Each cell gives the colour, its contrast on the background, its lowest contrast over a diff background or a selected row, its contrast over the current line and its contrast over the background only selection.
 
 | Token | Style | Zacess Light | Zacess Dark | Zacess Yellow on Black | Zacess Cream | Zacess High Contrast Dark | Zacess High Contrast Light | Zacess Deep Contrast Dark | Zacess Deep Contrast Light |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| foreground | regular | `#111111` 18.8:1, 16.3:1, 10.4:1 | `#f5f5f5` 17.1:1, 14.1:1, 9.1:1 | `#ffeb3b` 17.1:1, 12.4:1, 8.1:1 | `#000000` 19.4:1, 16.9:1, 10.5:1 | `#ffffff` 21.0:1, 15.0:1, 9.6:1 | `#000000` 21.0:1, 17.3:1, 11.2:1 | `#ffffff` 21.0:1, 16.5:1, 10.7:1 | `#000000` 21.0:1, 19.2:1, 13.8:1 |
-| keyword | bold | `#59029f` 10.8:1, 9.3:1, 6.0:1 | `#d3bdff` 11.1:1, 9.1:1, 5.9:1 | `#ffffff` 21.0:1, 15.2:1, 9.9:1 | `#530093` 10.8:1, 9.4:1, 5.9:1 | `#f5c400` 12.7:1, 9.1:1, 5.8:1 | `#4b0091` 12.2:1, 10.1:1, 6.5:1 | `#67aeff` 9.0:1, 7.1:1, 4.6:1 | `#002ec2` 9.6:1, 8.8:1, 6.3:1 |
-| control | bold | `#5e003c` 13.6:1, 11.7:1, 7.5:1 | `#ffd2e6` 13.9:1, 11.4:1, 7.4:1 | `#0cedf6` 14.4:1, 10.4:1, 6.8:1 | `#550036` 13.5:1, 11.7:1, 7.3:1 | `#ffcdf0` 15.2:1, 10.8:1, 7.0:1 | `#8a0046` 9.6:1, 8.0:1, 5.1:1 | `#ffabfd` 12.4:1, 9.8:1, 6.3:1 | `#950094` 7.7:1, 7.1:1, 5.1:1 |
-| function | regular | `#0049a3` 8.4:1, 7.3:1, 4.6:1 | `#84b7fa` 9.0:1, 7.4:1, 4.8:1 | `#88c3ff` 11.2:1, 8.1:1, 5.3:1 | `#004498` 8.5:1, 7.4:1, 4.6:1 | `#8fd0ff` 12.6:1, 9.0:1, 5.8:1 | `#00347f` 11.6:1, 9.6:1, 6.2:1 | `#ffdf5a` 15.9:1, 12.5:1, 8.1:1 | `#824100` 7.7:1, 7.1:1, 5.1:1 |
-| type | regular | `#003737` 13.1:1, 11.3:1, 7.2:1 | `#03dedd` 11.1:1, 9.1:1, 5.9:1 | `#e5c7ff` 13.9:1, 10.1:1, 6.5:1 | `#003232` 12.9:1, 11.2:1, 7.0:1 | `#00f4e0` 15.0:1, 10.7:1, 6.9:1 | `#004f4e` 9.4:1, 7.8:1, 5.0:1 | `#00ebb1` 13.5:1, 10.6:1, 6.9:1 | `#003a39` 12.6:1, 11.5:1, 8.3:1 |
-| variable | regular | `#111111` 18.8:1, 16.3:1, 10.4:1 | `#f5f5f5` 17.1:1, 14.1:1, 9.1:1 | `#ffeb3b` 17.1:1, 12.4:1, 8.1:1 | `#000000` 19.4:1, 16.9:1, 10.5:1 | `#ffffff` 21.0:1, 15.0:1, 9.6:1 | `#000000` 21.0:1, 17.3:1, 11.2:1 | `#ffffff` 21.0:1, 16.5:1, 10.7:1 | `#000000` 21.0:1, 19.2:1, 13.8:1 |
-| parameter | italic | `#4c2300` 13.5:1, 11.7:1, 7.5:1 | `#ffb97f` 11.1:1, 9.1:1, 5.9:1 | `#ffcca3` 14.4:1, 10.4:1, 6.8:1 | `#441f00` 13.5:1, 11.7:1, 7.3:1 | `#ffcf9e` 14.6:1, 10.4:1, 6.7:1 | `#6b3100` 10.1:1, 8.4:1, 5.4:1 | `#ffffff` 21.0:1, 16.5:1, 10.7:1 | `#000000` 21.0:1, 19.2:1, 13.8:1 |
-| property | regular | `#030075` 16.6:1, 14.3:1, 9.2:1 | `#c5e1ff` 13.9:1, 11.4:1, 7.4:1 | `#ffffff` 21.0:1, 15.2:1, 9.9:1 | `#020068` 16.1:1, 14.0:1, 8.7:1 | `#c9a8ff` 10.5:1, 7.5:1, 4.8:1 | `#1e0090` 14.4:1, 11.9:1, 7.7:1 | `#c195ff` 9.0:1, 7.0:1, 4.6:1 | `#2e0078` 15.1:1, 13.8:1, 9.9:1 |
-| string | regular | `#004a0e` 10.5:1, 9.1:1, 5.8:1 | `#1ee646` 11.1:1, 9.1:1, 5.9:1 | `#43f480` 14.4:1, 10.5:1, 6.8:1 | `#00440c` 10.6:1, 9.2:1, 5.7:1 | `#20fe34` 15.2:1, 10.9:1, 7.0:1 | `#005518` 9.0:1, 7.5:1, 4.8:1 | `#ffaa7c` 11.2:1, 8.8:1, 5.7:1 | `#870000` 10.3:1, 9.4:1, 6.8:1 |
-| number | regular | `#4c1b00` 14.3:1, 12.3:1, 7.9:1 | `#ffd9ba` 14.1:1, 11.6:1, 7.5:1 | `#ffa77e` 11.0:1, 8.0:1, 5.2:1 | `#451700` 14.1:1, 12.3:1, 7.6:1 | `#ffb27a` 11.9:1, 8.5:1, 5.4:1 | `#521e00` 13.5:1, 11.2:1, 7.2:1 | `#e19e00` 9.0:1, 7.1:1, 4.6:1 | `#a3005f` 7.7:1, 7.0:1, 5.0:1 |
-| comment | italic | `#97016b` 8.2:1, 7.1:1, 4.5:1 | `#80c201` 8.5:1, 7.0:1, 4.5:1 | `#88c200` 9.7:1, 7.0:1, 4.6:1 | `#8b0162` 8.5:1, 7.4:1, 4.6:1 | `#c7b404` 9.9:1, 7.1:1, 4.5:1 | `#1701fb` 8.6:1, 7.1:1, 4.6:1 | `#00c600` 9.0:1, 7.1:1, 4.6:1 | `#006108` 7.7:1, 7.0:1, 5.0:1 |
-| operator | regular | `#111111` 18.8:1, 16.3:1, 10.4:1 | `#f5f5f5` 17.1:1, 14.1:1, 9.1:1 | `#ffeb3b` 17.1:1, 12.4:1, 8.1:1 | `#000000` 19.4:1, 16.9:1, 10.5:1 | `#ffffff` 21.0:1, 15.0:1, 9.6:1 | `#000000` 21.0:1, 17.3:1, 11.2:1 | `#ffffff` 21.0:1, 16.5:1, 10.7:1 | `#000000` 21.0:1, 19.2:1, 13.8:1 |
-| tag | bold | `#59029f` 10.8:1, 9.3:1, 6.0:1 | `#d3bdff` 11.1:1, 9.1:1, 5.9:1 | `#ffffff` 21.0:1, 15.2:1, 9.9:1 | `#530093` 10.8:1, 9.4:1, 5.9:1 | `#f5c400` 12.7:1, 9.1:1, 5.8:1 | `#4b0091` 12.2:1, 10.1:1, 6.5:1 | `#67aeff` 9.0:1, 7.1:1, 4.6:1 | `#002ec2` 9.6:1, 8.8:1, 6.3:1 |
-| attribute | regular | `#412300` 14.3:1, 12.3:1, 7.9:1 | `#ffdb9e` 14.1:1, 11.6:1, 7.5:1 | `#ffffff` 21.0:1, 15.2:1, 9.9:1 | `#3a1f00` 14.1:1, 12.3:1, 7.6:1 | `#fff0b8` 18.4:1, 13.1:1, 8.4:1 | `#4f3200` 11.7:1, 9.7:1, 6.2:1 | `#c195ff` 9.0:1, 7.0:1, 4.6:1 | `#2e0078` 15.1:1, 13.8:1, 9.9:1 |
-| regex | regular | `#5b0020` 14.3:1, 12.3:1, 7.9:1 | `#f3989e` 8.7:1, 7.1:1, 4.6:1 | `#ffa1ce` 11.2:1, 8.1:1, 5.3:1 | `#52001c` 14.1:1, 12.3:1, 7.6:1 | `#ffa6c9` 11.5:1, 8.2:1, 5.3:1 | `#720030` 11.9:1, 9.8:1, 6.3:1 | `#ff80c5` 9.1:1, 7.1:1, 4.6:1 | `#a60049` 7.7:1, 7.0:1, 5.0:1 |
-| invalid | underline | `#5d0002` 14.3:1, 12.3:1, 7.9:1 | `#ffd7d2` 14.1:1, 11.6:1, 7.5:1 | `#ffa59d` 11.1:1, 8.0:1, 5.2:1 | `#540002` 14.1:1, 12.2:1, 7.6:1 | `#ff9e94` 10.5:1, 7.5:1, 4.8:1 | `#600000` 14.0:1, 11.6:1, 7.4:1 | `#fd8b78` 9.1:1, 7.1:1, 4.6:1 | `#aa0000` 7.7:1, 7.0:1, 5.1:1 |
-| added | regular | `#005b14` 8.3:1, 7.2:1, 4.6:1 | `#01ea45` 11.4:1, 9.4:1, 6.1:1 | `#28f74f` 14.5:1, 10.5:1, 6.8:1 | `#005512` 8.4:1, 7.3:1, 4.5:1 | `#3bff59` 15.6:1, 11.1:1, 7.2:1 | `#005518` 9.0:1, 7.5:1, 4.8:1 | `#00f000` 13.4:1, 10.5:1, 6.8:1 | `#006108` 7.7:1, 7.0:1, 5.0:1 |
-| removed | regular | `#5d0002` 14.3:1, 12.3:1, 7.9:1 | `#f39992` 8.7:1, 7.1:1, 4.6:1 | `#ffa59d` 11.1:1, 8.0:1, 5.2:1 | `#540002` 14.1:1, 12.2:1, 7.6:1 | `#ffaba3` 11.6:1, 8.2:1, 5.3:1 | `#4a0000` 16.2:1, 13.4:1, 8.6:1 | `#ffaa7c` 11.2:1, 8.8:1, 5.7:1 | `#730000` 12.1:1, 11.1:1, 7.9:1 |
-| changed | regular | `#001940` 17.3:1, 14.9:1, 9.5:1 | `#c9e0ff` 13.9:1, 11.4:1, 7.4:1 | `#ddedff` 17.6:1, 12.7:1, 8.3:1 | `#001538` 16.7:1, 14.5:1, 9.0:1 | `#e6f2ff` 18.5:1, 13.2:1, 8.5:1 | `#00307a` 12.3:1, 10.2:1, 6.5:1 | `#67aeff` 9.0:1, 7.1:1, 4.6:1 | `#002ec2` 9.6:1, 8.8:1, 6.3:1 |
+| foreground | regular | `#111111` 18.8:1, 16.3:1, 13.8:1, 10.4:1 | `#f5f5f5` 17.1:1, 14.1:1, 12.2:1, 9.1:1 | `#ffeb3b` 17.1:1, 12.4:1, 12.3:1, 8.1:1 | `#000000` 19.4:1, 16.9:1, 14.5:1, 10.5:1 | `#ffffff` 21.0:1, 15.0:1, 15.1:1, 9.6:1 | `#000000` 21.0:1, 17.3:1, 15.9:1, 11.2:1 | `#ffffff` 21.0:1, 16.5:1, 15.1:1, 10.7:1 | `#000000` 21.0:1, 19.2:1, 14.6:1, 13.8:1 |
+| keyword | bold | `#59029f` 10.8:1, 9.3:1, 7.9:1, 6.0:1 | `#d3bdff` 11.1:1, 9.1:1, 7.9:1, 5.9:1 | `#ffffff` 21.0:1, 15.2:1, 15.1:1, 9.9:1 | `#530093` 10.8:1, 9.4:1, 8.1:1, 5.9:1 | `#f5c400` 12.7:1, 9.1:1, 9.2:1, 5.8:1 | `#4b0091` 12.2:1, 10.1:1, 9.3:1, 6.5:1 | `#67aeff` 9.0:1, 7.1:1, 6.5:1, 4.6:1 | `#002ec2` 9.6:1, 8.8:1, 6.7:1, 6.3:1 |
+| control | bold | `#5e003c` 13.6:1, 11.7:1, 9.9:1, 7.5:1 | `#ffd2e6` 13.9:1, 11.4:1, 9.9:1, 7.4:1 | `#0cedf6` 14.4:1, 10.4:1, 10.4:1, 6.8:1 | `#550036` 13.5:1, 11.7:1, 10.0:1, 7.3:1 | `#ffcdf0` 15.2:1, 10.8:1, 10.9:1, 7.0:1 | `#8a0046` 9.6:1, 8.0:1, 7.3:1, 5.1:1 | `#ffabfd` 12.4:1, 9.8:1, 9.0:1, 6.3:1 | `#950094` 7.7:1, 7.1:1, 5.4:1, 5.1:1 |
+| function | regular | `#0049a3` 8.4:1, 7.3:1, 6.1:1, 4.6:1 | `#84b7fa` 9.0:1, 7.4:1, 6.4:1, 4.8:1 | `#88c3ff` 11.2:1, 8.1:1, 8.1:1, 5.3:1 | `#004498` 8.5:1, 7.4:1, 6.3:1, 4.6:1 | `#8fd0ff` 12.6:1, 9.0:1, 9.1:1, 5.8:1 | `#00347f` 11.6:1, 9.6:1, 8.8:1, 6.2:1 | `#ffdf5a` 15.9:1, 12.5:1, 11.4:1, 8.1:1 | `#824100` 7.7:1, 7.1:1, 5.4:1, 5.1:1 |
+| type | regular | `#003737` 13.1:1, 11.3:1, 9.5:1, 7.2:1 | `#03dedd` 11.1:1, 9.1:1, 7.9:1, 5.9:1 | `#e5c7ff` 13.9:1, 10.1:1, 10.0:1, 6.5:1 | `#003232` 12.9:1, 11.2:1, 9.6:1, 7.0:1 | `#00f4e0` 15.0:1, 10.7:1, 10.8:1, 6.9:1 | `#004f4e` 9.4:1, 7.8:1, 7.1:1, 5.0:1 | `#00ebb1` 13.5:1, 10.6:1, 9.7:1, 6.9:1 | `#003a39` 12.6:1, 11.5:1, 8.7:1, 8.3:1 |
+| variable | regular | `#111111` 18.8:1, 16.3:1, 13.8:1, 10.4:1 | `#f5f5f5` 17.1:1, 14.1:1, 12.2:1, 9.1:1 | `#ffeb3b` 17.1:1, 12.4:1, 12.3:1, 8.1:1 | `#000000` 19.4:1, 16.9:1, 14.5:1, 10.5:1 | `#ffffff` 21.0:1, 15.0:1, 15.1:1, 9.6:1 | `#000000` 21.0:1, 17.3:1, 15.9:1, 11.2:1 | `#ffffff` 21.0:1, 16.5:1, 15.1:1, 10.7:1 | `#000000` 21.0:1, 19.2:1, 14.6:1, 13.8:1 |
+| parameter | italic | `#4c2300` 13.5:1, 11.7:1, 9.9:1, 7.5:1 | `#ffb97f` 11.1:1, 9.1:1, 7.9:1, 5.9:1 | `#ffcca3` 14.4:1, 10.4:1, 10.3:1, 6.8:1 | `#441f00` 13.5:1, 11.7:1, 10.0:1, 7.3:1 | `#ffcf9e` 14.6:1, 10.4:1, 10.5:1, 6.7:1 | `#6b3100` 10.1:1, 8.4:1, 7.7:1, 5.4:1 | `#ffffff` 21.0:1, 16.5:1, 15.1:1, 10.7:1 | `#000000` 21.0:1, 19.2:1, 14.6:1, 13.8:1 |
+| property | regular | `#030075` 16.6:1, 14.3:1, 12.1:1, 9.2:1 | `#c5e1ff` 13.9:1, 11.4:1, 9.9:1, 7.4:1 | `#ffffff` 21.0:1, 15.2:1, 15.1:1, 9.9:1 | `#020068` 16.1:1, 14.0:1, 12.0:1, 8.7:1 | `#c9a8ff` 10.5:1, 7.5:1, 7.5:1, 4.8:1 | `#1e0090` 14.4:1, 11.9:1, 10.9:1, 7.7:1 | `#c195ff` 9.0:1, 7.0:1, 6.4:1, 4.6:1 | `#2e0078` 15.1:1, 13.8:1, 10.5:1, 9.9:1 |
+| string | regular | `#004a0e` 10.5:1, 9.1:1, 7.7:1, 5.8:1 | `#1ee646` 11.1:1, 9.1:1, 7.9:1, 5.9:1 | `#43f480` 14.4:1, 10.5:1, 10.4:1, 6.8:1 | `#00440c` 10.6:1, 9.2:1, 7.9:1, 5.7:1 | `#20fe34` 15.2:1, 10.9:1, 11.0:1, 7.0:1 | `#005518` 9.0:1, 7.5:1, 6.9:1, 4.8:1 | `#ffaa7c` 11.2:1, 8.8:1, 8.1:1, 5.7:1 | `#870000` 10.3:1, 9.4:1, 7.2:1, 6.8:1 |
+| number | regular | `#4c1b00` 14.3:1, 12.3:1, 10.4:1, 7.9:1 | `#ffd9ba` 14.1:1, 11.6:1, 10.1:1, 7.5:1 | `#ffa77e` 11.0:1, 8.0:1, 7.9:1, 5.2:1 | `#451700` 14.1:1, 12.3:1, 10.5:1, 7.6:1 | `#ffb27a` 11.9:1, 8.5:1, 8.5:1, 5.4:1 | `#521e00` 13.5:1, 11.2:1, 10.3:1, 7.2:1 | `#e19e00` 9.0:1, 7.1:1, 6.5:1, 4.6:1 | `#a3005f` 7.7:1, 7.0:1, 5.3:1, 5.0:1 |
+| comment | italic | `#97016b` 8.2:1, 7.1:1, 6.0:1, 4.5:1 | `#80c201` 8.5:1, 7.0:1, 6.1:1, 4.5:1 | `#88c200` 9.7:1, 7.0:1, 7.0:1, 4.6:1 | `#8b0162` 8.5:1, 7.4:1, 6.3:1, 4.6:1 | `#c7b404` 9.9:1, 7.1:1, 7.1:1, 4.5:1 | `#1701fb` 8.6:1, 7.1:1, 6.5:1, 4.6:1 | `#00c600` 9.0:1, 7.1:1, 6.5:1, 4.6:1 | `#006108` 7.7:1, 7.0:1, 5.3:1, 5.0:1 |
+| operator | regular | `#111111` 18.8:1, 16.3:1, 13.8:1, 10.4:1 | `#f5f5f5` 17.1:1, 14.1:1, 12.2:1, 9.1:1 | `#ffeb3b` 17.1:1, 12.4:1, 12.3:1, 8.1:1 | `#000000` 19.4:1, 16.9:1, 14.5:1, 10.5:1 | `#ffffff` 21.0:1, 15.0:1, 15.1:1, 9.6:1 | `#000000` 21.0:1, 17.3:1, 15.9:1, 11.2:1 | `#ffffff` 21.0:1, 16.5:1, 15.1:1, 10.7:1 | `#000000` 21.0:1, 19.2:1, 14.6:1, 13.8:1 |
+| tag | bold | `#59029f` 10.8:1, 9.3:1, 7.9:1, 6.0:1 | `#d3bdff` 11.1:1, 9.1:1, 7.9:1, 5.9:1 | `#ffffff` 21.0:1, 15.2:1, 15.1:1, 9.9:1 | `#530093` 10.8:1, 9.4:1, 8.1:1, 5.9:1 | `#f5c400` 12.7:1, 9.1:1, 9.2:1, 5.8:1 | `#4b0091` 12.2:1, 10.1:1, 9.3:1, 6.5:1 | `#67aeff` 9.0:1, 7.1:1, 6.5:1, 4.6:1 | `#002ec2` 9.6:1, 8.8:1, 6.7:1, 6.3:1 |
+| attribute | regular | `#412300` 14.3:1, 12.3:1, 10.4:1, 7.9:1 | `#ffdb9e` 14.1:1, 11.6:1, 10.1:1, 7.5:1 | `#ffffff` 21.0:1, 15.2:1, 15.1:1, 9.9:1 | `#3a1f00` 14.1:1, 12.3:1, 10.5:1, 7.6:1 | `#fff0b8` 18.4:1, 13.1:1, 13.2:1, 8.4:1 | `#4f3200` 11.7:1, 9.7:1, 8.9:1, 6.2:1 | `#c195ff` 9.0:1, 7.0:1, 6.4:1, 4.6:1 | `#2e0078` 15.1:1, 13.8:1, 10.5:1, 9.9:1 |
+| regex | regular | `#5b0020` 14.3:1, 12.3:1, 10.4:1, 7.9:1 | `#f3989e` 8.7:1, 7.1:1, 6.2:1, 4.6:1 | `#ffa1ce` 11.2:1, 8.1:1, 8.1:1, 5.3:1 | `#52001c` 14.1:1, 12.3:1, 10.5:1, 7.6:1 | `#ffa6c9` 11.5:1, 8.2:1, 8.3:1, 5.3:1 | `#720030` 11.9:1, 9.8:1, 9.0:1, 6.3:1 | `#ff80c5` 9.1:1, 7.1:1, 6.5:1, 4.6:1 | `#a60049` 7.7:1, 7.0:1, 5.3:1, 5.0:1 |
+| invalid | underline | `#5d0002` 14.3:1, 12.3:1, 10.4:1, 7.9:1 | `#ffd7d2` 14.1:1, 11.6:1, 10.1:1, 7.5:1 | `#ffa59d` 11.1:1, 8.0:1, 8.0:1, 5.2:1 | `#540002` 14.1:1, 12.2:1, 10.5:1, 7.6:1 | `#ff9e94` 10.5:1, 7.5:1, 7.6:1, 4.8:1 | `#600000` 14.0:1, 11.6:1, 10.6:1, 7.4:1 | `#fd8b78` 9.1:1, 7.1:1, 6.5:1, 4.6:1 | `#aa0000` 7.7:1, 7.0:1, 5.4:1, 5.1:1 |
+| added | regular | `#005b14` 8.3:1, 7.2:1, 6.1:1, 4.6:1 | `#01ea45` 11.4:1, 9.4:1, 8.1:1, 6.1:1 | `#28f74f` 14.5:1, 10.5:1, 10.4:1, 6.8:1 | `#005512` 8.4:1, 7.3:1, 6.2:1, 4.5:1 | `#3bff59` 15.6:1, 11.1:1, 11.2:1, 7.2:1 | `#005518` 9.0:1, 7.5:1, 6.9:1, 4.8:1 | `#00f000` 13.4:1, 10.5:1, 9.7:1, 6.8:1 | `#006108` 7.7:1, 7.0:1, 5.3:1, 5.0:1 |
+| removed | regular | `#5d0002` 14.3:1, 12.3:1, 10.4:1, 7.9:1 | `#f39992` 8.7:1, 7.1:1, 6.2:1, 4.6:1 | `#ffa59d` 11.1:1, 8.0:1, 8.0:1, 5.2:1 | `#540002` 14.1:1, 12.2:1, 10.5:1, 7.6:1 | `#ffaba3` 11.6:1, 8.2:1, 8.3:1, 5.3:1 | `#4a0000` 16.2:1, 13.4:1, 12.3:1, 8.6:1 | `#ffaa7c` 11.2:1, 8.8:1, 8.1:1, 5.7:1 | `#730000` 12.1:1, 11.1:1, 8.4:1, 7.9:1 |
+| changed | regular | `#001940` 17.3:1, 14.9:1, 12.6:1, 9.5:1 | `#c9e0ff` 13.9:1, 11.4:1, 9.9:1, 7.4:1 | `#ddedff` 17.6:1, 12.7:1, 12.7:1, 8.3:1 | `#001538` 16.7:1, 14.5:1, 12.4:1, 9.0:1 | `#e6f2ff` 18.5:1, 13.2:1, 13.3:1, 8.5:1 | `#00307a` 12.3:1, 10.2:1, 9.3:1, 6.5:1 | `#67aeff` 9.0:1, 7.1:1, 6.5:1, 4.6:1 | `#002ec2` 9.6:1, 8.8:1, 6.7:1, 6.3:1 |
 <!-- contrast detail end -->
 
 ## Interface colours
@@ -152,14 +225,16 @@ Each cell gives the colour and its lowest contrast on the surfaces it is drawn o
 | error | 7:1 | `#810005` 9.2:1 | `#ffccc4` 10.9:1 | `#ffbeb5` 12.2:1 | `#770004` 9.3:1 | `#ff9e94` 9.6:1 | `#8b0000` 8.7:1 | `#fe8167` 8.0:1 | `#aa0000` 7.7:1 |
 | warning | 7:1 | `#583600` 9.2:1 | `#ffd182` 10.9:1 | `#ffd8ab` 14.4:1 | `#513100` 9.3:1 | `#ffd28a` 13.5:1 | `#5a3a00` 8.9:1 | `#ffd370` 13.9:1 | `#674100` 9.0:1 |
 | info | 7:1 | `#003a84` 9.2:1 | `#bddaff` 10.9:1 | `#a6d2ff` 12.2:1 | `#00357a` 9.3:1 | `#a9d4ff` 12.3:1 | `#00337f` 10.2:1 | `#59a4f9` 7.6:1 | `#002ec2` 9.6:1 |
-| lineNumber | 7:1 | `#4d4d4d` 7.4:1 | `#b8b8b8` 8.3:1 | `#d9d9d9` 13.0:1 | `#4a4337` 8.1:1 | `#e6e6e6` 13.9:1 | `#262626` 13.5:1 | `#ffffff` 18.4:1 | `#000000` 19.2:1 |
-| lineNumberActive | 7:1 | `#111111` 16.5:1 | `#f5f5f5` 15.1:1 | `#ffeb3b` 15.0:1 | `#000000` 17.5:1 | `#f5c400` 10.5:1 | `#000000` 18.7:1 | `#ffff00` 17.1:1 | `#000000` 19.2:1 |
+| lineNumber | 7:1 | `#4d4d4d` 8.4:1 | `#b8b8b8` 9.4:1 | `#d9d9d9` 14.8:1 | `#4a4337` 9.0:1 | `#e6e6e6` 16.8:1 | `#262626` 15.1:1 | `#ffffff` 21.0:1 | `#000000` 21.0:1 |
+| lineNumberActive | 7:1 | `#111111` 13.8:1 | `#f5f5f5` 12.2:1 | `#ffeb3b` 12.3:1 | `#000000` 14.5:1 | `#f5c400` 9.2:1 | `#000000` 15.9:1 | `#ffff00` 14.0:1 | `#000000` 14.6:1 |
 | accentForeground | 7:1 | `#ffffff` 8.4:1 | `#121212` 9.5:1 | `#000000` 17.1:1 | `#ffffff` 9.2:1 | `#000000` 12.7:1 | `#ffffff` 9.8:1 | `#000000` 16.7:1 | `#ffffff` 8.9:1 |
 | selectionForeground | 7:1 | `#ffffff` 7.5:1 | `#121212` 8.9:1 | `#000000` 9.0:1 | `#fdf6e3` 7.4:1 | `#000000` 9.0:1 | `#ffffff` 7.5:1 | `#000000` 9.0:1 | `#ffffff` 7.4:1 |
-| cursor | 7:1 | `#111111` 16.5:1 | `#ffd400` 11.5:1 | `#ffffff` 18.4:1 | `#000000` 17.5:1 | `#f5c400` 10.5:1 | `#000000` 18.7:1 | `#ffff00` 17.1:1 | `#000000` 19.2:1 |
-| border | 3:1 | `#707070` 4.2:1 | `#7a7a7a` 3.6:1 | `#7a7a7a` 4.5:1 | `#6e6555` 4.5:1 | `#a6a6a6` 7.8:1 | `#262626` 13.1:1 | `#00ffff` 15.7:1 | `#0f4a85` 8.9:1 |
+| cursor | 7:1 | `#111111` 13.8:1 | `#ffd400` 9.3:1 | `#ffffff` 15.1:1 | `#000000` 14.5:1 | `#f5c400` 9.2:1 | `#000000` 15.9:1 | `#ffff00` 14.0:1 | `#000000` 14.6:1 |
+| background, as text under the cursor | 7:1 | `#ffffff` 18.8:1 | `#121212` 13.0:1 | `#000000` 21.0:1 | `#fdf6e3` 19.4:1 | `#000000` 12.7:1 | `#ffffff` 21.0:1 | `#000000` 19.5:1 | `#ffffff` 21.0:1 |
+| border | 3:1 | `#707070` 3.6:1 | `#7a7a7a` 3.1:1 | `#7a7a7a` 3.5:1 | `#6e6555` 3.9:1 | `#a6a6a6` 6.2:1 | `#262626` 11.5:1 | `#00ffff` 12.0:1 | `#0f4a85` 6.2:1 |
 | borderActive | 3:1 | `#0049a3` 7.2:1 | `#8cbcff` 8.0:1 | `#ffeb3b` 15.9:1 | `#004498` 7.3:1 | `#f5c400` 11.6:1 | `#003d99` 8.5:1 | `#ffff00` 18.4:1 | `#b5200d` 6.6:1 |
-| findMatchBorder | 3:1 | `#111111` 18.8:1 | `#ffd400` 13.0:1 | `#ffffff` 21.0:1 | `#000000` 19.4:1 | `#f5c400` 12.7:1 | `#000000` 21.0:1 | `#ffff00` 19.5:1 | `#b5200d` 6.6:1 |
+| findMatchBorder | 3:1 | `#111111` 13.1:1 | `#ffd400` 7.1:1 | `#ffffff` 11.0:1 | `#000000` 14.5:1 | `#f5c400` 6.8:1 | `#000000` 14.6:1 | `#ffff00` 10.7:1 | `#b5200d` 4.6:1 |
+| accent, as an outline | 3:1 | `#0049a3` 5.9:1 | `#8cbcff` 5.2:1 | `#ffeb3b` 9.0:1 | `#004498` 6.3:1 | `#f5c400` 6.8:1 | `#003d99` 6.8:1 | `#00ffff` 9.2:1 | `#0f4a85` 6.2:1 |
 | selectionStrong | 3:1 | `#0150b2` 7.5:1 | `#4fbdff` 8.9:1 | `#09bcc4` 9.0:1 | `#7401ca` 7.4:1 | `#bf96ff` 9.0:1 | `#015f5e` 7.5:1 | `#ff70ff` 9.0:1 | `#990098` 7.4:1 |
 | indentGuide | 3:1 | `#8a8a8a` 3.4:1 | `#6b6b6b` 3.5:1 | `#8c8c8c` 6.2:1 | `#857b69` 3.8:1 | `#8c8c8c` 6.2:1 | `#6e6e6e` 5.0:1 | `#8c8c8c` 6.2:1 | `#6e6e6e` 5.0:1 |
 | whitespace | 3:1 | `#767676` 4.5:1 | `#7a7a7a` 4.3:1 | `#9a9a9a` 7.4:1 | `#766c5b` 4.7:1 | `#8c8c8c` 6.2:1 | `#6e6e6e` 5.0:1 | `#8c8c8c` 6.2:1 | `#6e6e6e` 5.0:1 |
@@ -187,6 +262,12 @@ Each cell gives the colour and its lowest contrast on the surfaces it is drawn o
 | 14 brightCyan | `#028181` 4.7:1 | `#23f6f8` 13.9:1 | `#00f7f5` 15.6:1 | `#027b7b` 4.7:1 | `#56fff3` 16.9:1 | `#028181` 4.7:1 | `#00ffff` 16.7:1 | `#0178c1` 4.7:1 |
 | 15 brightWhite | `#111111` 18.8:1 | `#ffffff` 18.7:1 | `#ffffff` 21.0:1 | `#000000` 19.4:1 | `#ffffff` 21.0:1 | `#000000` 21.0:1 | `#ffffff` 21.0:1 | `#000000` 21.0:1 |
 <!-- terminal detail end -->
+
+Zacess Yellow on Black draws terminal text in its yellow, `#ffeb3b` at 17.1:1 on black, like its
+editor. Its bright red, bright green, bright yellow and bright magenta (ANSI 9, 10, 11 and 13) are
+pale enough to sit within 0.05 of that yellow in tone. They still differ from it in hue by 0.08 or
+more in OKLab in normal vision, but less under simulated tritanopia, so they are listed in
+`terminal.nearText` rather than failed. Each keeps 11:1 or more on the background.
 
 Every one of the 16 colours is measured as text on the background, ANSI black included, apart from
 the slots a theme lists in `terminal.backgroundRole`. In Zacess Dark and Zacess Yellow on Black, ANSI
@@ -232,7 +313,7 @@ always checked.
   punctuation, so those show in the text colour, which keeps 7:1.
 - Eclipse's Java editor colours `return` apart from the other keywords but not `if`, `for` or
   `while`, which take the keyword colour. Both are bold. Eclipse has no preference for the cursor
-  colour. Its window follows its own Light or Dark appearance rather than the palette. The Terminal
+  colour and no colour for the character under it. Its window follows its own Light or Dark appearance rather than the palette. The Terminal
   view takes the theme's 16 terminal colours, text, background and selection, but its cursor is
   drawn by Eclipse.
 - Xcode has no syntax type for operators, parameters or invalid code, so those show in the text
@@ -251,9 +332,16 @@ always checked.
   of the four light themes, which already sit near 4.5:1 on the background, to about 3.9:1 for ANSI
   black in Zacess Dark and Zacess Yellow on Black and to about 3.6:1 for red, blue and magenta in
   Zacess Deep Contrast Dark. The terminal's default text keeps 7:1 there.
-- The cursor is drawn on top of a selection in the theme's cursor colour, which can sit close in
-  lightness to the selection block. The cursor sits at the edge of the selection, beside the
+- The cursor is drawn on top of a selection in the theme's cursor colour. It stays at least 0.08
+  apart in OKLab from both selections. It sits at the edge of the selection, beside the
   background, where it keeps its full contrast.
+- Terminal.app, Warp, Windows Terminal and Zed set no colour for the character under a block
+  cursor, so the terminal chooses it. Warp's themes set no cursor or selection colour at all.
+  Terminal.app has no selected text colour, so its selection is the background only selection with
+  the terminal text at 7:1 over it.
+- The current line cannot reach 3:1 on the background for the same reason the background only
+  selection cannot: every syntax colour would then fall below 4.5:1 over it. It is a band of 1.3:1
+  to 1.4:1, held apart from the find match and both selections by OKLab distance.
 - Programs in a terminal sometimes choose their own colours, such as a 256 colour or true colour
   value, which these themes cannot control.
 - In Neovim the colours are exact only with `termguicolors` on and a true colour terminal. The same

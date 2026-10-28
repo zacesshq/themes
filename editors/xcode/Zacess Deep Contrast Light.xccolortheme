@@ -90,7 +90,7 @@
 	<key>DVTSourceTextBlockDimBackgroundColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTSourceTextCurrentLineHighlightColor</key>
-	<string>0.960784 0.960784 0.960784 1</string>
+	<string>0.784314 0.870588 0.741176 1</string>
 	<key>DVTSourceTextInsertionPointColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTSourceTextInvisiblesColor</key>

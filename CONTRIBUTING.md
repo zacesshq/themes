@@ -38,6 +38,9 @@ npm run preview
 
 # 4. prove nothing generated is left out of the commit
 npm run verify
+
+# 5. after changing the installer
+shellcheck install.sh
 ```
 
 Commit the palette change together with every file the build and the previews rewrote. When a check
@@ -47,14 +50,19 @@ fails it prints a table naming the theme, the colour, the surface and the floor 
 
 Add a function to `scripts/build.mjs` that writes the editor's files from the palette, use the
 existing token names so the font styles carry over, add a parse check for the new file type to
-`scripts/check.mjs` and document the install step in the editor's own README and in the root
-README.
+`scripts/check.mjs`, read its selection and its cursor, current line and find colours back in the
+same file and document the install step in the editor's own README and in the root README. A new
+terminal also goes into `install.sh`.
 
 ## Project conventions
 
 - **Contrast is a requirement.** Every text and syntax colour keeps 7:1 on every surface it is drawn
-  on, apart from the floors the README lists for find matches and the background only selection. A
-  change that lowers a ratio below a floor cannot merge.
+  on, apart from the floors the README lists for find matches, the current line and the background
+  only selection. A change that lowers a ratio below a floor cannot merge.
+- **Where you are stays visible.** The cursor, the current line, find matches, word and bracket
+  outlines and diff marks each have their own floor. `npm run check` reads every one back out of
+  each generated file. A target that draws a fill where the palette expects an outline fails the
+  check, as does one that draws a colour the palette did not measure.
 - **Colour is never the only signal.** Keep keywords bold, comments and parameters italic and invalid
   code underlined. Two tokens that sit side by side must differ in tone or font style, not only in
   hue.

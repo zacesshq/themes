@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, writeFileSync, copyFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { ROOT, HEADER, REPO, ANSI_NAMES, loadPalette, loadSchema, styleOf, terminalText } from "./lib/palette.mjs";
 import { parseHex } from "./lib/colour.mjs";
+import { UID, bplist } from "./lib/bplist.mjs";
 import { validate } from "./lib/schema.mjs";
 import { contrastTables } from "./lib/tables.mjs";
 
@@ -26,6 +27,11 @@ const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
 const fontStyle = (token) => styleOf(palette, token).join(" ");
 const has = (token, style) => styleOf(palette, token).includes(style);
 const slug = (theme) => `zacess-${theme.id}`;
+// the outline for a written word and a matched bracket: the accent, unless the theme names its own
+// because its accent is also its find match outline
+const matchOutline = (u) => u.matchOutline ?? u.accent;
+const matchOutlineName = (u) => (u.matchOutline ? "match_outline" : "accent");
+const dashedWord = (theme) => theme.wordOutline === "dashed";
 
 // ---------------------------------------------------------------- VS Code
 
@@ -140,22 +146,36 @@ function vscodeColors(theme) {
     "editorOverviewRuler.selectionHighlightForeground": u.border,
     "minimap.selectionHighlight": u.selectionStrong,
     "minimap.selectionOccurrenceHighlight": u.border,
+    // the current line is a band the syntax colours keep the signal floor over
     "editor.lineHighlightBackground": u.lineHighlight,
     "editor.lineHighlightBorder": u.lineHighlight,
+    // the current find match is filled and outlined, the other matches outlined only, so the
+    // two are told apart by the fill and each keeps its border on the current line and a selection
     "editor.findMatchBackground": u.findMatch,
     "editor.findMatchBorder": u.findMatchBorder,
     "editor.findMatchHighlightBackground": `${u.background}00`,
     "editor.findMatchHighlightBorder": u.findMatchBorder,
+    // the word under the cursor and a matched bracket are outlined with no fill, so they never
+    // hide a character or pass for a selection or a find match
     "editor.wordHighlightBackground": `${u.background}00`,
     "editor.wordHighlightBorder": u.border,
     "editor.wordHighlightStrongBackground": `${u.background}00`,
-    "editor.wordHighlightStrongBorder": u.accent,
+    "editor.wordHighlightStrongBorder": matchOutline(u),
+    "editor.wordHighlightTextBackground": `${u.background}00`,
+    "editor.wordHighlightTextBorder": u.border,
     "editorBracketMatch.background": `${u.background}00`,
-    "editorBracketMatch.border": u.accent,
+    "editorBracketMatch.border": matchOutline(u),
     "editorGutter.background": u.gutter,
+    // every changed line carries a gutter mark as well as its fill, so colour is never the only sign
     "editorGutter.addedBackground": s.added,
     "editorGutter.modifiedBackground": s.changed,
     "editorGutter.deletedBackground": s.removed,
+    "editorOverviewRuler.addedForeground": s.added,
+    "editorOverviewRuler.modifiedForeground": s.changed,
+    "editorOverviewRuler.deletedForeground": s.removed,
+    "editorOverviewRuler.wordHighlightForeground": u.border,
+    "editorOverviewRuler.wordHighlightStrongForeground": matchOutline(u),
+    "editorOverviewRuler.bracketMatchForeground": matchOutline(u),
     "editorError.foreground": u.error,
     "editorWarning.foreground": u.warning,
     "editorInfo.foreground": u.info,
@@ -184,10 +204,18 @@ function vscodeColors(theme) {
     "editorOverviewRuler.warningForeground": u.warning,
     "editorOverviewRuler.infoForeground": u.info,
     "editorOverviewRuler.findMatchForeground": u.findMatchBorder,
+    // diff lines carry a border in the added or removed colour as well as their fill; the
+    // gutter of the diff editor marks them too
     "diffEditor.insertedTextBackground": u.diffAddedBackground,
     "diffEditor.removedTextBackground": u.diffRemovedBackground,
+    "diffEditor.insertedTextBorder": s.added,
+    "diffEditor.removedTextBorder": s.removed,
     "diffEditor.insertedLineBackground": u.diffAddedBackground,
     "diffEditor.removedLineBackground": u.diffRemovedBackground,
+    "diffEditorGutter.insertedLineBackground": u.diffAddedBackground,
+    "diffEditorGutter.removedLineBackground": u.diffRemovedBackground,
+    "diffEditorOverview.insertedForeground": s.added,
+    "diffEditorOverview.removedForeground": s.removed,
     "editorGroup.border": u.border,
     "editorGroupHeader.tabsBackground": u.surface,
     "editorGroupHeader.tabsBorder": u.border,
@@ -318,7 +346,9 @@ function vscodeColors(theme) {
     "scrollbarSlider.activeBackground": u.indentGuide,
     "terminal.background": u.background,
     "terminal.foreground": terminalText(theme).foreground,
+    // the block cursor draws the background colour as the character under it
     "terminalCursor.foreground": terminalText(theme).cursor,
+    "terminalCursor.background": u.background,
     "terminal.selectionBackground": u.selectionStrong,
     "terminal.selectionForeground": u.selectionForeground,
     "terminal.inactiveSelectionBackground": u.selectionStrong,
@@ -494,14 +524,20 @@ function icls(theme) {
     SEARCH_RESULT_ATTRIBUTES: { bg: u.findMatch, effect: 0, effectColour: u.findMatchBorder },
     TEXT_SEARCH_RESULT_ATTRIBUTES: { bg: u.findMatch, effect: 0, effectColour: u.findMatchBorder },
     WRITE_SEARCH_RESULT_ATTRIBUTES: { bg: u.findMatch, effect: 0, effectColour: u.findMatchBorder },
-    IDENTIFIER_UNDER_CARET_ATTRIBUTES: { bg: u.lineHighlight, effect: 0, effectColour: u.border },
-    WRITE_IDENTIFIER_UNDER_CARET_ATTRIBUTES: { bg: u.lineHighlight, effect: 0, effectColour: u.accent },
-    MATCHED_BRACE_ATTRIBUTES: { bg: u.lineHighlight, effect: 0, effectColour: u.accent, fontType: 1 },
+    // the word under the caret and a matched brace are boxed with no fill, so they never hide a
+    // character and stay apart from the filled search results and the selection
+    // EFFECT_TYPE 5 is a bold dotted underline, the nearest the IDE gets to a dashed outline
+    IDENTIFIER_UNDER_CARET_ATTRIBUTES: { effect: dashedWord(theme) ? 5 : 0, effectColour: u.border },
+    WRITE_IDENTIFIER_UNDER_CARET_ATTRIBUTES: { effect: dashedWord(theme) ? 5 : 0, effectColour: matchOutline(u) },
+    MATCHED_BRACE_ATTRIBUTES: { effect: 0, effectColour: matchOutline(u), fontType: 1 },
     UNMATCHED_BRACE_ATTRIBUTES: { fg: s.invalid, token: "invalid" },
     TODO_DEFAULT_ATTRIBUTES: { fg: s.control, fontType: 3 },
+    // the diff fills are matched by the gutter stripes in ADDED_LINES_COLOR, MODIFIED_LINES_COLOR
+    // and DELETED_LINES_COLOR above; a modified line takes the selected row fill, which every
+    // syntax colour keeps the text floor over
     DIFF_INSERTED: { bg: u.diffAddedBackground },
     DIFF_DELETED: { bg: u.diffRemovedBackground },
-    DIFF_MODIFIED: { bg: u.lineHighlight },
+    DIFF_MODIFIED: { bg: u.listSelection },
     DELETED_TEXT_ATTRIBUTES: { fg: s.removed, effect: 3, effectColour: s.removed },
     INJECTED_LANGUAGE_FRAGMENT: {},
     CONSOLE_NORMAL_OUTPUT: { fg: terminalText(theme).foreground },
@@ -657,7 +693,7 @@ function buildJetbrains() {
     "<ul>",
     ...palette.themes.map((t) => `<li><b>${t.name}</b>: ${t.description}</li>`),
     "</ul>",
-    "<p>Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background and the current line. Comments are never dimmed below it. Selected text takes one colour at 7:1 or more on a bold selection block. Keywords are bold, comments italic and invalid code underlined, so colour is never the only signal.</p>",
+    "<p>Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background. The current line is a visible band with plain text at 7:1 and every syntax colour at 4.5:1 or more over it. Comments are never dimmed below 7:1. Selected text takes one colour at 7:1 or more on a bold selection block. Keywords are bold, comments italic and invalid code underlined, so colour is never the only signal.</p>",
     `<p>Source, contrast tables and issues: <a href="${REPO}">${REPO}</a></p>`,
     "]]></description>",
     "  <depends>com.intellij.modules.platform</depends>",
@@ -715,6 +751,9 @@ function obsidianVars(theme) {
     `--text-on-accent-inverted: ${u.accentForeground};`,
     `--text-selection: ${u.selection};`,
     `--text-highlight-bg: ${u.findMatch};`,
+    `--zacess-find-border: ${u.findMatchBorder};`,
+    `--zacess-line-highlight: ${u.lineHighlight};`,
+    `--zacess-match-outline: ${matchOutline(u)};`,
     `--interactive-normal: ${u.surfaceAlt};`,
     `--interactive-hover: ${u.lineHighlight};`,
     `--interactive-accent: ${u.accent};`,
@@ -799,9 +838,30 @@ function buildObsidian() {
     block("body.zacess-deep-contrast-dark.theme-light,\nbody.zacess-deep-contrast-dark.theme-dark", byId["deep-contrast-dark"]),
     block("body.zacess-deep-contrast-light.theme-light,\nbody.zacess-deep-contrast-light.theme-dark", byId["deep-contrast-light"]),
     "/* Obsidian fills search matches in the editor with the selection colour; they take the find",
-    "   match colour instead, so a selection never passes for a search hit */",
-    ".cm-s-obsidian span.cm-highlight.obsidian-search-match-highlight {",
+    "   match colour instead, so a selection never passes for a search hit; the match the",
+    "   cursor is on is outlined as well */",
+    ".cm-s-obsidian span.cm-highlight.obsidian-search-match-highlight,",
+    ".cm-s-obsidian .cm-searchMatch {",
     "  background-color: var(--text-highlight-bg);",
+    "}",
+    "",
+    ".cm-s-obsidian .cm-searchMatch.cm-searchMatch-selected {",
+    "  outline: 2px solid var(--zacess-find-border);",
+    "  outline-offset: 1px;",
+    "}",
+    "",
+    "/* the line the cursor is on is a visible band in editing view */",
+    ".cm-s-obsidian .cm-active.cm-line,",
+    ".cm-s-obsidian .cm-activeLine {",
+    "  background-color: var(--zacess-line-highlight);",
+    "}",
+    "",
+    "/* a matched bracket is outlined and bold with no fill, so it never hides the character */",
+    ".cm-s-obsidian .cm-matchingBracket,",
+    ".cm-s-obsidian span.cm-matchingBracket {",
+    "  background-color: transparent;",
+    "  outline: 2px solid var(--zacess-match-outline);",
+    "  font-weight: 700;",
     "}",
     "",
     "/* links are underlined so colour is never the only signal */",
@@ -869,6 +929,7 @@ function buildObsidian() {
 
 function neovim(theme) {
   const u = theme.ui;
+  const wordLine = dashedWord(theme) ? { underdashed: true } : { underline: true };
   const s = theme.syntax;
   const spec = (token, extra = {}) => {
     const out = { fg: s[token], ...extra };
@@ -899,11 +960,15 @@ function neovim(theme) {
     // including terminal buffers
     Visual: { fg: u.selectionForeground, bg: u.selectionStrong },
     VisualNOS: { fg: u.selectionForeground, bg: u.selectionStrong },
-    Search: { fg: u.foreground, bg: u.lineHighlight, underline: true, sp: u.findMatchBorder },
+    // the current match is filled and bold, the other matches underlined in the find match
+    // outline colour with no fill, so they stay apart from each other and from the current line
+    Search: { underline: true, sp: u.findMatchBorder },
     CurSearch: { fg: u.foreground, bg: u.findMatch, bold: true },
     IncSearch: { fg: u.foreground, bg: u.findMatch, bold: true },
     Substitute: { fg: u.foreground, bg: u.findMatch },
-    MatchParen: { bg: u.lineHighlight, bold: true, underline: true, sp: u.accent },
+    // a matched bracket and the word under the cursor are underlined with no fill, so they never
+    // hide a character and show on the current line too
+    MatchParen: { bold: true, underline: true, sp: matchOutline(u) },
     NonText: { fg: u.whitespace },
     Whitespace: { fg: u.whitespace },
     SpecialKey: { fg: u.whitespace },
@@ -936,10 +1001,23 @@ function neovim(theme) {
     SpellCap: { undercurl: true, sp: u.warning },
     SpellLocal: { undercurl: true, sp: u.info },
     SpellRare: { undercurl: true, sp: u.info },
+    // diff fills with the sign column marks that gitsigns, mini.diff and vim-signify draw beside them
     DiffAdd: { bg: u.diffAddedBackground },
     DiffDelete: { fg: s.removed, bg: u.diffRemovedBackground },
-    DiffChange: { bg: u.lineHighlight },
-    DiffText: { bg: u.listSelection, bold: true },
+    DiffChange: { bg: u.listSelection },
+    DiffText: { bg: u.listSelection, bold: true, underline: true, sp: s.changed },
+    GitSignsAdd: { fg: s.added, bg: u.gutter },
+    GitSignsChange: { fg: s.changed, bg: u.gutter },
+    GitSignsDelete: { fg: s.removed, bg: u.gutter },
+    GitSignsChangedelete: { fg: s.changed, bg: u.gutter },
+    GitSignsTopdelete: { fg: s.removed, bg: u.gutter },
+    GitSignsUntracked: { fg: s.added, bg: u.gutter },
+    MiniDiffSignAdd: { fg: s.added, bg: u.gutter },
+    MiniDiffSignChange: { fg: s.changed, bg: u.gutter },
+    MiniDiffSignDelete: { fg: s.removed, bg: u.gutter },
+    SignifySignAdd: { fg: s.added, bg: u.gutter },
+    SignifySignChange: { fg: s.changed, bg: u.gutter },
+    SignifySignDelete: { fg: s.removed, bg: u.gutter },
     Added: spec("added"),
     Removed: spec("removed"),
     Changed: spec("changed"),
@@ -991,9 +1069,9 @@ function neovim(theme) {
     DiagnosticUnderlineHint: { undercurl: true, sp: u.muted },
     DiagnosticUnnecessary: { fg: u.muted, italic: true },
     DiagnosticDeprecated: { strikethrough: true, sp: u.muted },
-    LspReferenceText: { bg: u.lineHighlight },
-    LspReferenceRead: { bg: u.lineHighlight },
-    LspReferenceWrite: { bg: u.lineHighlight, underline: true, sp: u.accent },
+    LspReferenceText: { ...wordLine, sp: u.border },
+    LspReferenceRead: { ...wordLine, sp: u.border },
+    LspReferenceWrite: { ...wordLine, sp: matchOutline(u) },
     LspInlayHint: { fg: u.muted, bg: u.surface },
     "@variable": spec("variable"),
     "@variable.builtin": spec("keyword"),
@@ -1180,9 +1258,17 @@ function zedTheme(theme) {
     "editor.active_wrap_guide": u.border,
     "editor.indent_guide": u.indentGuide,
     "editor.indent_guide_active": u.foreground,
-    "editor.document_highlight.read_background": u.lineHighlight,
-    "editor.document_highlight.write_background": u.lineHighlight,
-    "editor.document_highlight.bracket_background": u.lineHighlight,
+    // Zed draws the word under the cursor and a matched bracket as a fill with no outline, so they
+    // take the selected row colour, which every syntax colour keeps the text floor over
+    "editor.document_highlight.read_background": u.listSelection,
+    "editor.document_highlight.write_background": u.listSelection,
+    "editor.document_highlight.bracket_background": u.listSelection,
+    // the gutter marks beside changed lines
+    "version_control.added": s.added,
+    "version_control.modified": s.changed,
+    "version_control.deleted": s.removed,
+    "version_control.conflict_marker.ours": u.diffAddedBackground,
+    "version_control.conflict_marker.theirs": u.diffRemovedBackground,
     "terminal.background": u.background,
     "terminal.foreground": terminalText(theme).foreground,
     "terminal.bright_foreground": terminalText(theme).foreground,
@@ -1213,7 +1299,7 @@ function zedTheme(theme) {
     "info.background": u.surface,
     "info.border": u.info,
     modified: s.changed,
-    "modified.background": u.lineHighlight,
+    "modified.background": u.listSelection,
     "modified.border": s.changed,
     predictive: u.muted,
     "predictive.background": u.surface,
@@ -1367,9 +1453,9 @@ function sublimeScheme(theme) {
       find_highlight_foreground: v("foreground"),
       highlight: v("find_match_border"),
       brackets_options: "underline",
-      brackets_foreground: v("accent"),
+      brackets_foreground: v(matchOutlineName(theme.ui)),
       bracket_contents_options: "underline",
-      bracket_contents_foreground: v("accent"),
+      bracket_contents_foreground: v(matchOutlineName(theme.ui)),
       tags_options: "underline",
       tags_foreground: v("accent"),
       line_diff_width: "3",
@@ -1409,7 +1495,8 @@ function helix(theme) {
     "ui.text.info": ui("foreground", "surface"),
     "ui.cursor": ui("background", "cursor"),
     "ui.cursor.primary": ui("background", "cursor"),
-    "ui.cursor.match": ui(null, "line_highlight", { modifiers: ["bold"], underline: { color: "accent", style: "line" } }),
+    // a matched bracket is bold and underlined with no fill, so it shows on the current line too
+    "ui.cursor.match": { modifiers: ["bold"], underline: { color: matchOutlineName(theme.ui), style: "line" } },
     "ui.cursorline.primary": ui(null, "line_highlight"),
     "ui.gutter": ui(null, "gutter"),
     "ui.linenr": ui("line_number"),
@@ -1581,15 +1668,27 @@ function emacs(theme) {
     "font-lock-misc-punctuation-face": tok("operator"),
     "font-lock-negation-char-face": tok("control"),
     "font-lock-warning-face": tok("invalid", { weight: "bold" }),
-    "show-paren-match": { background: u.lineHighlight, weight: "bold", underline: { color: u.accent } },
+    // a matched bracket is bold and underlined with no fill; the other search matches are
+    // underlined in the find match outline colour while the current one is filled and bold
+    "show-paren-match": { weight: "bold", underline: { color: matchOutline(u) } },
     "show-paren-mismatch": tok("invalid", { weight: "bold" }),
     isearch: { foreground: u.foreground, background: u.findMatch, weight: "bold" },
     "isearch-fail": { foreground: u.error, weight: "bold" },
-    "lazy-highlight": { background: u.lineHighlight, underline: { color: u.findMatchBorder } },
-    match: { background: u.lineHighlight, underline: { color: u.findMatchBorder } },
+    "lazy-highlight": { underline: { color: u.findMatchBorder } },
+    match: { underline: { color: u.findMatchBorder } },
+    // diff lines carry an indicator in the fringe and a coloured marker column as well as the fill
     "diff-added": { foreground: s.added, background: u.diffAddedBackground, extend: true },
     "diff-removed": { foreground: s.removed, background: u.diffRemovedBackground, extend: true },
-    "diff-changed": { foreground: s.changed, background: u.lineHighlight, extend: true },
+    "diff-changed": { foreground: s.changed, background: u.listSelection, extend: true },
+    "diff-indicator-added": { foreground: s.added, background: u.diffAddedBackground, weight: "bold" },
+    "diff-indicator-removed": { foreground: s.removed, background: u.diffRemovedBackground, weight: "bold" },
+    "diff-indicator-changed": { foreground: s.changed, background: u.listSelection, weight: "bold" },
+    "diff-refine-added": { foreground: s.added, background: u.diffAddedBackground, weight: "bold", underline: true },
+    "diff-refine-removed": { foreground: s.removed, background: u.diffRemovedBackground, weight: "bold", underline: true },
+    "diff-refine-changed": { foreground: s.changed, background: u.listSelection, weight: "bold", underline: true },
+    "diff-hl-insert": { foreground: s.added, background: u.gutter },
+    "diff-hl-delete": { foreground: s.removed, background: u.gutter },
+    "diff-hl-change": { foreground: s.changed, background: u.gutter },
     "diff-header": { foreground: u.foreground, background: u.surfaceAlt },
     "diff-file-header": { foreground: u.foreground, background: u.surfaceAlt, weight: "bold" },
     "flymake-error": wave(u.error),
@@ -1626,8 +1725,8 @@ function emacs(theme) {
     "",
     `;; ${theme.description}`,
     ";; Every text and syntax colour keeps at least 7:1 contrast on the",
-    ";; background and the current line. Selected text takes one colour at",
-    ";; 7:1 or more on a bold selection block.",
+    ";; background and 4.5:1 or more over the current line. Selected text",
+    ";; takes one colour at 7:1 or more on a bold selection block.",
     "",
     ";;; Code:",
     "",
@@ -1740,7 +1839,7 @@ function eclipsePrefs(theme) {
   );
 
   jdt.push(
-    ["matchingBracketsColor", rgb(u.accent)],
+    ["matchingBracketsColor", rgb(matchOutline(u))],
     ["sourceHoverBackgroundColor", rgb(u.surface)],
     ["sourceHoverBackgroundColor.SystemDefault", false],
     ["content_assist_proposals_background", rgb(u.surface)],
@@ -2246,6 +2345,10 @@ function alacritty(theme) {
     "[colors.bright]",
     ...names.map((n, i) => `${n} = "${t.ansi[i + 8]}"`),
     "",
+    "# dim text keeps the normal colours, so it never drops below their floor",
+    "[colors.dim]",
+    ...names.map((n, i) => `${n} = "${t.ansi[i]}"`),
+    "",
   ].join("\n");
 }
 
@@ -2310,6 +2413,116 @@ function windowsTerminal() {
   });
 }
 
+// Terminal.app stores each colour as an NSKeyedArchiver archive of an NSColor in sRGB (NSSpaceID
+// 12), so the profile shows exactly the palette's values; the device RGB form Terminal.app's own
+// older profiles use is converted to the display's space and comes out darker
+function nsColour(hex) {
+  const unit = (v) => String(Number((v / 255).toFixed(10)));
+  const components = new TextEncoder().encode(`${parseHex(hex).map(unit).join(" ")} 1`);
+  return bplist({
+    $archiver: "NSKeyedArchiver",
+    $version: 100000,
+    $top: { root: new UID(1) },
+    $objects: [
+      "$null",
+      { $class: new UID(4), NSColorSpace: 1, NSComponents: components, NSCustomColorSpace: new UID(2), NSRGB: new Uint8Array([...components, 0]) },
+      { $class: new UID(3), NSSpaceID: 12 },
+      { $classes: ["NSColorSpace", "NSObject"], $classname: "NSColorSpace" },
+      { $classes: ["NSColor", "NSObject"], $classname: "NSColor" },
+    ],
+  });
+}
+
+const TERMINAL_APP_ANSI = ["Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White"];
+
+function terminalApp(theme) {
+  const t = terminalColours(theme);
+  const data = (bytes) => {
+    const b64 = Buffer.from(bytes).toString("base64");
+    return ["\t<data>", ...b64.match(/.{1,68}/g).map((l) => `\t${l}`), "\t</data>"];
+  };
+  const colours = {
+    BackgroundColor: t.background,
+    TextColor: t.foreground,
+    TextBoldColor: t.foreground,
+    CursorColor: t.cursor,
+    // Terminal.app has no selected text colour: selected text keeps its own colour, so the
+    // selection is the background only one the checks hold the terminal text to 7:1 over
+    SelectionColor: theme.ui.selection,
+  };
+  TERMINAL_APP_ANSI.forEach((n, i) => {
+    colours[`ANSI${n}Color`] = t.ansi[i];
+    colours[`ANSIBright${n}Color`] = t.ansi[i + 8];
+  });
+  const entries = {
+    ...Object.fromEntries(Object.entries(colours).map(([k, v]) => [k, ["\t<key>" + k + "</key>", ...data(nsColour(v))]])),
+    ProfileCurrentVersion: ["\t<key>ProfileCurrentVersion</key>", "\t<real>2.09</real>"],
+    // bold text keeps its own colour rather than switching to the bright row
+    UseBrightBold: ["\t<key>UseBrightBold</key>", "\t<false/>"],
+    name: ["\t<key>name</key>", `\t<string>${xmlEscape(theme.name)}</string>`],
+    type: ["\t<key>type</key>", "\t<string>Window Settings</string>"],
+  };
+  return [
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+    "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">",
+    `<!-- ${HEADER} -->`,
+    "<plist version=\"1.0\">",
+    "<dict>",
+    ...Object.keys(entries).sort().flatMap((k) => entries[k]),
+    "</dict>",
+    "</plist>",
+    "",
+  ].join("\n");
+}
+
+// Warp's custom themes set the background, the text, an accent and the 16 colours; Warp draws its
+// cursor and selection itself, so the theme cannot set them
+function warp(theme) {
+  const t = terminalColours(theme);
+  const names = ANSI_NAMES.slice(0, 8);
+  return [
+    `# ${theme.name}`,
+    `# ${HEADER}`,
+    `name: ${theme.name}`,
+    `accent: '${theme.ui.accent}'`,
+    `background: '${t.background}'`,
+    `foreground: '${t.foreground}'`,
+    `details: ${theme.appearance === "dark" ? "darker" : "lighter"}`,
+    "terminal_colors:",
+    "  normal:",
+    ...names.map((n, i) => `    ${n}: '${t.ansi[i]}'`),
+    "  bright:",
+    ...names.map((n, i) => `    ${n}: '${t.ansi[i + 8]}'`),
+    "",
+  ].join("\n");
+}
+
+// a WezTerm colour scheme file, read from ~/.config/wezterm/colors and chosen by its name
+function wezterm(theme) {
+  const t = terminalColours(theme);
+  const list = (values) => `[${values.map((v) => `"${v}"`).join(", ")}]`;
+  return [
+    `# ${theme.name}`,
+    `# ${HEADER}`,
+    "",
+    "[colors]",
+    `background = "${t.background}"`,
+    `foreground = "${t.foreground}"`,
+    `cursor_bg = "${t.cursor}"`,
+    `cursor_border = "${t.cursor}"`,
+    `cursor_fg = "${t.cursorText}"`,
+    `selection_bg = "${t.selection}"`,
+    `selection_fg = "${t.selectionText}"`,
+    `ansi = ${list(t.ansi.slice(0, 8))}`,
+    `brights = ${list(t.ansi.slice(8))}`,
+    "",
+    "[metadata]",
+    `name = "${theme.name}"`,
+    `origin_url = "${REPO}"`,
+    "",
+  ].join("\n");
+}
+
 function buildTerminals() {
   for (const theme of palette.themes) {
     const name = slug(theme);
@@ -2317,6 +2530,9 @@ function buildTerminals() {
     write(`editors/terminals/alacritty/${name}.toml`, alacritty(theme));
     write(`editors/terminals/kitty/${name}.conf`, kitty(theme));
     write(`editors/terminals/ghostty/${name}`, ghostty(theme));
+    write(`editors/terminals/terminal-app/${theme.name}.terminal`, terminalApp(theme));
+    write(`editors/terminals/warp/${name}.yaml`, warp(theme));
+    write(`editors/terminals/wezterm/${theme.name}.toml`, wezterm(theme));
   }
   write("editors/terminals/windows-terminal/zacess.json", windowsTerminal());
 }
@@ -2341,6 +2557,7 @@ function buildDocs() {
   replaceBetween("README.md", "contrast summary", tables.summary);
   replaceBetween("ACCESSIBILITY.md", "contrast detail", tables.detail);
   replaceBetween("ACCESSIBILITY.md", "selection detail", tables.selection);
+  replaceBetween("ACCESSIBILITY.md", "signals detail", tables.signals);
   replaceBetween("ACCESSIBILITY.md", "interface detail", tables.ui);
   replaceBetween("ACCESSIBILITY.md", "terminal detail", tables.terminal);
   replaceBetween("ACCESSIBILITY.md", "colour vision detail", tables.vision);

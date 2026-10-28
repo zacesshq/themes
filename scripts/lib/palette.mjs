@@ -17,8 +17,16 @@ export function loadSchema() {
 
 // the surfaces syntax colours are drawn on, each held to the text contrast floor; the selection
 // is measured on its own floor, rules.selectionContrast, because a fill bright enough to stand out
-// from the background cannot also keep every syntax colour at 7:1
-export const TEXT_SURFACES = ["background", "surface", "surfaceAlt", "listSelection", "lineHighlight", "diffAddedBackground", "diffRemovedBackground"];
+// from the background cannot also keep every syntax colour at 7:1; the current line is held to
+// rules.signalTextContrast for the same reason: a band at 1.3:1 or more on the background cannot
+// keep every syntax colour at 7:1 either
+export const TEXT_SURFACES = ["background", "surface", "surfaceAlt", "listSelection", "diffAddedBackground", "diffRemovedBackground"];
+
+// the fills a cursor must never be mistaken for and the fills the current line must never be
+// mistaken for, each measured by OKLab distance; the current line is not held apart from the
+// diff backgrounds, which carry a gutter mark or a border of their own
+export const CURSOR_NEIGHBOURS = ["selection", "selectionStrong", "lineHighlight", "findMatch"];
+export const LINE_NEIGHBOURS = ["findMatch"];
 
 // interface text that can sit inside a background only selection (links and muted text in
 // Obsidian, the Xcode console), held to rules.selectionContrast like the syntax colours
@@ -36,11 +44,16 @@ export const UI_TEXT = [
   ["error", ["background", "surface", "surfaceAlt"]],
   ["warning", ["background", "surface", "surfaceAlt"]],
   ["info", ["background", "surface", "surfaceAlt"]],
-  ["lineNumber", ["gutter", "lineHighlight"]],
+  // the line number on the current line is always the active one, so the plain number is
+  // measured on the gutter alone
+  ["lineNumber", ["gutter"]],
   ["lineNumberActive", ["gutter", "lineHighlight"]],
   ["accentForeground", ["accent"]],
   ["selectionForeground", ["selectionStrong"]],
   ["cursor", ["background", "lineHighlight"]],
+  // the text under a block cursor is drawn in the background colour in every editor and terminal
+  // that can set it
+  ["background", ["cursor"]],
 ];
 
 // boundaries and markers that are not text, held to the non-text floor (WCAG 1.4.11) on every
@@ -53,6 +66,13 @@ export const UI_NON_TEXT = [
   ["borderActive", "surface"],
   ["borderActive", "surfaceAlt"],
   ["findMatchBorder", "background"],
+  ["findMatchBorder", "findMatch"],
+  ["findMatchBorder", "lineHighlight"],
+  // the word under the cursor and a matched bracket are outlined in the border and accent colours,
+  // on the background, the current line or a find match
+  ["border", "lineHighlight"],
+  ["accent", "lineHighlight"],
+  ["accent", "findMatch"],
   ["selectionStrong", "background"],
   ["indentGuide", "background"],
   ["whitespace", "background"],
@@ -151,10 +171,40 @@ export const VSCODE_HC_TEXT_PAIRS = [
   ["editor.selectionForeground", "editor.inactiveSelectionBackground"],
 ];
 
-// non-text marks that are not named as borders, held to the non-text floor
+// non-text marks that are not named as borders, held to the non-text floor, plus the outlines that
+// mark a find match, the word under the cursor, a matched bracket and a diff line on each fill
+// they sit on
 export const VSCODE_NON_TEXT_PAIRS = [
   ["textSeparator.foreground", "editor.background"],
   ["menu.separatorBackground", "menu.background"],
+  ["editorCursor.foreground", "editor.background"],
+  ["editorCursor.foreground", "editor.lineHighlightBackground"],
+  ["editor.findMatchBorder", "editor.findMatchBackground"],
+  ["editor.findMatchBorder", "editor.background"],
+  ["editor.findMatchHighlightBorder", "editor.background"],
+  ["editor.findMatchHighlightBorder", "editor.lineHighlightBackground"],
+  ["editor.wordHighlightBorder", "editor.background"],
+  ["editor.wordHighlightBorder", "editor.lineHighlightBackground"],
+  ["editor.wordHighlightStrongBorder", "editor.background"],
+  ["editor.wordHighlightStrongBorder", "editor.lineHighlightBackground"],
+  ["editorBracketMatch.border", "editor.background"],
+  ["editorBracketMatch.border", "editor.lineHighlightBackground"],
+  ["editorGutter.addedBackground", "editorGutter.background"],
+  ["editorGutter.modifiedBackground", "editorGutter.background"],
+  ["editorGutter.deletedBackground", "editorGutter.background"],
+  ["diffEditor.insertedTextBorder", "diffEditor.insertedLineBackground"],
+  ["diffEditor.removedTextBorder", "diffEditor.removedLineBackground"],
+  ["terminalCursor.foreground", "terminal.background"],
+];
+
+// text VS Code draws on a fill at the floor for that fill: the plain text on the current line and
+// a find match keeps the text floor, the cursor text keeps it too
+export const VSCODE_FILL_TEXT_PAIRS = [
+  ["editor.foreground", "editor.lineHighlightBackground"],
+  ["editor.foreground", "editor.findMatchBackground"],
+  ["editorLineNumber.activeForeground", "editor.lineHighlightBackground"],
+  ["editorCursor.background", "editorCursor.foreground"],
+  ["terminalCursor.background", "terminalCursor.foreground"],
 ];
 
 // the keys of an Xcode .xccolortheme, read from the themes Xcode 27.1 ships in DVTUserInterfaceKit

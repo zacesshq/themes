@@ -2,10 +2,13 @@
 
 Eight high contrast code themes. Four match the [Zacess](https://zacess.com) reader, so a student sees
 the same page in the reader and in the editor. Four more give the highest contrast a screen can show.
-Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background and the
-current line, comments included. In the five high contrast themes and in the terminal a selection
-is a bold block with every selected character in one colour at 7:1 or more. In Zacess Light, Dark
-and Cream the editor keeps each token's colour inside a selection, at 4.5:1 or more.
+Every text and syntax colour keeps at least 7:1 contrast (WCAG AAA) on the background, comments
+included. The current line is a visible band with plain text at 7:1 and every syntax colour at
+4.5:1 or more over it. In the five high contrast themes and in the terminal a selection is a bold
+block with every selected character in one colour at 7:1 or more. In Zacess Light, Dark and Cream
+the editor keeps each token's colour inside a selection, at 4.5:1 or more. The current find match
+is filled and outlined while the other matches, the word under the cursor and a matched bracket
+are outlined only. Changed lines carry a gutter mark as well as their fill.
 
 | Theme | For | Text on background |
 | --- | --- | --- |

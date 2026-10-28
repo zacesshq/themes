@@ -11,8 +11,8 @@
 
 ;; Ink on white, the reader's Dark on light theme.
 ;; Every text and syntax colour keeps at least 7:1 contrast on the
-;; background and the current line. Selected text takes one colour at
-;; 7:1 or more on a bold selection block.
+;; background and 4.5:1 or more over the current line. Selected text
+;; takes one colour at 7:1 or more on a bold selection block.
 
 ;;; Code:
 
@@ -24,12 +24,12 @@
  '(default ((t (:foreground "#111111" :background "#ffffff"))))
  '(cursor ((t (:background "#111111"))))
  '(region ((t (:foreground "#ffffff" :background "#0150b2" :extend t))))
- '(secondary-selection ((t (:background "#f0f0f0" :extend t))))
- '(highlight ((t (:background "#f0f0f0"))))
- '(hl-line ((t (:background "#f0f0f0" :extend t))))
+ '(secondary-selection ((t (:background "#d6dde8" :extend t))))
+ '(highlight ((t (:background "#d6dde8"))))
+ '(hl-line ((t (:background "#d6dde8" :extend t))))
  '(fringe ((t (:foreground "#4d4d4d" :background "#ffffff"))))
  '(line-number ((t (:foreground "#4d4d4d" :background "#ffffff"))))
- '(line-number-current-line ((t (:foreground "#111111" :background "#f0f0f0" :weight bold))))
+ '(line-number-current-line ((t (:foreground "#111111" :background "#d6dde8" :weight bold))))
  '(mode-line ((t (:foreground "#111111" :background "#ededed" :box (:line-width 1 :color "#707070")))))
  '(mode-line-inactive ((t (:foreground "#424242" :background "#f4f4f4" :box (:line-width 1 :color "#707070")))))
  '(header-line ((t (:foreground "#111111" :background "#ededed"))))
@@ -71,15 +71,24 @@
  '(font-lock-misc-punctuation-face ((t (:foreground "#111111"))))
  '(font-lock-negation-char-face ((t (:foreground "#5e003c" :weight bold))))
  '(font-lock-warning-face ((t (:foreground "#5d0002" :underline t :weight bold))))
- '(show-paren-match ((t (:background "#f0f0f0" :weight bold :underline (:color "#0049a3")))))
+ '(show-paren-match ((t (:weight bold :underline (:color "#0049a3")))))
  '(show-paren-mismatch ((t (:foreground "#5d0002" :underline t :weight bold))))
  '(isearch ((t (:foreground "#111111" :background "#ffd400" :weight bold))))
  '(isearch-fail ((t (:foreground "#810005" :weight bold))))
- '(lazy-highlight ((t (:background "#f0f0f0" :underline (:color "#111111")))))
- '(match ((t (:background "#f0f0f0" :underline (:color "#111111")))))
+ '(lazy-highlight ((t (:underline (:color "#111111")))))
+ '(match ((t (:underline (:color "#111111")))))
  '(diff-added ((t (:foreground "#005b14" :background "#e3f5e6" :extend t))))
  '(diff-removed ((t (:foreground "#5d0002" :background "#fdeaea" :extend t))))
- '(diff-changed ((t (:foreground "#001940" :background "#f0f0f0" :extend t))))
+ '(diff-changed ((t (:foreground "#001940" :background "#fff1a8" :extend t))))
+ '(diff-indicator-added ((t (:foreground "#005b14" :background "#e3f5e6" :weight bold))))
+ '(diff-indicator-removed ((t (:foreground "#5d0002" :background "#fdeaea" :weight bold))))
+ '(diff-indicator-changed ((t (:foreground "#001940" :background "#fff1a8" :weight bold))))
+ '(diff-refine-added ((t (:foreground "#005b14" :background "#e3f5e6" :weight bold :underline t))))
+ '(diff-refine-removed ((t (:foreground "#5d0002" :background "#fdeaea" :weight bold :underline t))))
+ '(diff-refine-changed ((t (:foreground "#001940" :background "#fff1a8" :weight bold :underline t))))
+ '(diff-hl-insert ((t (:foreground "#005b14" :background "#ffffff"))))
+ '(diff-hl-delete ((t (:foreground "#5d0002" :background "#ffffff"))))
+ '(diff-hl-change ((t (:foreground "#001940" :background "#ffffff"))))
  '(diff-header ((t (:foreground "#111111" :background "#ededed"))))
  '(diff-file-header ((t (:foreground "#111111" :background "#ededed" :weight bold))))
  '(flymake-error ((t (:underline (:color "#810005" :style wave)))))
