@@ -13,7 +13,7 @@
     "rules": {
       "type": "object",
       "description": "The floors the checks enforce.",
-      "required": ["textContrast", "findMatchContrast", "selectionContrast", "nonTextContrast", "ansiFloor", "toneStep", "deficiencyDistance", "selectionDistance"],
+      "required": ["textContrast", "findMatchContrast", "selectionContrast", "nonTextContrast", "ansiFloor", "toneStep", "deficiencyDistance", "selectionDistance", "signalContrast", "signalTextContrast"],
       "additionalProperties": false,
       "properties": {
         "textContrast": { "type": "number", "minimum": 7, "description": "WCAG contrast for every text and syntax colour on every surface text sits on." },
@@ -23,7 +23,9 @@
         "ansiFloor": { "type": "number", "minimum": 4.5, "description": "The lowest contrast any terminal colour may have when it is documented as dimmer than the text floor." },
         "toneStep": { "type": "number", "minimum": 0.05, "description": "The smallest tone difference, the cube root of relative luminance, between two paired tokens that share a style." },
         "deficiencyDistance": { "type": "number", "minimum": 0.04, "description": "The smallest OKLab distance between two paired tokens under each simulated colour vision deficiency." },
-        "selectionDistance": { "type": "number", "minimum": 0.05, "description": "The smallest OKLab distance, in normal vision and under each simulated colour vision deficiency, between either selection colour and the background, the current line, a find match and both diff backgrounds, so a selection never passes for one of them." }
+        "selectionDistance": { "type": "number", "minimum": 0.05, "description": "The smallest OKLab distance, in normal vision and under each simulated colour vision deficiency, between either selection colour and the background, the current line, a find match and both diff backgrounds, so a selection never passes for one of them. The cursor keeps the same distance from both selections, the current line and a find match, and the current line from a find match." },
+        "signalContrast": { "type": "number", "minimum": 1.3, "description": "The smallest WCAG contrast the current line band keeps on the background, so the line the cursor is on is visible as a band." },
+        "signalTextContrast": { "type": "number", "minimum": 4.5, "description": "WCAG contrast for syntax colours over the current line band. The plain text, the active line number and the cursor keep textContrast over it." }
       }
     },
     "tokens": {
@@ -72,6 +74,7 @@
         "vscodeUiTheme": { "enum": ["vs", "vs-dark", "hc-black", "hc-light"] },
         "readerProfile": { "enum": ["dark_on_light", "light_on_dark", "yellow_on_black", "black_on_cream"] },
         "description": { "type": "string" },
+        "wordOutline": { "enum": ["solid", "dashed"], "description": "Optional. How the word under the cursor is marked where the editor offers a line style: dashed draws a dashed underline in Neovim and a dotted one in the JetBrains IDEs, so it never relies on colour alone to stand apart from the outlined find matches. Defaults to solid." },
         "ui": {
           "type": "object",
           "required": ["background", "foreground", "surface", "surfaceAlt", "muted", "border", "borderActive", "accent", "accentForeground", "link", "selection", "selectionStrong", "selectionForeground", "listSelection", "lineHighlight", "cursor", "gutter", "lineNumber", "lineNumberActive", "findMatch", "findMatchBorder", "error", "warning", "info", "diffAddedBackground", "diffRemovedBackground", "indentGuide", "whitespace"],
@@ -79,6 +82,10 @@
             "selection": { "$ref": "#/$defs/colour", "description": "Selected text where the editor keeps each character's own colour, such as the VS Code editor in the non high contrast themes, Zed, Obsidian, Xcode and text fields. As far from the background as rules.selectionContrast allows." },
             "selectionStrong": { "$ref": "#/$defs/colour", "description": "Selected text where the selected text colour can be set too: terminals, the VS Code high contrast themes and terminal, the JetBrains IDEs, Eclipse, Sublime Text, Helix, Neovim and Emacs. A bold block at rules.nonTextContrast or more on the background." },
             "selectionForeground": { "$ref": "#/$defs/colour", "description": "The one colour every selected character takes on selectionStrong, at rules.textContrast or more." },
+            "lineHighlight": { "$ref": "#/$defs/colour", "description": "The current line, a band at rules.signalContrast or more on the background with every syntax colour at rules.signalTextContrast over it and plain text at rules.textContrast. Also the calm hover fill in lists and tabs." },
+            "findMatch": { "$ref": "#/$defs/colour", "description": "The current find match, filled, with plain text at rules.textContrast and every syntax colour at rules.findMatchContrast over it. Other matches are outlined in findMatchBorder where the editor can draw an outline." },
+            "cursor": { "$ref": "#/$defs/colour", "description": "The text cursor, at rules.textContrast on the background and the current line, with the background drawn as the text under a block cursor at rules.textContrast on it." },
+            "matchOutline": { "$ref": "#/$defs/colour", "description": "Optional. The outline of a written word and a matched bracket when the theme's accent is also its find match outline, so the two never look alike. Defaults to accent. Keeps rules.nonTextContrast on the background and the current line." },
             "listSelection": { "$ref": "#/$defs/colour", "description": "The selected row in lists, trees, menus and completion popups plus other calm fills under text, such as Neovim's changed text in a diff. Every text and syntax colour keeps rules.textContrast over it." }
           },
           "additionalProperties": { "$ref": "#/$defs/colour" }
@@ -109,6 +116,11 @@
             "textRole": {
               "type": "array",
               "description": "ANSI indexes that stand for the default text colour by convention, such as bright white on a dark theme, so they may match the terminal foreground.",
+              "items": { "type": "integer", "minimum": 0, "maximum": 15 }
+            },
+            "nearText": {
+              "type": "array",
+              "description": "ANSI indexes allowed to sit closer to the default text than rules.toneStep and rules.deficiencyDistance, because the text colour itself is a colour, as in Zacess Yellow on Black. Each one is listed in ACCESSIBILITY.md.",
               "items": { "type": "integer", "minimum": 0, "maximum": 15 }
             }
           }

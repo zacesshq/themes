@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- The current line is a visible band in all eight themes. It sat at about 1.1:1 on the background, so the line the cursor was on could be lost. It now sits at 1.3:1 to 1.4:1 in a neutral or calm tint from each theme's palette: Zacess Light `#d6dde8`, Dark `#2f2f2f`, Yellow on Black `#262626`, Cream `#c8dadd`, High Contrast Dark `#262626`, High Contrast Light `#c3e5fe`, Deep Contrast Dark `#262626` and Deep Contrast Light `#c8debd`. Plain text, the active line number and the cursor keep 7:1 over it and every syntax colour keeps 4.5:1 or more.
+- The find match is stronger in the dark themes so it stays apart from the new current line: Zacess Dark `#4d4000`, Yellow on Black `#4b3a00`, High Contrast Dark `#493900` and Deep Contrast Dark `#453800`. Plain text keeps 9:1 or more over it and every syntax colour 4.5:1 or more.
+- Other find matches, the word under the cursor and a matched bracket are outlined or underlined with no fill in VS Code, the JetBrains IDEs, Neovim, Helix, Emacs and Obsidian, so they never hide a character or pass for the current match or a selection. Zed, which cannot draw an outline there, fills them in the calm selected row colour.
+- Zacess Yellow on Black draws terminal text in its yellow `#ffeb3b` (17.1:1 on black) instead of white, matching its editor. The cursor stays yellow.
+- Zacess Yellow on Black marks the word under the cursor with a dashed underline in Neovim and a dotted one in the JetBrains IDEs, set by the new optional `wordOutline` in the palette, so it no longer relies on colour alone to stand apart from the outlined find matches. VS Code and Zed offer no line style there, so they keep the solid outline.
+- Bold text in Terminal.app keeps its colour and Alacritty's dim text keeps the normal colours.
+
+### Added
+
+- Terminal.app, Warp and WezTerm themes for all eight themes in `editors/terminals`. Terminal.app and WezTerm carry the cursor and WezTerm the selection block and the character under the cursor too.
+- `install.sh`, which finds the terminal it runs in (Terminal.app, iTerm2, Ghostty, kitty, WezTerm, Warp, Alacritty or Windows Terminal), copies all eight themes to the folder that terminal reads and prints the one step that turns one on. It never edits a configuration file. `install.ps1` does the same for Windows Terminal through its settings fragments.
+- The README has a table of every terminal with its file, where it goes and how to turn it on, plus zsh-syntax-highlighting and fish settings that use the ANSI colour names so command colours follow the active theme.
+- Diff marks beside changed lines: the diff borders, overview ruler and gutter colours in VS Code, the gitsigns, mini.diff and vim-signify sign groups in Neovim, the `version_control` colours in Zed and the `diff-indicator` and `diff-hl` faces in Emacs.
+- `rules.signalContrast` (1.3:1) and `rules.signalTextContrast` (4.5:1) in the palette. `npm run check` measures the current line band, every syntax colour over it, the cursor and the character under it in the editors and the terminals and the OKLab distance from the cursor to both selections, the current line and the find match. It reads the cursor, current line, find match, outlines, diff marks and the 16 terminal colours back out of every generated file and fails a highlight that should be an outline but has a fill. ACCESSIBILITY.md has a new Where you are section with every measurement.
+- An optional `ui.matchOutline` in the palette for a theme whose accent is also its find match outline. Zacess High Contrast Dark outlines a written word and a matched bracket in light blue `#8fd0ff` so they never look like another find match.
+- `terminal.nearText` in the palette lists the ANSI slots allowed to sit close to the terminal text in tone. Zacess Yellow on Black lists its bright red, green, yellow and magenta there.
+- CI runs ShellCheck on the installer.
+
 ## [0.5.0] - 2026-10-28
 
 ### Changed

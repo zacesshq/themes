@@ -7,7 +7,7 @@
   </metaInfo>
   <colors>
     <option name="CARET_COLOR" value="111111" />
-    <option name="CARET_ROW_COLOR" value="f0f0f0" />
+    <option name="CARET_ROW_COLOR" value="d6dde8" />
     <option name="SELECTION_BACKGROUND" value="0150b2" />
     <option name="SELECTION_FOREGROUND" value="ffffff" />
     <option name="SELECTION_BACKGROUND_INACTIVE" value="0150b2" />
@@ -382,21 +382,18 @@
     </option>
     <option name="IDENTIFIER_UNDER_CARET_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="f0f0f0" />
         <option name="EFFECT_COLOR" value="707070" />
         <option name="EFFECT_TYPE" value="0" />
       </value>
     </option>
     <option name="WRITE_IDENTIFIER_UNDER_CARET_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="f0f0f0" />
         <option name="EFFECT_COLOR" value="0049a3" />
         <option name="EFFECT_TYPE" value="0" />
       </value>
     </option>
     <option name="MATCHED_BRACE_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="f0f0f0" />
         <option name="FONT_TYPE" value="1" />
         <option name="EFFECT_COLOR" value="0049a3" />
         <option name="EFFECT_TYPE" value="0" />
@@ -427,7 +424,7 @@
     </option>
     <option name="DIFF_MODIFIED">
       <value>
-        <option name="BACKGROUND" value="f0f0f0" />
+        <option name="BACKGROUND" value="fff1a8" />
       </value>
     </option>
     <option name="DELETED_TEXT_ATTRIBUTES">

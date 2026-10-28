@@ -1,7 +1,7 @@
 // every measurement the checks, the tables and the website data share, so a number in the
 // README is always the number CI enforced
 import { DEFICIENCIES, contrast, distance, luminance, oklab, ratio, simulate } from "./colour.mjs";
-import { SELECTION_NEIGHBOURS, SELECTION_TEXT, TEXT_SURFACES, UI_TEXT, UI_NON_TEXT, styleOf, terminalText } from "./palette.mjs";
+import { CURSOR_NEIGHBOURS, LINE_NEIGHBOURS, SELECTION_NEIGHBOURS, SELECTION_TEXT, TEXT_SURFACES, UI_TEXT, UI_NON_TEXT, styleOf, terminalText } from "./palette.mjs";
 
 // tone is the cube root of relative luminance: the OKLab lightness of the grey with the same
 // luminance, which is all a viewer with no colour vision has to go on
@@ -33,7 +33,13 @@ export function measureTheme(palette, theme) {
     // the text floor over it and the syntax colours the selection floor
     const selectionFloor = token === "foreground" ? r.textContrast : r.selectionContrast;
     contrastRows.push(row(theme, `syntax.${token}`, colour, "selection", u.selection, selectionFloor));
+    // the current line is a band strong enough to see, so the syntax colours keep the signal floor
+    // over it and the plain text the text floor
+    const lineFloor = token === "foreground" ? r.textContrast : r.signalTextContrast;
+    contrastRows.push(row(theme, `syntax.${token}`, colour, "lineHighlight", u.lineHighlight, lineFloor));
   }
+  // the band itself must be visible on the background
+  contrastRows.push(row(theme, "ui.lineHighlight", u.lineHighlight, "background", u.background, r.signalContrast));
   for (const item of SELECTION_TEXT) contrastRows.push(row(theme, `selectionText.${item}`, u[item], "selection", u.selection, r.selectionContrast));
   for (const [item, surfaces] of UI_TEXT) {
     for (const surface of surfaces) contrastRows.push(row(theme, `ui.${item}`, u[item], surface, u[surface], r.textContrast));
@@ -43,14 +49,35 @@ export function measureTheme(palette, theme) {
   contrastRows.push(row(theme, "terminal.foreground", term.foreground, "background", u.background, r.textContrast));
   // Zed's terminal draws the editor's background only selection under the terminal text
   contrastRows.push(row(theme, "terminal.foreground", term.foreground, "selection", u.selection, r.textContrast));
-  contrastRows.push(row(theme, "terminal.cursor", term.cursor, "background", u.background, r.nonTextContrast));
+  // the terminal cursor is a block with the background colour drawn as the text under it, so both
+  // keep the text floor; in a terminal buffer the cursor can sit over the selection block
+  contrastRows.push(row(theme, "terminal.cursor", term.cursor, "background", u.background, r.textContrast));
+  contrastRows.push(row(theme, "terminal.cursorText", u.background, "terminal.cursor", term.cursor, r.textContrast));
   contrastRows.push(row(theme, "windowsTerminal.selectionText", windowsSelectionText(u.selectionStrong), "selectionStrong", u.selectionStrong, r.textContrast));
 
-  // each selection colour stays apart from the fills it could be mistaken for
-  const selectionRows = ["selection", "selectionStrong"].flatMap((item) => SELECTION_NEIGHBOURS.map((on) => {
-    const value = leastDistance(u[item], u[on]);
-    return { theme: theme.id, item, colour: u[item], on, background: u[on], distance: value, floor: r.selectionDistance, pass: value >= r.selectionDistance };
-  }));
+  // each selection colour, the cursor and the current line stay apart from the fills they could be
+  // mistaken for
+  const distanceRow = (item, colour, on) => {
+    const value = leastDistance(colour, u[on]);
+    return { theme: theme.id, item, colour, on, background: u[on], distance: value, floor: r.selectionDistance, pass: value >= r.selectionDistance };
+  };
+  // the word and bracket outlines keep the non-text floor where they are drawn and stay apart from
+  // the find match outline, so an outlined word never passes for another find match
+  const outlines = [["ui.border", u.border], ["ui.matchOutline", u.matchOutline ?? u.accent]];
+  for (const [item, colour] of outlines) {
+    for (const on of ["background", "lineHighlight"]) contrastRows.push(row(theme, item, colour, on, u[on], r.nonTextContrast));
+  }
+  const outlineRows = outlines.map(([item, colour]) => {
+    const value = leastDistance(colour, u.findMatchBorder);
+    return { theme: theme.id, item: item.replace("ui.", ""), colour, on: "findMatchBorder", background: u.findMatchBorder, distance: value, floor: r.selectionDistance, pass: value >= r.selectionDistance };
+  });
+  const selectionRows = [
+    ...outlineRows,
+    ...["selection", "selectionStrong"].flatMap((item) => SELECTION_NEIGHBOURS.map((on) => distanceRow(item, u[item], on))),
+    ...CURSOR_NEIGHBOURS.map((on) => distanceRow("cursor", u.cursor, on)),
+    ...CURSOR_NEIGHBOURS.map((on) => distanceRow("terminal.cursor", term.cursor, on)),
+    ...LINE_NEIGHBOURS.map((on) => distanceRow("lineHighlight", u.lineHighlight, on)),
+  ];
 
   const terminalRows = theme.terminal.ansi.map((colour, i) => {
     if (theme.terminal.backgroundRole.includes(i)) {
@@ -66,6 +93,7 @@ export function measureTheme(palette, theme) {
   // from the default foreground in tone or, under every simulation, in OKLab; the slots that stand
   // for the default text by convention are listed in terminal.textRole and skipped
   const textRole = theme.terminal.textRole ?? [];
+  const nearText = theme.terminal.nearText ?? [];
   const terminalTextRows = theme.terminal.ansi.flatMap((colour, i) => {
     if (textRole.includes(i) || theme.terminal.backgroundRole.includes(i)) return [];
     const toneDiff = Math.abs(tone(term.foreground) - tone(colour));
@@ -75,8 +103,10 @@ export function measureTheme(palette, theme) {
         d === "normal" ? distance(term.foreground, colour) : distance(simulate(term.foreground, d), simulate(colour, d)),
       ]),
     );
-    const pass = toneDiff >= r.toneStep || Object.values(simulated).every((v) => v >= r.deficiencyDistance);
-    return [{ theme: theme.id, index: i, colour, foreground: term.foreground, toneDiff, simulated, pass }];
+    const apart = toneDiff >= r.toneStep || Object.values(simulated).every((v) => v >= r.deficiencyDistance);
+    // a slot listed in terminal.nearText is reported but not failed; ACCESSIBILITY.md names it
+    const pass = apart || nearText.includes(i);
+    return [{ theme: theme.id, index: i, colour, foreground: term.foreground, toneDiff, simulated, apart, pass }];
   });
 
   const pairRows = palette.pairs.map(({ pair: [a, b], lightness = false }) => {
@@ -95,12 +125,16 @@ export function measureTheme(palette, theme) {
 
   const syntaxOnBackground = contrastRows.filter((x) => x.item.startsWith("syntax.") && x.on === "background");
   // the surfaces drawn over the background and held to the text floor, which is what the third
-  // column of the summary reports; the selection has a column of its own
-  const OVERLAYS = ["listSelection", "lineHighlight", "diffAddedBackground", "diffRemovedBackground"];
+  // column of the summary reports; the selection and the current line have columns of their own
+  const OVERLAYS = ["listSelection", "diffAddedBackground", "diffRemovedBackground"];
   const textRows = contrastRows.filter((x) => x.item.startsWith("syntax.") && OVERLAYS.includes(x.on));
   const selectionTextRows = contrastRows.filter((x) => x.item.startsWith("syntax.") && x.item !== "syntax.foreground" && x.on === "selection");
+  const lineRows = contrastRows.filter((x) => x.item.startsWith("syntax.") && x.item !== "syntax.foreground" && x.on === "lineHighlight");
+  const findRows = contrastRows.filter((x) => x.item.startsWith("syntax.") && x.item !== "syntax.foreground" && x.on === "findMatch");
   const lowest = (rows) => rows.reduce((m, x) => (x.ratio < m.ratio ? x : m));
   return {
+    lowestOnLine: lowest(lineRows),
+    lowestOnFind: lowest(findRows),
     contrastRows,
     terminalRows,
     terminalTextRows,

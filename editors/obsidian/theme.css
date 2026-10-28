@@ -49,8 +49,8 @@ settings:
   --background-modifier-border: #707070;
   --background-modifier-border-hover: #111111;
   --background-modifier-border-focus: #0049a3;
-  --background-modifier-hover: #f0f0f0;
-  --background-modifier-active-hover: #f0f0f0;
+  --background-modifier-hover: #d6dde8;
+  --background-modifier-active-hover: #d6dde8;
   --background-modifier-error: #810005;
   --background-modifier-success: #005b14;
   --text-normal: #111111;
@@ -65,8 +65,11 @@ settings:
   --text-on-accent-inverted: #ffffff;
   --text-selection: #9bc3ff;
   --text-highlight-bg: #ffd400;
+  --zacess-find-border: #111111;
+  --zacess-line-highlight: #d6dde8;
+  --zacess-match-outline: #0049a3;
   --interactive-normal: #ededed;
-  --interactive-hover: #f0f0f0;
+  --interactive-hover: #d6dde8;
   --interactive-accent: #0049a3;
   --interactive-accent-hover: #0049a3;
   --link-color: #0049a3;
@@ -127,8 +130,8 @@ settings:
   --background-modifier-border: #7a7a7a;
   --background-modifier-border-hover: #f5f5f5;
   --background-modifier-border-focus: #8cbcff;
-  --background-modifier-hover: #1f1f1f;
-  --background-modifier-active-hover: #1f1f1f;
+  --background-modifier-hover: #2f2f2f;
+  --background-modifier-active-hover: #2f2f2f;
   --background-modifier-error: #ffccc4;
   --background-modifier-success: #01ea45;
   --text-normal: #f5f5f5;
@@ -142,9 +145,12 @@ settings:
   --text-on-accent: #121212;
   --text-on-accent-inverted: #121212;
   --text-selection: #004769;
-  --text-highlight-bg: #332a00;
+  --text-highlight-bg: #4d4000;
+  --zacess-find-border: #ffd400;
+  --zacess-line-highlight: #2f2f2f;
+  --zacess-match-outline: #8cbcff;
   --interactive-normal: #232323;
-  --interactive-hover: #1f1f1f;
+  --interactive-hover: #2f2f2f;
   --interactive-accent: #8cbcff;
   --interactive-accent-hover: #8cbcff;
   --link-color: #8cbcff;
@@ -207,8 +213,8 @@ body.zacess-yellow-on-black.theme-dark {
   --background-modifier-border: #7a7a7a;
   --background-modifier-border-hover: #ffeb3b;
   --background-modifier-border-focus: #ffeb3b;
-  --background-modifier-hover: #141414;
-  --background-modifier-active-hover: #141414;
+  --background-modifier-hover: #262626;
+  --background-modifier-active-hover: #262626;
   --background-modifier-error: #ffbeb5;
   --background-modifier-success: #28f74f;
   --text-normal: #ffeb3b;
@@ -222,9 +228,12 @@ body.zacess-yellow-on-black.theme-dark {
   --text-on-accent: #000000;
   --text-on-accent-inverted: #000000;
   --text-selection: #024b4e;
-  --text-highlight-bg: #3d3000;
+  --text-highlight-bg: #4b3a00;
+  --zacess-find-border: #ffffff;
+  --zacess-line-highlight: #262626;
+  --zacess-match-outline: #ffeb3b;
   --interactive-normal: #0d0d0d;
-  --interactive-hover: #141414;
+  --interactive-hover: #262626;
   --interactive-accent: #ffeb3b;
   --interactive-accent-hover: #ffeb3b;
   --link-color: #1be4ed;
@@ -286,8 +295,8 @@ body.zacess-cream.theme-dark {
   --background-modifier-border: #6e6555;
   --background-modifier-border-hover: #000000;
   --background-modifier-border-focus: #004498;
-  --background-modifier-hover: #f3ead2;
-  --background-modifier-active-hover: #f3ead2;
+  --background-modifier-hover: #c8dadd;
+  --background-modifier-active-hover: #c8dadd;
   --background-modifier-error: #770004;
   --background-modifier-success: #005512;
   --text-normal: #000000;
@@ -302,8 +311,11 @@ body.zacess-cream.theme-dark {
   --text-on-accent-inverted: #ffffff;
   --text-selection: #c8a9ff;
   --text-highlight-bg: #ffd400;
+  --zacess-find-border: #000000;
+  --zacess-line-highlight: #c8dadd;
+  --zacess-match-outline: #004498;
   --interactive-normal: #e9e5dd;
-  --interactive-hover: #f3ead2;
+  --interactive-hover: #c8dadd;
   --interactive-accent: #004498;
   --interactive-accent-hover: #004498;
   --link-color: #004498;
@@ -365,8 +377,8 @@ body.zacess-high-contrast-dark.theme-dark {
   --background-modifier-border: #a6a6a6;
   --background-modifier-border-hover: #ffffff;
   --background-modifier-border-focus: #f5c400;
-  --background-modifier-hover: #1a1a1a;
-  --background-modifier-active-hover: #1a1a1a;
+  --background-modifier-hover: #262626;
+  --background-modifier-active-hover: #262626;
   --background-modifier-error: #ff9e94;
   --background-modifier-success: #3bff59;
   --text-normal: #ffffff;
@@ -380,9 +392,12 @@ body.zacess-high-contrast-dark.theme-dark {
   --text-on-accent: #000000;
   --text-on-accent-inverted: #000000;
   --text-selection: #6501ae;
-  --text-highlight-bg: #403300;
+  --text-highlight-bg: #493900;
+  --zacess-find-border: #f5c400;
+  --zacess-line-highlight: #262626;
+  --zacess-match-outline: #8fd0ff;
   --interactive-normal: #0f0f0f;
-  --interactive-hover: #1a1a1a;
+  --interactive-hover: #262626;
   --interactive-accent: #f5c400;
   --interactive-accent-hover: #f5c400;
   --link-color: #8fd0ff;
@@ -444,8 +459,8 @@ body.zacess-high-contrast-light.theme-dark {
   --background-modifier-border: #262626;
   --background-modifier-border-hover: #000000;
   --background-modifier-border-focus: #003d99;
-  --background-modifier-hover: #f2f2f2;
-  --background-modifier-active-hover: #f2f2f2;
+  --background-modifier-hover: #c3e5fe;
+  --background-modifier-active-hover: #c3e5fe;
   --background-modifier-error: #8b0000;
   --background-modifier-success: #005518;
   --text-normal: #000000;
@@ -460,8 +475,11 @@ body.zacess-high-contrast-light.theme-dark {
   --text-on-accent-inverted: #ffffff;
   --text-selection: #00d3d0;
   --text-highlight-bg: #ffd400;
+  --zacess-find-border: #000000;
+  --zacess-line-highlight: #c3e5fe;
+  --zacess-match-outline: #003d99;
   --interactive-normal: #efefef;
-  --interactive-hover: #f2f2f2;
+  --interactive-hover: #c3e5fe;
   --interactive-accent: #003d99;
   --interactive-accent-hover: #003d99;
   --link-color: #003d99;
@@ -523,8 +541,8 @@ body.zacess-deep-contrast-dark.theme-dark {
   --background-modifier-border: #00ffff;
   --background-modifier-border-hover: #ffffff;
   --background-modifier-border-focus: #ffff00;
-  --background-modifier-hover: #141414;
-  --background-modifier-active-hover: #141414;
+  --background-modifier-hover: #262626;
+  --background-modifier-active-hover: #262626;
   --background-modifier-error: #fe8167;
   --background-modifier-success: #00f000;
   --text-normal: #ffffff;
@@ -538,9 +556,12 @@ body.zacess-deep-contrast-dark.theme-dark {
   --text-on-accent: #000000;
   --text-on-accent-inverted: #000000;
   --text-selection: #720072;
-  --text-highlight-bg: #403300;
+  --text-highlight-bg: #453800;
+  --zacess-find-border: #ffff00;
+  --zacess-line-highlight: #262626;
+  --zacess-match-outline: #00ffff;
   --interactive-normal: #0a0a0a;
-  --interactive-hover: #141414;
+  --interactive-hover: #262626;
   --interactive-accent: #00ffff;
   --interactive-accent-hover: #00ffff;
   --link-color: #1db4ff;
@@ -602,8 +623,8 @@ body.zacess-deep-contrast-light.theme-dark {
   --background-modifier-border: #0f4a85;
   --background-modifier-border-hover: #000000;
   --background-modifier-border-focus: #b5200d;
-  --background-modifier-hover: #f5f5f5;
-  --background-modifier-active-hover: #f5f5f5;
+  --background-modifier-hover: #c8debd;
+  --background-modifier-active-hover: #c8debd;
   --background-modifier-error: #aa0000;
   --background-modifier-success: #006108;
   --text-normal: #000000;
@@ -618,8 +639,11 @@ body.zacess-deep-contrast-light.theme-dark {
   --text-on-accent-inverted: #ffffff;
   --text-selection: #ffbcfa;
   --text-highlight-bg: #fff1a0;
+  --zacess-find-border: #b5200d;
+  --zacess-line-highlight: #c8debd;
+  --zacess-match-outline: #0f4a85;
   --interactive-normal: #ffffff;
-  --interactive-hover: #f5f5f5;
+  --interactive-hover: #c8debd;
   --interactive-accent: #0f4a85;
   --interactive-accent-hover: #0f4a85;
   --link-color: #003df6;
@@ -659,9 +683,30 @@ body.zacess-deep-contrast-light.theme-dark {
 }
 
 /* Obsidian fills search matches in the editor with the selection colour; they take the find
-   match colour instead, so a selection never passes for a search hit */
-.cm-s-obsidian span.cm-highlight.obsidian-search-match-highlight {
+   match colour instead, so a selection never passes for a search hit; the match the
+   cursor is on is outlined as well */
+.cm-s-obsidian span.cm-highlight.obsidian-search-match-highlight,
+.cm-s-obsidian .cm-searchMatch {
   background-color: var(--text-highlight-bg);
+}
+
+.cm-s-obsidian .cm-searchMatch.cm-searchMatch-selected {
+  outline: 2px solid var(--zacess-find-border);
+  outline-offset: 1px;
+}
+
+/* the line the cursor is on is a visible band in editing view */
+.cm-s-obsidian .cm-active.cm-line,
+.cm-s-obsidian .cm-activeLine {
+  background-color: var(--zacess-line-highlight);
+}
+
+/* a matched bracket is outlined and bold with no fill, so it never hides the character */
+.cm-s-obsidian .cm-matchingBracket,
+.cm-s-obsidian span.cm-matchingBracket {
+  background-color: transparent;
+  outline: 2px solid var(--zacess-match-outline);
+  font-weight: 700;
 }
 
 /* links are underlined so colour is never the only signal */

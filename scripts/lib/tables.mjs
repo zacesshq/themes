@@ -22,20 +22,22 @@ export function contrastTables(palette) {
   const name = (x) => x.item.replace("syntax.", "");
   const find = (rows, item, on) => rows.find((x) => x.item === item && (!on || x.on === on));
   const summary = [
-    "| Theme | Text on background | Lowest syntax colour on background | Lowest syntax colour over the current line, a diff or a selected row | Selection |",
-    "| --- | --- | --- | --- | --- |",
-    ...all.map(({ theme, contrastRows, lowestOnBackground, lowestText, lowestOnSelection }) => {
+    "| Theme | Text on background | Lowest syntax colour on background | Lowest syntax colour over a diff or a selected row | Current line | Selection |",
+    "| --- | --- | --- | --- | --- | --- |",
+    ...all.map(({ theme, contrastRows, lowestOnBackground, lowestText, lowestOnSelection, lowestOnLine }) => {
       const u = theme.ui;
       const text = find(contrastRows, "syntax.foreground", "background");
       const strong = find(contrastRows, "ui.selectionForeground");
       const selection = `\`${u.selectionForeground}\` on \`${u.selectionStrong}\`, ${r1(strong.ratio)}; background only \`${u.selection}\`, syntax ${r1(lowestOnSelection.ratio)} (${name(lowestOnSelection)})`;
-      return `| ${theme.name} | \`${u.foreground}\` on \`${u.background}\`, ${r1(text.ratio)} | ${r1(lowestOnBackground.ratio)} (${name(lowestOnBackground)}) | ${r1(lowestText.ratio)} (${name(lowestText)} on ${SURFACE_NAMES[lowestText.on]}) | ${selection} |`;
+      const band = find(contrastRows, "ui.lineHighlight");
+      const line = `\`${u.lineHighlight}\` ${r1(band.ratio)} on the background, syntax ${r1(lowestOnLine.ratio)} (${name(lowestOnLine)})`;
+      return `| ${theme.name} | \`${u.foreground}\` on \`${u.background}\`, ${r1(text.ratio)} | ${r1(lowestOnBackground.ratio)} (${name(lowestOnBackground)}) | ${r1(lowestText.ratio)} (${name(lowestText)} on ${SURFACE_NAMES[lowestText.on]}) | ${line} | ${selection} |`;
     }),
   ].join("\n");
 
   const tokens = Object.keys(palette.themes[0].syntax);
   const detail = [
-    "Each cell gives the colour, its contrast on the background, its lowest contrast over the current line, a diff background or a selected row and its contrast over the background only selection.",
+    "Each cell gives the colour, its contrast on the background, its lowest contrast over a diff background or a selected row, its contrast over the current line and its contrast over the background only selection.",
     "",
     `| Token | Style | ${all.map(({ theme }) => theme.name).join(" | ")} |`,
     `| --- | --- | ${all.map(() => "---").join(" | ")} |`,
@@ -44,10 +46,11 @@ export function contrastTables(palette) {
       const cells = all.map(({ contrastRows }) => {
         const rows = contrastRows.filter((x) => x.item === `syntax.${token}`);
         const bg = rows.find((x) => x.on === "background");
-        const overlays = ["listSelection", "lineHighlight", "diffAddedBackground", "diffRemovedBackground"];
+        const overlays = ["listSelection", "diffAddedBackground", "diffRemovedBackground"];
         const low = Math.min(...rows.filter((x) => overlays.includes(x.on)).map((x) => x.ratio));
+        const line = rows.find((x) => x.on === "lineHighlight");
         const selected = rows.find((x) => x.on === "selection");
-        return `\`${bg.colour}\` ${r1(bg.ratio)}, ${r1(low)}, ${r1(selected.ratio)}`;
+        return `\`${bg.colour}\` ${r1(bg.ratio)}, ${r1(low)}, ${r1(line.ratio)}, ${r1(selected.ratio)}`;
       });
       return `| ${token} | ${style || "regular"} | ${cells.join(" | ")} |`;
     }),
@@ -78,6 +81,45 @@ export function contrastTables(palette) {
     }),
   ].join("\n");
 
+  // the signals that show where the reader is: the cursor, the current line and the find match
+  const closest = (rows, item) => rows.filter((x) => x.item === item).reduce((m, y) => (y.distance < m.distance ? y : m));
+  const FILL_NAMES = { ...SURFACE_NAMES, selection: "the background only selection", selectionStrong: "the selection block", cursor: "the cursor" };
+  const lowestUi = (contrastRows, item) => contrastRows.filter((x) => x.item === item).reduce((m, y) => (y.ratio < m.ratio ? y : m));
+  const signals = [
+    `| Measure | Floor | ${all.map(({ theme }) => theme.name).join(" | ")} |`,
+    `| --- | --- | ${all.map(() => "---").join(" | ")} |`,
+    selectionRow("Cursor on the background and the current line", `${r.textContrast}:1`, ({ theme, contrastRows }) => `\`${theme.ui.cursor}\` ${r1(lowestUi(contrastRows, "ui.cursor").ratio)}`),
+    selectionRow("Character under a block cursor, in the background colour", `${r.textContrast}:1`, ({ contrastRows }) => r1(lowestUi(contrastRows, "ui.background").ratio)),
+    selectionRow("Cursor and its closest fill, least OKLab distance", `${r.selectionDistance}`, ({ selectionRows }) => {
+      const x = closest(selectionRows, "cursor");
+      return `${floor3(x.distance)} (${FILL_NAMES[x.on]})`;
+    }),
+    selectionRow("Terminal cursor and the character under it", `${r.textContrast}:1`, ({ theme, contrastRows }) => {
+      const c = find(contrastRows, "terminal.cursor");
+      return `\`${c.colour}\` ${r1(c.ratio)}, text ${r1(find(contrastRows, "terminal.cursorText").ratio)}`;
+    }),
+    selectionRow("Terminal cursor and its closest fill, least OKLab distance", `${r.selectionDistance}`, ({ selectionRows }) => {
+      const x = closest(selectionRows, "terminal.cursor");
+      return `${floor3(x.distance)} (${FILL_NAMES[x.on]})`;
+    }),
+    selectionRow("Current line on the background", `${r.signalContrast}:1`, ({ theme, contrastRows }) => `\`${theme.ui.lineHighlight}\` ${r1(find(contrastRows, "ui.lineHighlight").ratio)}`),
+    selectionRow("Lowest syntax colour over the current line", `${r.signalTextContrast}:1`, ({ lowestOnLine }) => `${r1(lowestOnLine.ratio)} (${name(lowestOnLine)})`),
+    selectionRow("Plain text over the current line", `${r.textContrast}:1`, ({ contrastRows }) => r1(find(contrastRows, "syntax.foreground", "lineHighlight").ratio)),
+    selectionRow("Current line and the find match, least OKLab distance", `${r.selectionDistance}`, ({ selectionRows }) => floor3(closest(selectionRows, "lineHighlight").distance)),
+    selectionRow("Find match on the background", "none, it carries a border", ({ theme }) => `\`${theme.ui.findMatch}\` ${r1(contrast(theme.ui.findMatch, theme.ui.background))}`),
+    selectionRow("Plain text over the find match", `${r.textContrast}:1`, ({ contrastRows }) => r1(find(contrastRows, "syntax.foreground", "findMatch").ratio)),
+    selectionRow("Lowest syntax colour over the find match", `${r.findMatchContrast}:1`, ({ lowestOnFind }) => `${r1(lowestOnFind.ratio)} (${name(lowestOnFind)})`),
+    selectionRow("Find match border on the match, the background and the current line", `${r.nonTextContrast}:1`, ({ theme, contrastRows }) => `\`${theme.ui.findMatchBorder}\` ${r1(lowestUi(contrastRows, "ui.findMatchBorder").ratio)}`),
+    selectionRow("Word and bracket outlines on the background and the current line", `${r.nonTextContrast}:1`, ({ theme, contrastRows }) => {
+      const rows = contrastRows.filter((x) => x.item === "ui.border" || x.item === "ui.matchOutline");
+      return `\`${theme.ui.border}\` and \`${theme.ui.matchOutline ?? theme.ui.accent}\`, ${r1(Math.min(...rows.map((x) => x.ratio)))}`;
+    }),
+    selectionRow("Word and bracket outlines and the find match outline, least OKLab distance", `${r.selectionDistance}`, ({ selectionRows }) => {
+      const x = selectionRows.filter((y) => y.on === "findMatchBorder").reduce((m, y) => (y.distance < m.distance ? y : m));
+      return floor3(x.distance);
+    }),
+  ].join("\n");
+
   const terminal = [
     `| Colour | ${all.map(({ theme }) => theme.name).join(" | ")} |`,
     `| --- | ${all.map(() => "---").join(" | ")} |`,
@@ -92,19 +134,23 @@ export function contrastTables(palette) {
     }),
   ].join("\n");
 
-  const uiItems = [...UI_TEXT.map(([item]) => item), ...[...new Set(UI_NON_TEXT.map(([item]) => item))]];
+  // interface text first at the text floor, then the marks at the non-text floor; an accent is
+  // listed under both, as text and as an outline
+  const uiItems = [...UI_TEXT.map(([item]) => [item, palette.rules.textContrast]), ...[...new Set(UI_NON_TEXT.map(([item]) => item))].map((item) => [item, palette.rules.nonTextContrast])];
+  // the background is measured here as the character under a block cursor
+  const UI_LABELS = { background: "background, as text under the cursor" };
   const ui = [
     "Each cell gives the colour and its lowest contrast on the surfaces it is drawn on.",
     "",
     `| Interface colour | Floor | ${all.map(({ theme }) => theme.name).join(" | ")} |`,
     `| --- | --- | ${all.map(() => "---").join(" | ")} |`,
-    ...uiItems.map((item) => {
+    ...uiItems.map(([item, floor]) => {
       const cells = all.map(({ contrastRows }) => {
-        const rows = contrastRows.filter((x) => x.item === `ui.${item}`);
+        const rows = contrastRows.filter((x) => x.item === `ui.${item}` && x.floor === floor);
         return `\`${rows[0].colour}\` ${r1(Math.min(...rows.map((x) => x.ratio)))}`;
       });
-      const floor = all[0].contrastRows.find((x) => x.item === `ui.${item}`).floor;
-      return `| ${item} | ${floor}:1 | ${cells.join(" | ")} |`;
+      const label = UI_LABELS[item] ?? (item === "accent" && floor === palette.rules.nonTextContrast ? "accent, as an outline" : item);
+      return `| ${label} | ${floor}:1 | ${cells.join(" | ")} |`;
     }),
   ].join("\n");
 
@@ -128,5 +174,5 @@ export function contrastTables(palette) {
     }),
   ].join("\n");
 
-  return { summary, detail, selection, terminal, ui, vision };
+  return { summary, detail, selection, signals, terminal, ui, vision };
 }

@@ -12,10 +12,10 @@
       "inactiveForeground": "#4d4d4d",
       "selectionBackground": "#f0f5ff",
       "selectionForeground": "#000000",
-      "selectionInactiveBackground": "#f5f5f5",
-      "selectionBackgroundInactive": "#f5f5f5",
+      "selectionInactiveBackground": "#c8debd",
+      "selectionBackgroundInactive": "#c8debd",
       "selectionInactiveForeground": "#000000",
-      "hoverBackground": "#f5f5f5",
+      "hoverBackground": "#c8debd",
       "borderColor": "#0f4a85",
       "separatorColor": "#0f4a85",
       "focusColor": "#b5200d",
@@ -99,7 +99,7 @@
     "ToolWindow": {
       "Header.background": "#ffffff",
       "Header.inactiveBackground": "#ffffff",
-      "HeaderTab.selectedInactiveBackground": "#f5f5f5",
+      "HeaderTab.selectedInactiveBackground": "#c8debd",
       "Button.selectedBackground": "#f0f5ff",
       "Button.selectedForeground": "#000000"
     },
@@ -116,14 +116,14 @@
       "foreground": "#000000",
       "selectionBackground": "#f0f5ff",
       "selectionForeground": "#000000",
-      "selectionInactiveBackground": "#f5f5f5"
+      "selectionInactiveBackground": "#c8debd"
     },
     "List": {
       "background": "#ffffff",
       "foreground": "#000000",
       "selectionBackground": "#f0f5ff",
       "selectionForeground": "#000000",
-      "selectionInactiveBackground": "#f5f5f5"
+      "selectionInactiveBackground": "#c8debd"
     },
     "Table": {
       "background": "#ffffff",

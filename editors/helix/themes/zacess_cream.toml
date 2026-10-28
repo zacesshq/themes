@@ -9,7 +9,7 @@
 "ui.text.info" = { fg = "foreground", bg = "surface" }
 "ui.cursor" = { fg = "background", bg = "cursor" }
 "ui.cursor.primary" = { fg = "background", bg = "cursor" }
-"ui.cursor.match" = { bg = "line_highlight", modifiers = ["bold"], underline = { color = "accent", style = "line" } }
+"ui.cursor.match" = { modifiers = ["bold"], underline = { color = "accent", style = "line" } }
 "ui.cursorline.primary" = { bg = "line_highlight" }
 "ui.gutter" = { bg = "gutter" }
 "ui.linenr" = { fg = "line_number" }
@@ -108,7 +108,7 @@ selection = "#c8a9ff"
 selection_strong = "#7401ca"
 selection_foreground = "#fdf6e3"
 list_selection = "#f9e79a"
-line_highlight = "#f3ead2"
+line_highlight = "#c8dadd"
 cursor = "#000000"
 gutter = "#fdf6e3"
 line_number = "#4a4337"

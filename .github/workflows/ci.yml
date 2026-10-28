@@ -28,6 +28,8 @@ jobs:
         run: npm run check
       - name: Prove the committed files match the palette
         run: npm run verify
+      - name: Lint the terminal installer
+        run: shellcheck install.sh
 
   vscode:
     name: VS Code package

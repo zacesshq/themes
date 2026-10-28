@@ -3,7 +3,7 @@
 
 [colors.primary]
 background = "#000000"
-foreground = "#ffffff"
+foreground = "#ffeb3b"
 
 [colors.cursor]
 cursor = "#ffeb3b"
@@ -32,3 +32,14 @@ blue = "#c9e0ff"
 magenta = "#ffd0fa"
 cyan = "#00f7f5"
 white = "#ffffff"
+
+# dim text keeps the normal colours, so it never drops below their floor
+[colors.dim]
+black = "#a3a3a3"
+red = "#ffa79b"
+green = "#01dc3f"
+yellow = "#edb618"
+blue = "#90c1ff"
+magenta = "#fd9cf8"
+cyan = "#1fd3d3"
+white = "#d9d9d9"
