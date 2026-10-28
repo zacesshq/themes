@@ -4,6 +4,17 @@ All notable changes to the Zacess Themes extension are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-10-28
+
+### Changed
+
+- Selected text stands out in every theme. In the five high contrast themes the editor draws a selection as a bold block with every selected character in one colour at 7:1 or more. In Zacess Light, Dark and Cream the editor keeps each token's colour inside a selection, so the selection is a fill in the theme's own hue with every token at 4.5:1 or more over it. The terminal draws the block in all eight themes.
+- Selected rows in lists, trees, menus and completion popups keep their calmer colour, with every text and syntax colour at 7:1 over it.
+
+### Added
+
+- `terminal.selectionForeground`, `terminal.inactiveSelectionBackground`, `minimap.selectionHighlight`, `minimap.selectionOccurrenceHighlight` and `editorOverviewRuler.selectionHighlightForeground`, which the themes did not set before.
+
 ## [0.4.0] - 2026-10-22
 
 ### Changed
@@ -85,6 +96,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Editor, workbench, terminal and semantic token colours, with every text and syntax colour at 7:1 contrast or more.
 - Bold keywords, italic comments and parameters and underlined invalid code, so colour is never the only signal.
 
+[0.5.0]: https://github.com/zacesshq/themes/releases/tag/v0.5.0
 [0.4.0]: https://github.com/zacesshq/themes/releases/tag/v0.4.0
 [0.3.0]: https://github.com/zacesshq/themes/releases/tag/v0.3.0
 [0.2.0]: https://github.com/zacesshq/themes/releases/tag/v0.2.0

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-28
+
 ### Changed
 
 - Selected text is now easy to find in all eight themes. In the dark themes the old selection sat at only 1.2:1 to 1.4:1 on the background and in the light themes at about 1.1:1, so a selection could pass for the background. Each theme now has a selection block in a colour from its own palette with every selected character in one text colour, the way a terminal draws a selection: Zacess Light `#ffffff` on blue `#0150b2`, Dark `#121212` on sky blue `#4fbdff`, Yellow on Black `#000000` on cyan `#09bcc4`, Cream `#fdf6e3` on purple `#7401ca`, High Contrast Dark `#000000` on violet `#bf96ff`, High Contrast Light `#ffffff` on teal `#015f5e`, Deep Contrast Dark `#000000` on magenta `#ff70ff` and Deep Contrast Light `#ffffff` on magenta `#990098`. The text keeps 7.4:1 to 9:1 on the block and the block sits at 7.4:1 to 9:1 on the background.
@@ -141,7 +143,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - SVG previews drawn as real text and the data for the themes page on the Zacess website.
 - CI that runs the checks, proves the committed files are current, packages the VS Code extension and builds the JetBrains plugin. A release workflow that attaches the `.vsix`, the JetBrains zip and an Obsidian zip to each GitHub release and publishes to each marketplace once its token is set.
 
-[Unreleased]: https://github.com/zacesshq/themes/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/zacesshq/themes/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/zacesshq/themes/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/zacesshq/themes/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/zacesshq/themes/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/zacesshq/themes/compare/v0.2.0...v0.2.1
