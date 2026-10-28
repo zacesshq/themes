@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-28
+
 ### Changed
 
 - The current line is a visible band in all eight themes. It sat at about 1.1:1 on the background, so the line the cursor was on could be lost. It now sits at 1.3:1 to 1.4:1 in a neutral or calm tint from each theme's palette: Zacess Light `#d6dde8`, Dark `#2f2f2f`, Yellow on Black `#262626`, Cream `#c8dadd`, High Contrast Dark `#262626`, High Contrast Light `#c3e5fe`, Deep Contrast Dark `#262626` and Deep Contrast Light `#c8debd`. Plain text, the active line number and the cursor keep 7:1 over it and every syntax colour keeps 4.5:1 or more.
@@ -163,7 +165,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - SVG previews drawn as real text and the data for the themes page on the Zacess website.
 - CI that runs the checks, proves the committed files are current, packages the VS Code extension and builds the JetBrains plugin. A release workflow that attaches the `.vsix`, the JetBrains zip and an Obsidian zip to each GitHub release and publishes to each marketplace once its token is set.
 
-[Unreleased]: https://github.com/zacesshq/themes/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/zacesshq/themes/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/zacesshq/themes/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/zacesshq/themes/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/zacesshq/themes/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/zacesshq/themes/compare/v0.2.1...v0.3.0

@@ -4,6 +4,19 @@ All notable changes to the Zacess Themes extension are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-10-28
+
+### Changed
+
+- The current line is a visible band in all eight themes, at 1.3:1 to 1.4:1 on the background, with plain text at 7:1 and every syntax colour at 4.5:1 or more over it.
+- The find match is stronger in Zacess Dark, Yellow on Black, High Contrast Dark and Deep Contrast Dark, so it stays apart from the current line.
+- Zacess Yellow on Black draws terminal text in its yellow instead of white.
+
+### Added
+
+- Diff lines carry a border and an overview ruler mark as well as their fill. The gutter marks added, changed and removed lines in every theme: `diffEditor.insertedTextBorder`, `diffEditor.removedTextBorder`, `diffEditorGutter.insertedLineBackground`, `diffEditorGutter.removedLineBackground`, `diffEditorOverview.insertedForeground`, `diffEditorOverview.removedForeground` and `editorOverviewRuler.addedForeground`, `modifiedForeground` and `deletedForeground`.
+- `editor.wordHighlightTextBackground` and `editor.wordHighlightTextBorder`, overview ruler marks for the word under the cursor and a matched bracket and `terminalCursor.background`, so the character under the terminal cursor keeps 7:1.
+
 ## [0.5.0] - 2026-10-28
 
 ### Changed
