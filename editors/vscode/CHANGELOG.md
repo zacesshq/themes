@@ -4,6 +4,12 @@ All notable changes to the Zacess Themes extension are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2026-10-29
+
+### Changed
+
+- The README is a short front page with an install line for each editor. The full contrast summary, the palette and the recommended settings, including following the system light and dark setting and the terminal minimum contrast, are in the repository's `docs` folder.
+
 ## [0.6.0] - 2026-10-28
 
 ### Changed
