@@ -2554,7 +2554,7 @@ function replaceBetween(path, marker, body) {
 
 function buildDocs() {
   const tables = contrastTables(palette);
-  replaceBetween("README.md", "contrast summary", tables.summary);
+  replaceBetween("docs/contrast.md", "contrast summary", tables.summary);
   replaceBetween("ACCESSIBILITY.md", "contrast detail", tables.detail);
   replaceBetween("ACCESSIBILITY.md", "selection detail", tables.selection);
   replaceBetween("ACCESSIBILITY.md", "signals detail", tables.signals);

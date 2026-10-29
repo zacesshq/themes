@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- The README is a short front page: the themes, their previews, a one-line install for each app that links to its own guide and the terminal installer. The contrast summary and floors moved to `docs/contrast.md`, the pipeline and layout to `docs/how-it-works.md` and the shell colour settings to `docs/shell-colours.md`. `scripts/build.mjs` writes the contrast summary into `docs/contrast.md`.
+
 ## [0.6.0] - 2026-10-28
 
 ### Changed
