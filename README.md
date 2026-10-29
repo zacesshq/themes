@@ -68,6 +68,7 @@ Xcode, Terminal.app, iTerm2, Ghostty, kitty, WezTerm, Warp, Alacritty and Window
   the floors CI enforces are in [docs/contrast.md](docs/contrast.md).
 
 [ACCESSIBILITY.md](ACCESSIBILITY.md) lists every token, every measurement and what each editor can draw.
+Every colour of every theme is in [docs/palette.md](docs/palette.md).
 
 ## Install
 
@@ -86,7 +87,8 @@ Xcode, Terminal.app, iTerm2, Ghostty, kitty, WezTerm, Warp, Alacritty and Window
 | Terminals | Run the installer below in the terminal to theme | [editors/terminals](editors/terminals/README.md) |
 
 Every file is also in the [latest release](https://github.com/zacesshq/themes/releases/latest) for an
-offline install.
+offline install. [docs/recommended-settings.md](docs/recommended-settings.md) has the settings that
+switch with the system light and dark setting and keep terminal text readable.
 
 The terminal installer works out which terminal it runs in (Terminal.app, iTerm2, Ghostty, kitty,
 WezTerm, Warp, Alacritty or Windows Terminal), copies all eight themes to the folder that terminal

@@ -2552,8 +2552,24 @@ function replaceBetween(path, marker, body) {
   written.push(path);
 }
 
+// every syntax role with its font style and its colour in each theme, so the palette can be read
+// without opening palette/zacess.json
+function paletteTable() {
+  const names = palette.themes.map((theme) => theme.name.replace(/^Zacess /, ""));
+  const lines = [`| Role | Style | ${names.join(" | ")} |`, `| --- | --- | ${names.map(() => "---").join(" | ")} |`];
+  const cell = (hex) => `\`${hex}\``;
+  lines.push(`| Background | | ${palette.themes.map((theme) => cell(theme.ui.background)).join(" | ")} |`);
+  lines.push(`| Text | | ${palette.themes.map((theme) => cell(theme.syntax.foreground)).join(" | ")} |`);
+  for (const [token, spec] of Object.entries(palette.tokens)) {
+    const style = (spec.style ?? []).join(", ") || "plain";
+    lines.push(`| ${token}: ${spec.description} | ${style} | ${palette.themes.map((theme) => cell(theme.syntax[token])).join(" | ")} |`);
+  }
+  return lines.join("\n");
+}
+
 function buildDocs() {
   const tables = contrastTables(palette);
+  replaceBetween("docs/palette.md", "palette table", paletteTable());
   replaceBetween("docs/contrast.md", "contrast summary", tables.summary);
   replaceBetween("ACCESSIBILITY.md", "contrast detail", tables.detail);
   replaceBetween("ACCESSIBILITY.md", "selection detail", tables.selection);

@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - The README is a short front page: the themes, their previews, a one-line install for each app that links to its own guide and the terminal installer. The contrast summary and floors moved to `docs/contrast.md`, the pipeline and layout to `docs/how-it-works.md` and the shell colour settings to `docs/shell-colours.md`. `scripts/build.mjs` writes the contrast summary into `docs/contrast.md`.
 
+### Added
+
+- `docs/palette.md`, a table of every syntax role with its font style and its colour in all eight themes, written by `scripts/build.mjs` from the palette.
+- `docs/recommended-settings.md`: following the system light and dark setting in VS Code, Zed, the JetBrains IDEs, Ghostty and Obsidian. It also lists the minimum contrast setting in each terminal that has one.
+
 ## [0.6.0] - 2026-10-28
 
 ### Changed
