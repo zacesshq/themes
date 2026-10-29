@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-10-29
+
 ### Changed
 
 - The README is a short front page: the themes, their previews, a one-line install for each app that links to its own guide and the terminal installer. The contrast summary and floors moved to `docs/contrast.md`, the pipeline and layout to `docs/how-it-works.md` and the shell colour settings to `docs/shell-colours.md`. `scripts/build.mjs` writes the contrast summary into `docs/contrast.md`.
@@ -174,7 +176,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - SVG previews drawn as real text and the data for the themes page on the Zacess website.
 - CI that runs the checks, proves the committed files are current, packages the VS Code extension and builds the JetBrains plugin. A release workflow that attaches the `.vsix`, the JetBrains zip and an Obsidian zip to each GitHub release and publishes to each marketplace once its token is set.
 
-[Unreleased]: https://github.com/zacesshq/themes/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/zacesshq/themes/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/zacesshq/themes/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/zacesshq/themes/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/zacesshq/themes/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/zacesshq/themes/compare/v0.3.0...v0.4.0
