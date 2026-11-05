@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- The Zacess Themes mark in `assets/` in light, dark, automatic and single colour versions, with a light and a dark lockup at the head of the README.
+
 ## [0.12.1] - 2026-11-05
 
 ### Fixed
