@@ -12,10 +12,23 @@ address bar and new tab page. Web pages keep their own colours.
 > Microsoft Edge Add-ons does not accept themes. Edge installs the Chrome versions from the Chrome
 > Web Store once **Allow extensions from other stores** is turned on.
 
+## The themes in each store
+
+| Theme | Chrome | Firefox |
+| --- | --- | --- |
+| Zacess Light | [Chrome Web Store](https://chromewebstore.google.com/detail/nnpaobhoflcmeichelgbbbdnkdmcgokn) | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/zacess-light/) |
+| Zacess Dark | [Chrome Web Store](https://chromewebstore.google.com/detail/pgbncbfpkagnjdkjiljplaekolkoobgo) | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/zacess-dark/) |
+| Zacess Yellow on Black | [Chrome Web Store](https://chromewebstore.google.com/detail/nhhdbchelioanecdinloahbgkidblknc) | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/zacess-yellow-on-black/) |
+| Zacess Cream | [Chrome Web Store](https://chromewebstore.google.com/detail/djplikakdodgljiigpjpbngpplkippgn) | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/zacess-cream/) |
+| Zacess High Contrast Dark | [Chrome Web Store](https://chromewebstore.google.com/detail/jonipbnecoekmlnojmdfnkpinflcbmja) | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/zacess-high-contrast-dark/) |
+| Zacess High Contrast Light | [Chrome Web Store](https://chromewebstore.google.com/detail/khmfjccebfgnbeanmknhcgjhjpojadie) | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/zacess-high-contrast-light/) |
+| Zacess Deep Contrast Dark | [Chrome Web Store](https://chromewebstore.google.com/detail/hempingnjhdnpkdnhhhheocbnidjlhnd) | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/zacess-deep-contrast-dark/) |
+| Zacess Deep Contrast Light | [Chrome Web Store](https://chromewebstore.google.com/detail/pdmcgfeljojjckjmoojocbljmldckahm) | [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/zacess-deep-contrast-light/) |
+
 ## Install
 
-From the store, search for **Zacess** and choose a theme. To try a theme from this repository
-before it is released:
+Pick a theme from the table above or search for **Zacess** in either store. To try a theme from
+this repository before it is released:
 
 - **Chrome:** open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and
   choose a folder in `chrome/`.
